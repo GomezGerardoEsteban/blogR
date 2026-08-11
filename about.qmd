@@ -1,0 +1,25 @@
+---
+title: "Sobre mi y el blog"
+image: _DSC3361.JPG
+about:
+  template: marquee
+  links:
+    - icon: twitter
+      text: Twitter
+      href: https://x.com/GEsteban_Gomez
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/gestebangomez/
+    - icon: github
+      text: Github
+      href: https://github.com/GomezGerardoEsteban
+    - icon: youtube
+      text: YouTube
+      href: https://www.youtube.com/@GEstebanGomez
+---
+
+Mi nombre es Esteban, soy de Colombia e hice parte de la XXVI promoción de la Maestría en Gobierno y Asuntos Públicos, que estuvo en la institución entre 2022 y 2024. Hice mi licenciatura en Economía en Argentina e investigo temas de energía y finanzas públicas subnacionales. Disfruté mucho haber sido parte de una institución como Flacso y haber recibido una formación multidisciplinaria que despertó en mí un interés particular por la ciencia política.
+
+Este blog es parte de mi servicio social. Espero que sea de utilidad para todos y todas aquellas que enfrentan dificultades o animadversión por el uso de R y la estadística. No le teman. Siempre dije que la estadística es como un poste de luz para un borracho: sirve para apoyarse, no para iluminarse.
+
+Hubo muchas personas que me marcaron en Flacso. Recuerdo con particular cariño a mis compañeros, a los cocineros, a la Dra. Alicia Puyana, al Dr. Oscar Fontanelli y al Dr. J. Mario Herrera, pero de quienes más aprendí y cuyas clases más disfruté fueron las del Dr. Rodrigo Salazar-Helena y la Dra. Alejandra Armesto.

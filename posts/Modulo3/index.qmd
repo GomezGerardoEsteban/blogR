@@ -1,0 +1,342 @@
+---
+title: "Módulo 3: Análisis estadístico bivariado"
+author: "Gerardo Esteban, Gómez-Santiago"
+toc: true
+format: 
+  html:
+    code-links:
+      - text: Video YouTube
+        icon: camera-reels
+        href: https://youtu.be/T-JHMBjzt4U
+      - text: Repositorio GitHub
+        icon: file-code
+        href: https://github.com/GomezGerardoEsteban/Tidyverso/tree/main/TallerR/Modulo3
+    mathjax: default
+    code-tools: true
+    self-contained: true
+execute:
+  warning: false
+image: "modulo3.png"
+---
+
+## Introducción
+
+La principal razón por la que utilizamos la estadística como herramienta de investigación, es porque nos permite generar evidencia empírica sobre la relación entre dos o más variables.\
+Por ejemplo, teóricamente podemos asumir que el desarrollo económico tiene una relación positiva con la tolerancia política o los valores democráticos de un país. En el fondo, establecemos esa relación porque tenemos un argumento teórico que lo justifica.\
+En el caso del desarrollo económico y los valores democráticos, podemos argumentar que a mayor desarrollo económico, mayor es el costo para los ciudadanos de enfrentar un gobierno dictatorial que pone en tela de juicio los derechos de propiedad, pues los ciudadanos tienen aversión a la perdida y no quieren perder sus posesiones, lo cual es más probable que suceda bajo dictaduras.
+
+Lograr justificar estadísticamente un argumento causal es algo que excede este curso y que en el mundo de la estadística se conoce como **inferencia causal**, lo que si podemos evidenciar con estadística descriptiva, es si efectivamente el desarrollo económico, medido por el PIB per cápita, tiene una relación positiva con los valores democráticos, medidos por la tasa de participación en elecciones (por ejemplo).\
+
+::: {.callout-note appearance="simple"}
+A partir de estadística descriptiva, no podemos garantizar que la causa de una relación planteada se debe a nuestro planteamiento teórico, pero si podemos dar cuenta de que la relación existe.
+:::
+
+En el ejemplo hipotético que planteamos, estamos tratando a dos variables continuas, el **PIB per cápita**, el cual esta medido en unidades monetarias y la **tasa de participación en elecciones**, la cual es un porcentaje con valores posibles entre cero y cien.\
+En general, las variables cuantitativas son las más susceptibles al análisis bivariado, a las cuales se les calcula covarianza, correlación y con las que generalmente se realizan regresiones.
+
+Sin embargo no son las únicas, es posible verificar si existe relación entre variables categóricas.\
+Por ejemplo, nos interesa saber si fumar o no fumar (variable categórica de dos niveles) tiene relación con tener o no tener cáncer de pulmón (variable categórica de dos niveles), para ello se genera una prueba estadística conocida como prueba de independencia chi-cuadrado, la cual nos indica si las variables son independientes o no.
+
+No haremos un análisis exhaustivo de la estadística subyacente a las medidas mencionadas, nos enfocaremos en la obtención de los valores a través de R y RStudio y en su interpretación.
+
+## Covarianzas
+
+Podemos rastrear el origen del análisis bivariado en el análisis univariado, a lo largo del módulo anterior, se hizo énfasis en la necesidad de obtener medidas de posición y de dispersión para conocer la distribución de los datos.\
+Como medidas de dispersión tenemos fundamentalmente la varianza y la desviación estándar, que en el fondo son la misma medida, debido a que la desviación estándar es una transformación de la varianza ($Desvio =  \sqrt{Varianza}$).
+
+Si revisamos la fórmula matemática de la varianza, vemos que es la suma de las diferencias de cada observación con respecto a la media elevadas al cuadrado. Formalmente podemos expresarlo como:
+
+$$\sigma^2 = \frac{\sum_{i = 1}^n (x_i - \bar{x})^2}{n-1} = \frac{1}{n-1} \cdot \sum_{i = 1}^n (x_i - \bar{x})\cdot(x_i - \bar{x})$$ donde $\bar{x}$ simboliza el promedio de $x$, $n$ el número de observaciones y $x_i$ los sucesivos valores de $x$.
+
+### ¿Qué es lo que cambia en la varianza para poder obtener la covarianza?
+
+Que en lugar de trabajar con una sola variable trabajamos con dos, tomando la última expresión de la fórmula matemática anterior, vemos que se repite $(x_i - \bar{x})$. En la covarianza, lo que hacemos es cambiar uno de estos términos por su equivalente en la segunda variable de interés, llamemos esa segunda variable de interés $y$. La fórmula de la covarianza es:
+
+$$cov_{(x,y)} = \frac{\sum_{i = 1}^n (x_i - \bar{x})\cdot(y_i - \bar{y})}{n-1}$$
+
+donde $\bar{y}$ es el promedio de la variable $y$ y $y_i$ son los sucesivos valores de $y$ (el resto de símbolos son los mismos que se explicaron en la expresión de la varianza).
+
+La estructura en la fórmula de la covarianza es casi idéntica a la fórmula de la varianza, solo que en lugar de trabajar sobre una variable ($X$), ahora trabajamos sobre dos variables ($X,Y$).
+
+### ¿Qué es lo que aporta la Covarianza?
+
+La covarianza me permite conocer **cual es el sentido del cambio** (positivo o negativo) en una variable $(X)$ ante cambios en otra variable $(y)$, es decir, si $x$ y $y$ tienen una relación positiva o negativa.\
+Lo de *"el sentido del cambio"* es relevante, porque la covarianza no me permite saber a ciencia cierta si la relación entre $x$ y $y$ es fuerte o débil, solo si esa relación es positiva o negativa.
+
+Veamos el ejemplo entre desarrollo económico (medida por el PIB per cápita) y valores democráticos (medido por un índice continúo construido por [V-Dem](https://www.v-dem.net/)). La base para el análisis la construiremos a partir de dos librerías `wbstats` que contiene la variable de **PIB per cápita** `(NY.GDP.PCAP.KD)` y `vdemdata` que contiene un índice generalmente aceptado sobre **Democracia** `(v2x_polyarchy)`.
+
+La función para obtener la covarianza `cov()` y su sintaxis bastante sencilla, solo debo poner como argumentos a las dos variables que me interesa analizar.\
+Este valor no tiene una interpretación analítica más allá de su signo, en el caso de democracia y PIB per cápita, como el valor es positivo, podemos afirmar que la democracia y el PIB se relacionan positivamente *("...a mayor PIB mayor democracia...")*.
+
+```{r}
+#| echo: true
+
+# Limpieza de ambiente
+rm(list = ls())   
+
+# Activacion de paquete tidyverse
+library(tidyverse)
+library(wbstats)
+library(vdemdata)
+
+# Extraigo la variable de Banco Mundial
+
+base <- wb_data(indicator = c("NY.GDP.PCAP.KD"),
+                start_date = 2019,
+                end_date = 2019)
+
+# Extraigo la variable del paque vdemdata
+
+varVdem <- c("country_text_id",
+             "year",
+             "v2x_polyarchy")
+
+
+vdata <- vdemdata::vdem %>% 
+  select(all_of(varVdem))
+
+# Join de bases
+
+base <- base %>% 
+  left_join(y = vdata,
+            by = c("iso3c" = "country_text_id",
+                   "date" = "year"))
+
+# Eliminamos valores perdidos de la base
+
+base <- base %>% 
+  select(-c(unit, obs_status, footnote, last_updated)) %>% 
+  na.omit()
+
+# Calculo de la covarianza
+
+cov(base$NY.GDP.PCAP.KD, base$v2x_polyarchy)
+
+```
+
+Este valor de covarianza tiene un correlato gráfico, cuando queremos ver gráficamente como se relacionan dos variables continuas, generamos lo que se conoce como gráfico de dispersión, el cual genera un diagrama de puntos del cual se puede inferir una pendiente (sentido), la cual puede ser positiva o negativa.
+
+A continuación se muestra el gráfico de dispersión entre `v2x_polyarchy` y `NY.GDP.PCAP.KD`
+
+```{r}
+#| echo: true
+
+base %>% 
+  ggplot(mapping = aes(x = (NY.GDP.PCAP.KD), y = v2x_polyarchy)) +
+  geom_point()
+
+```
+
+Este es uno de esos casos donde se observa una relación (existe un patrón en los datos), pero esa relación no es tan clara, podríamos argumentar una relación positiva pero difícilmente podemos sostener que esa relación es completamente lineal.
+
+## Correlación
+
+La covarianza nos permitió conocer que sí, que efectivamente existe una relación positiva entre democracia y PIB, sin embargo, no nos permitió conocer que tan fuerte es esa relación.\
+No lo permite porque la medida de la covarianza esta influenciada por las unidades de medición, es decir, el PIB se mide en miles de dólares y la democracia es un número índice entre cero y uno, como las unidades de medida son distintas, la covarianza no me dice nada respecto a la magnitud de la relación.
+
+::: {.callout-note appearance="simple"}
+**¿Como solucionarlo?** con la Correlación. El cálculo de la correlación parte de la covarianza, pero agrega una división por los desvíos estándar de cada variable que normaliza el rango de valores posibles entre -1 y 1.
+:::
+
+Es decir, la correlación entre dos variables cualesquiera sean estas, es un valor entre -1 y 1, donde 1 significa una correlación positiva perfecta y -1 significa una correlación negativa perfecta.\
+Valores cercanos a cero indican que no existe una relación significativa entre las variables.
+
+Formalmente la fórmula de la correlación es:
+
+$$\rho_{x,y} = \frac{COV_{x,y}}{\sigma_x\cdot\sigma_y} = \frac{\sum_{i=1}^n(x_i - \bar{x})\cdot(y_i - \bar{y})}{\sigma_x\cdot\sigma_y}$$
+
+Note en la fórmula matemática, que el valor del numerador es el mismo que en la fórmula de la covarianza, el cual habíamos deducido de la fórmula de la varianza.
+
+Para obtener la correlación entre dos variables, la lógica es muy similar a la de la covarianza, la función es `cor()` y los argumentos son los mismos, solo debo indicar las variables que estoy analizando.
+
+```{r}
+#| echo: true
+
+cor(base$NY.GDP.PCAP.KD, base$v2x_polyarchy)
+
+```
+
+En ciencias sociales las correlaciones no tienden a ser muy fuertes, el valor de `r round(cor(base$NY.GDP.PCAP.KD, base$v2x_polyarchy),2)` entre democracia y PIB no es despreciable, me estaría indicando una intensidad media (no muy fuerte pero tampoco trivial) entre ambas variables.
+
+Algo que puede ayudar en la discusión sobre la significatividad de la correlación, es utilizar un **test estadístico de correlación lineal**, el comando para realizarlo en R es `cor.test()`, los argumentos que recibe la función son los mismos que utilizamos en la función `cor()`.
+
+```{r}
+#| echo: true
+
+cor.test(base$NY.GDP.PCAP.KD, base$v2x_polyarchy)
+
+```
+
+Este test realiza una prueba de hipótesis, cuya hipótesis nula es que la verdadera correlación entre las variables es cero. Por lo tanto, para argumentar que la relación entre democracia y PIB per cápita es significativa, el objetivo es rechazar la hipótesis nula.\
+En la salida del comando `cor.test()`, se muestran dos criterios que nos permiten obtener conclusiones respecto a la hipótesis nula.\
+El primero es el ***p-value*** , en este caso su valor es de `r cor.test(base$NY.GDP.PCAP.KD, base$v2x_polyarchy)$p.value`, por ser menor de 0.05, podemos rechazar la hipótesis nula y afirmar que la relación entre democracia y PIB per cápita es significativa.\
+El segundo son los ***intervalos de confianza***, cuando estos tienen el mismo signo, se puede rechazar la hipótesis nula, adémas, como en este caso son ambos positivos, podemos afirmar que la relación es significativa y positiva. (Límite inferior = `r cor.test(base$NY.GDP.PCAP.KD, base$v2x_polyarchy)$conf.int[1]`, Límite superior = `r cor.test(base$NY.GDP.PCAP.KD, base$v2x_polyarchy)$conf.int[2]`)
+
+### ¿Que agrega la correlación respecto a la covarianza?
+
+La magnitud de la relación, por la covarianza yo sabía que la relación entre ambas variables era positiva, pero no sabía que tan positiva era. Ahora que tenemos la correlación, podemos afirmar que esa relación positiva es significativa (es distinta de cero) y está en torno al 0.46
+
+Podríamos ir un paso más allá y preguntarnos en cuanto mejoraría la democracia si incrementamos en una unidad el PIB per cápita.\
+Este tipo de análisis ya es bastante más riguroso debido a que me permite hacer predicciones, es decir, podríamos conocer el valor del índice de democracia para un valor hipotético de $\$ 50.000$ dólares de PIB.\
+Obviamente, esto tiene sus limitaciones, hay un montón de supuestos estadísticos detrás de la regresión que pocas veces se cumplen, pero es mejor saber hacerlo que simplemente no hacer nada porque ningún supuesto se cumple.
+
+## Regresión
+
+No tengo pruebas pero tampoco dudas, de que la regresión es el análisis más utilizado para corroborar hipótesis en ciencias sociales.\
+Lo que vamos a ver ahora es un análisis de regresión simple, en el que existe una variable dependiente $(Y)$ y una variable independiente $(X)$. Lo de dependiente e independiente no es trivial, contrario a los análisis de covarianza y correlación, en el análisis de regresión si importa el orden y el sentido de la relación que planteo, puesto que estoy estableciendo una relación causal entre las variables en el sentido de que $(X)$ es causa de $(Y)$.
+
+Realizó el cálculo de la regresión para saber cuál sería el cambio en $(Y)$ si $(X)$ cambia en una unidad. La regresión tiene un apellido que es importante no olvidar, regresión **lineal**, este hace referencia a que se asume que la relación entre ambas variables $(X, Y)$ es lineal, es decir, existe una tasa constante que establece en cuanto se afecta $Y$ ante un cambio en $X$.
+
+La fórmula más sencilla de regresión simple es:
+
+$$\hat{y} = \hat{\alpha} + \hat{\beta}\cdot x$$ Lo que establece el sentido de la relación entre $(X)$ y $(Y)$ es el valor de $\hat{\beta}$, cuya fórmula tiene que ver con la fórmula de la correlación y la covarianza.
+
+$$\hat{\beta} = \frac{COV_{X,Y}}{VAR_X} = \frac{\sum_{i=1}^n(x_i - \bar{x})\cdot(y_i - \bar{y})}{\sum_{i=1}^n(x_i - \bar{x})^2}$$
+
+La regresión es la base de la inferencia causal, por eso es importante manejarla bien si mi objetivo es corroborar hipótesis entre variables, en el sentido de que una es causada por la otra.
+
+La función para realizar análisis de regresión lineal simple es `lm()`, los argumentos también son dos variables pero la sintaxis es un poco diferente. Además, la impresión de los resultados requiere el uso de la función `summary()`, a continuación mostramos la regresión entre PIB per cápita e índice de democracia, es decir, asumimos que el PIB per cápita tiene un efecto positivo sobre el índice de democracia y queremos saber en cuanto cambiaria el índice de democracia si incrementamos en una unidad monetaria el PIB per cápita.
+
+```{r}
+#| echo: true
+
+# Para la regresion debemos usar el simbolo '~' de manera que antes de este se
+# encuentre la variable dependiente (Y) y despues de este se encuentre la variable 
+# independiente (X).
+
+reg <- lm(formula = v2x_polyarchy ~ NY.GDP.PCAP.KD,
+          data = base)
+
+
+# Con la funcion 'summary()' veo el resultado de la regresion
+
+summary(reg)
+
+```
+
+Ahora vemos muchos números y esto puede generar una mala impresión, lo relevante por ahora está en los `Coefficients`, donde vemos que existe un `(Intercept)` (equivalente a $\hat{\alpha}$ en la formula anterior) y el nombre de nuestra variable $(X)$ `NY.GDP.PCAP.KD` (equivalente a $\hat{\beta}$ en la formula anterior).\
+Centrémonos en el valor del coeficiente de `NY.GDP.PCAP.KD`, este es de `r round(reg$coefficients[2], 8)`, parece muy bajito y cercano a cero, pero pensémoslo bien, lo que nos está diciendo es que si incremento el PIB per cápita en 1 dólar, el índice de democracia se incrementa en `r round(reg$coefficients[2], 8)`.\
+Un cambio de un dólar en el PIB per cápita es algo casi que aleatorio, tendría mas sentido hablar de un cambio de mil dólares. Corrijamos la unidad de medida del PIB de manera que se refleje eso.
+
+```{r}
+#| echo: true
+
+# Creo la variable de PIB per capita dividida por mil
+
+base$pib <- base$NY.GDP.PCAP.KD/1000
+
+# Calculo nuevamente la regresión
+
+reg <- lm(formula = v2x_polyarchy ~ pib,
+          data = base)
+
+summary(reg)
+
+```
+
+Al leer nuevamente los resultados, podemos concluir que un incremento de mil dólares en el PIB per cápita, conduce a un incremento en el valor del índice de democracia de `r round(reg$coefficients[2], 4)`, parece ínfimo, pero en ciencias sociales ese tipo de efectos son los más usuales.\
+Algo importante respecto a la lectura de los coeficientes es la última columna en la que aparece el P-Valor, lo que implícitamente hace el R, es una prueba de hipótesis en la que se corrobora si el valor de mi estimador (`r round(reg$coefficients[2], 4)`) es significativamente diferente de 0.\
+El hecho de que el P-Valor sea menor que 0.001, implica que al $99.9\%$ de confianza, el PIB tiene un efecto positivo sobre la democracia.
+
+La regresión lineal también tiene un correlato gráfico, conocido como recta de regresión. A continuación se muestran dos opciones de código para graficarla con **{ggplot2}**.
+
+```{r}
+#| echo: true
+
+base %>% 
+  ggplot(mapping = aes(x = pib, y = v2x_polyarchy)) +
+  geom_point() +
+  geom_smooth(method = "lm") # Agrega la recta de regresión
+
+```
+
+```{r}
+#| echo: true
+
+base %>% 
+  ggplot(mapping = aes(x = pib, y = v2x_polyarchy)) +
+  geom_point() +
+  geom_abline(intercept = reg$coefficients[1], slope = reg$coefficients[2])
+
+
+```
+
+### ¿Como mejorar el ajuste?
+
+La recta parece no ajustarse muy bien a los puntos, no se observa una distribución aleatoria de los puntos en torno a la recta de regresión.\
+En la clase pasada hablamos de la necesidad de que en ciertos escenarios, las variables presenten una distribución normal, el análisis de regresión es uno de ellos.\
+En el siguiente gráfico vemos la distribución de las variables Democracia y PIB per cápita, vemos que el PIB per cápita presenta un importante sesgo a la derecha, mientras la democracia no presenta un sesgo tan claro, pero es dificil sostener que tiene una distribución normal. Lo ideal sería poder corregir ambas distribuciones a partir de alguna transformación que conduzca a la variable a comportarse como una normal (o se aproxime más a ella).
+
+```{r}
+#| echo: true
+
+base %>% 
+  ggplot(mapping = aes(x = v2x_polyarchy)) + 
+  geom_density() +
+  labs(title = "Distribución v2x_polyarchy")
+
+base %>% 
+  ggplot(mapping = aes(x = pib)) + 
+  geom_density() +
+  labs(title = "Distribución PIB")
+
+```
+
+Los logaritmos son las operaciones mas utilizadas para realizar este tipo de transformaciones, apliquemos logaritmo natural a ambas variables y veamos que pasa con el gráfico de dispersión y la recta de regresión.
+
+```{r}
+
+base$log_democ <- log(base$v2x_polyarchy)
+
+base$log_pib <- log(base$pib)
+
+reg_log <- lm(formula = log_democ ~ log_pib,
+              data = base)
+
+
+summary(reg_log)
+
+```
+
+Cuando se utilizan logaritmos en ambas variables $(X,Y)$, la interpretación de la regresión pasa a realizarse en terminos porcentuales, es decir, en este caso un incremento del $1\%$ en el PIB per cápita, generá un incremento del `r round(reg_log$coefficients[2],3)`% en el índice de democracia.
+
+La gráfica se ve asi ahora.
+
+```{r}
+
+base %>% 
+  ggplot(mapping = aes(x = log_pib, y = log_democ)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+
+```
+
+Aunque el comportamiento sigue sin ser el ideal, mejoro significativamente respecto a sus valores originales.
+
+## Tabla resumen de las medidas calculadas
+
+```{r echo=FALSE}
+#| echo: true
+
+library(knitr)
+library(kableExtra)
+
+# Datos de la tabla
+tabla <- data.frame(
+  Medida = c("Covarianza", "Correlación", "Regresión"),
+  Interpretación = c("La relación entre las variables es (positiva/negativa)", 
+                     "La relación entre las variables es (positiva/negativa) y significativa", 
+                     "Un incremento de ... en X genera un cambio de ... en Y"),
+  Fórmula = c("$$\\frac{\\sum_{i = 1}^n (x_i - \\bar{x}) \\cdot (y_i - \\bar{y})}{n-1}$$",
+              "$$\\frac{\\sum_{i=1}^n(x_i - \\bar{x}) \\cdot (y_i - \\bar{y})}{\\sigma_x \\cdot \\sigma_y}$$",
+              "$$\\frac{\\sum_{i=1}^n(x_i - \\bar{x}) \\cdot (y_i - \\bar{y})}{\\sum_{i=1}^n(x_i - \\bar{x})^2}$$")
+)
+
+# Generar la tabla
+kable(tabla, format = "html", escape = FALSE, col.names = c("Medida", "Interpretación", "Fórmula")) %>%
+  kable_styling(full_width = FALSE) %>%
+  add_header_above(c("Tabla Resumen" = 3))
+
+
+```

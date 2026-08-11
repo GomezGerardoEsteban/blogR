@@ -1,0 +1,619 @@
+---
+title: "Módulo 5: Visualización de datos con `{ggplot2}`"
+author: "Gerardo Esteban, Gómez-Santiago"
+toc: true
+format: 
+  html:
+    code-links:
+      - text: Video YouTube
+        icon: camera-reels
+        href: https://youtu.be/rbh30vopa6I?si=OA8xwtdTWP7skIpb
+      - text: Repositorio GitHub
+        icon: file-code
+        href: https://github.com/GomezGerardoEsteban/Tidyverso/tree/main/TallerR/Modulo5
+    mathjax: default
+    code-tools: true
+    self-contained: true
+execute:
+  warning: false
+image: "modulo5.png"
+---
+
+## Introducción
+
+El software R ya no se queda solamente en el análisis estrictamente estadístico, es tambien una herramienta con grandes capacidades comunicativas, la personalización de gráficos es una de las más demandadas.\
+En este tutorial veremos como utilizar una librería `{ggplot2}`, cuya sintaxis es bastante intuitiva y ofrece mucha flexibilidad en el diseño del gráfico.\
+Otras librerías que utilizaremos son:\
+
+-   `giscoR`, la cual nos permite obtener las coordenadas geográficas de los países.
+-   `ggrepel`, una extensión de `ggplot2` que nos ayuda a trabajar con etiquetas en gráficos de dispersión.
+-   `extrafont`, que nos permite modificar la fuente de la letra.
+-   `patchwork`, que nos permite unir gráficos.
+-   `ggspatial`, un complemento de `ggplot2` para agregar detalles a los mapas.
+
+## Datos a gráficar
+
+La visualización que realizaremos es un mapa con el valor del índice de democracia calculado por [VDEM](https://www.v-dem.net/) y un gráfico de dispersión en el que vemos la relación entre el índice de democracia y el PIB per cápita medido por el [Banco Mundial](https://data.worldbank.org/) para el año 2019.\
+Los datos estan contenidos en un archivo `.RData` llamado **ShapefileDemoc_Gdp.RData**, lo pueden encontrar en el [repositorio de GitHub](https://github.com/GomezGerardoEsteban/Tidyverso/tree/7ed8174f0c753a0ceed3c82fce135f7d55cd145f/TallerR).
+
+### Obtención de datos
+
+En el siguiente bloque de código limpiamos el ambiente de trabajo, activamos las librerías a utilizar y cargamos la base de datos.
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+
+rm(list = ls())
+
+# Librerias
+
+library(tidyverse)
+library(sf)
+library(classInt)
+library(ggspatial)
+library(patchwork)
+library(extrafont)
+library(ggrepel)
+
+# Cargo la base de datos
+
+# Es un archivo .RData, estos se cargan con el comando 'load()' y no es necesario
+# ponerle un nombre, se carga con el nombre que le puso quien exporto la base.
+
+load(file = "bases/ShapefileDemoc_Gdp.RData")
+
+dim(mapa)
+
+```
+
+Como podemos verificar en el comando `dim(base)`, el objeto `base` contiene 257 observaciones y 10 variables.\
+Sin embargo, la base no esta del todo lista para la visualización, algunos países no tienen el valor de `v2x_polyarchy` o de `NY.GDP.PCAP.KD`, vamos a quedarnos solo con aquellos países que contienen información para ambas variables.
+
+```{r}
+#| echo: true
+
+mapa <- mapa %>% 
+  filter(!is.na(v2x_polyarchy))
+
+```
+
+## Establecimiento de la paleta de colores para la variable `v2x_polyarchy`
+
+La visualización de un mapa en el que las unidades territoriales toman distintas tonalidades según el valor de una variable continúa, es una de las visualizaciones mas utilizadas en mapas, R ofrece algunas tonalidades por defecto, lo que haremos en este caso es seleccionar los colores de una paleta especifica.
+
+Lo primero que debo hacer es definir los quiebres o intervalos en la variable continua a partir de los cúales voy a establecer el color, esto lo hago con la función `classInt::classIntervals`.
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+breaks <- classInt::classIntervals(var = mapa$v2x_polyarchy, # Defino la variable a partir de la cual crear los intervalos
+                                   n = 8,                    # Establezco el número de intervalos
+                                   style = "pretty")         # Criterio para el establecimiento de intervalos
+
+breaks <- breaks$brks                                        # Almaceno los quiebres en un vector de nombre breaks
+
+breaks
+```
+
+Establecidos los quiebres, obtengo los colores, debo obtener un color por cada intervalo. Para ello, utilizo la función `hcl.colors`, la paleta que utilizaremos es `Zissou 1`.
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+
+colors <- hcl.colors(n = length(breaks),   # Longitud de breaks (número de colores a utilizar)
+                     palette = "Zissou 1") # Paleta a utilizar, se pueden consultar más paletas ejecutando 'hcl.pals()'
+
+scales::show_col(colors)  # Función para visualizar la paleta
+
+```
+
+La paleta que obtuvimos es de `r length(breaks)` colores, sin embargo, como la variable a gráficar es continua, los `r length(breaks)` pueden resultar una limitante al momento de reflejar la variación de la variable.\
+Lo que debemos hacer es utilizar estos colores como base y expandir las tonalidades entre colores, esto lo podemos hacer con la función `colorRampPalette`.
+
+```{r}
+#| echo: true
+#| warning: true
+#| message: true
+
+textura <- colorRampPalette(colors = colors)(600) # Genero 600 tonalidades
+
+textura <- rev(textura)                           # Por preferencias personales en la visualización, prefiero el azul para países mas democraticos y el rojo para menos democraticos. Por eso invierto el vector de colores con la funcion 'rev()'
+
+scales::show_col(textura, labels = F)
+
+```
+
+## Realización del mapa
+
+El paquete `ggplot2` trabaja de manera simple con datos geográficos, el `geom` necesario para ello es `geom_sf()`
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+mapa %>% 
+  ggplot() +
+  geom_sf()
+
+```
+
+Lo que debemos agregar ahora es el relleno de los países a partir de la variable `v2x_polyarchy`
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+mapa %>% 
+  ggplot() +
+  geom_sf(mapping = aes(fill = v2x_polyarchy))
+
+```
+
+Pedimos que utilice la paleta ya creada
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+mapa %>% 
+  ggplot() +
+  geom_sf(mapping = aes(fill = v2x_polyarchy)) +
+  scale_fill_gradientn(
+    name = "Índice de\nDemocracia",
+    breaks = breaks,
+    labels = round(breaks, 1),
+    colors = textura
+  )
+
+
+```
+
+Añado titulo, subtitulo y quito nombres en los ejes
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+
+mapa %>% 
+  ggplot() +
+  geom_sf(mapping = aes(fill = v2x_polyarchy)) +
+  scale_fill_gradientn(
+    name = "Índice de\nDemocracia",
+    breaks = breaks,
+    labels = round(breaks, 1),
+    colors = textura
+  ) +
+  labs(title = "Democracia y desarrollo económico",
+       subtitle = "Índice de democracia electoral (v2x_polyarchy | V-Dem) - 2019",
+       x = NULL,
+       y = NULL,
+       caption = NULL)
+
+```
+
+Inserto rosa de los vientos
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+mapa %>% 
+  ggplot() +
+  geom_sf(mapping = aes(fill = v2x_polyarchy)) +
+  scale_fill_gradientn(
+    name = "Índice de\nDemocracia",
+    breaks = breaks,
+    labels = round(breaks, 1),
+    colors = textura
+  ) +
+  labs(title = "Democracia y desarrollo económico",
+       subtitle = "Índice de democracia electoral (v2x_polyarchy | V-Dem) - 2019",
+       x = NULL,
+       y = NULL,
+       caption = NULL) +
+  annotation_north_arrow(location = "bl",
+                         width = unit(0.8, "cm"),
+                         height = unit(1.2, "cm"),
+                         style = north_arrow_fancy_orienteering)
+
+```
+
+Dentro de la función `theme` manipulo el diseño del gráfico
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+mapa %>% 
+  ggplot() +
+  geom_sf(mapping = aes(fill = v2x_polyarchy)) +
+  scale_fill_gradientn(
+    name = "Índice de\nDemocracia",
+    breaks = breaks,
+    labels = round(breaks, 1),
+    colors = textura
+  ) +
+  labs(title = "Democracia y desarrollo económico",
+       subtitle = "Índice de democracia electoral (v2x_polyarchy | V-Dem) - 2019",
+       x = NULL,
+       y = NULL,
+       caption = NULL) +
+  annotation_north_arrow(location = "bl",
+                         width = unit(0.8, "cm"),
+                         height = unit(1.2, "cm"),
+                         style = north_arrow_fancy_orienteering) +
+  theme(text = element_text(family = "Cambria"),
+        plot.title = element_text(hjust = 0.5, color = "darkslategray"),
+        plot.subtitle = element_text(hjust = 0.5, color = "darkslategray"),
+        plot.background = element_rect(fill = "lightcyan"),
+        panel.background = element_rect(fill = "beige"),
+        panel.grid = element_line(color = "grey85", linetype = "dashed"),
+        legend.position = "bottom",
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        legend.key.height = unit(0.2, "cm"),
+        legend.key.width = unit(1, "cm"),
+        legend.title = element_text(hjus = 0.5),
+        legend.background = element_rect(fill = "lightcyan3"))
+
+```
+
+Para exportar la visualización, guardo el gráfico en un objeto y utilizo el comando `ggsave()`, exportar la visualización utilizando esta función, garantiza que el gráfico no pierda definición. Al ejecutarlo el gráfico se guarda en mi directorio de trabajo.
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+# Guardo la visualización
+
+graficoMapa <- mapa %>% 
+  ggplot() +
+  geom_sf(mapping = aes(fill = v2x_polyarchy)) +
+  scale_fill_gradientn(
+    name = "Índice de\nDemocracia",
+    breaks = breaks,
+    labels = round(breaks, 1),
+    colors = textura
+  ) +
+  labs(title = "Democracia y desarrollo económico",
+       subtitle = "Índice de democracia electoral (v2x_polyarchy | V-Dem) - 2019",
+       x = NULL,
+       y = NULL,
+       caption = NULL) +
+  annotation_north_arrow(location = "bl",
+                         width = unit(0.8, "cm"),
+                         height = unit(1.2, "cm"),
+                         style = north_arrow_fancy_orienteering) +
+  theme(text = element_text(family = "Cambria"),
+        plot.title = element_text(hjust = 0.5, color = "darkslategray"),
+        plot.subtitle = element_text(hjust = 0.5, color = "darkslategray"),
+        plot.background = element_rect(fill = "lightcyan"),
+        panel.background = element_rect(fill = "beige"),
+        panel.grid = element_line(color = "grey85", linetype = "dashed"),
+        legend.position = "bottom",
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        legend.key.height = unit(0.2, "cm"),
+        legend.key.width = unit(1, "cm"),
+        legend.title = element_text(hjus = 0.5),
+        legend.background = element_rect(fill = "lightcyan3"))
+
+# Exporto la visualizacion
+
+ggsave(filename = "mapa_soloDemoc.png", # Nombre de la imagen en mi directorio de trabajo, es importante la extensión '.png'
+       plot = graficoMapa,              # Objeto a exportar
+       dpi = 500,                       # Definición de pixeles
+       width = 8,                       # Ancho
+       height = 4)                      # Alto
+
+```
+
+## Gráfico de dispersión v2x_polyarchy \~ NY.GDP.PCAP.KD
+
+La estructura para realizar gráficos con `ggplot2` es igual siempre, parto de una base, conecto con la función `ggplot()` y voy añadiendo capas que contienen epecificaciones de diseño.\
+El `geom` para los diagramas de dispersión es `geom_point()`, debido a que la distribución del PIB per cápita presenta sesgo a la derecha, utilizaremos su transformación logarítmica, lo que permite que la variable tienda a una distribución normal.
+
+Esta es la estructura inicial del gráfico
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+mapa %>% 
+  ggplot(mapping = aes(x = log(NY.GDP.PCAP.KD), y = v2x_polyarchy)) +
+  geom_point()
+
+```
+
+Vamos a modificar la forma y el color de los puntos a partir del valor de ciertas variables, cuando quiero incorporar alguna característica en el gráfico a partir del valor de cierta variable, es necesario especificar esto dentro del `aes()`, el cual puede estar definido en el `ggplot()` inicial o dentro de los `geom`.\
+En este caso modificaremos el color y la forma de los puntos a partir variables contenidas en nuestra base de datos.
+
+-   `size`: tamaño de los puntos (en función de la población total)
+-   `shape`: forma de los puntos (en función de los contienes)
+-   `color`: color de los puntos (en función del índice de democracia)
+
+Otras especificaciones son `alpha` para agregar transparencia a los puntos y `show.legend = F` para que no aparezcan leyendas al costado del gráfico.
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+mapa %>% 
+  ggplot(mapping = aes(x = log(NY.GDP.PCAP.KD), y = v2x_polyarchy)) +
+  geom_point(mapping = aes(shape = continentes,
+                           color = v2x_polyarchy,
+                           size = SP.POP.TOTL),
+             alpha = 0.7,
+             show.legend = F)
+
+```
+
+Las especificaciones de tipos de forma, tamaño y color son las que pone por defecto el R en función de las variables especificadas, para modificar esas especificaciones, debo utilizar las funciones `scale`. Utilizaremos la misma paleta de colores del mapa.
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+mapa %>% 
+  ggplot(mapping = aes(x = log(NY.GDP.PCAP.KD), y = v2x_polyarchy)) +
+  geom_point(mapping = aes(shape = continentes,
+                           color = v2x_polyarchy,
+                           size = SP.POP.TOTL),
+             alpha = 0.7,
+             show.legend = F) +
+  scale_color_gradientn(
+    name = "Índice de\nDemocracia",
+    breaks = breaks,
+    labels = round(breaks, 1),
+    colors = textura
+  ) +
+  scale_shape_manual(values = c(15,16,17,18,3)) +
+  scale_size_continuous(range = c(1,8))
+
+```
+
+Añadimos nuevos `geom` al gráfico, `geom_smooth()` nos permite visualizar la recta de regresión entre las variables y `geom_text_repel()` nos permite colocar el codigo a tres carácteres de cada país, evitando el solapamiento de los mismos.
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+mapa %>% 
+  ggplot(mapping = aes(x = log(NY.GDP.PCAP.KD), y = v2x_polyarchy)) +
+  geom_point(mapping = aes(shape = continentes,
+                           color = v2x_polyarchy,
+                           size = SP.POP.TOTL),
+             alpha = 0.7,
+             show.legend = F) +
+  scale_color_gradientn(
+    name = "Índice de\nDemocracia",
+    breaks = breaks,
+    labels = round(breaks, 1),
+    colors = textura
+  ) +
+  scale_shape_manual(values = c(15,16,17,18,3)) +
+  scale_size_continuous(range = c(1,8)) +
+  scale_y_continuous(breaks = breaks) +
+  geom_smooth(method = "lm", se = F,
+              color = "olivedrab3",
+              linetype = "longdash") +
+  geom_text_repel(mapping = aes(label = ISO3_CODE,
+                          color = v2x_polyarchy),
+            size = 2.3,
+            show.legend = F)
+
+
+```
+
+Añadimos titulos a los ejes y una nota al pie con algunas aclaraciones
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+mapa %>% 
+  ggplot(mapping = aes(x = log(NY.GDP.PCAP.KD), y = v2x_polyarchy)) +
+  geom_point(mapping = aes(shape = continentes,
+                           color = v2x_polyarchy,
+                           size = SP.POP.TOTL),
+             alpha = 0.7,
+             show.legend = F) +
+  scale_color_gradientn(
+    name = "Índice de\nDemocracia",
+    breaks = breaks,
+    labels = round(breaks, 1),
+    colors = textura
+  ) +
+  scale_shape_manual(values = c(15,16,17,18,3)) +
+  scale_size_continuous(range = c(1,8)) +
+  geom_smooth(method = "lm", se = F,
+              color = "olivedrab3",
+              linetype = "longdash") +
+  scale_y_continuous(breaks = breaks) +
+  geom_text_repel(mapping = aes(label = ISO3_CODE,
+                          color = v2x_polyarchy),
+            size = 2.3,
+            show.legend = F) +
+  labs(x = "Logaritmo del PIB per cápita",
+       y = "Índice de democracia",
+       caption = "\nFuente: Banco Mundial y V-Dem | Elaboración: @GEsteban_Gomez\nLa visualización contiene información de 174 paises | El tamaño de los puntos esta en función de la población total")
+
+```
+
+Una de las limitaciones que tiene en este momento nuestro gráfico, es que no hay ninguna leyenda que indique a que continente corresponde la forma de los puntos. Para incluirlos, crearemos una base de datos con esta información, una de las ventajas de `ggplot2` es que permite trabajar con más de una base de datos en la misma visualización.
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+# Base con la información de los continentes para incluir como leyenda dentro del gráfico
+
+continentes <- mapa %>% 
+  st_drop_geometry() %>% 
+  group_by(continentes) %>% 
+  summarise(mean = mean(v2x_polyarchy, na.rm = T)) %>% 
+  mutate(x = 5.5,
+         y = c(0.9, 0.866, 0.833, 0.8, 0.766),
+         label = str_c(continentes, " (", round(mean, 2), ")"))
+
+# grafico
+
+mapa %>% 
+  ggplot(mapping = aes(x = log(NY.GDP.PCAP.KD), y = v2x_polyarchy)) +
+  geom_point(mapping = aes(shape = continentes,
+                           color = v2x_polyarchy,
+                           size = SP.POP.TOTL),
+             alpha = 0.7,
+             show.legend = F) +
+  scale_color_gradientn(
+    name = "Índice de\nDemocracia",
+    breaks = breaks,
+    labels = round(breaks, 1),
+    colors = textura
+  ) +
+  scale_shape_manual(values = c(15,16,17,18,3)) +
+  scale_size_continuous(range = c(1,8)) +
+  geom_smooth(method = "lm", se = F,
+              color = "olivedrab3",
+              linetype = "longdash") +
+  scale_y_continuous(breaks = breaks) +
+  geom_text_repel(mapping = aes(label = ISO3_CODE,
+                          color = v2x_polyarchy),
+            size = 2.3,
+            show.legend = F) +
+  geom_point(data = continentes,              # Incluyo los puntos para simbolizar los continentes
+             mapping = aes(x = x,
+                           y = y,
+                           shape = continentes,
+                           color = mean),
+             show.legend = F) +
+  annotate(geom = "text",                     # Incluyo el nombre de los continentes con una leyenda del promedio del índice de democracia
+           x = continentes$x + 0.4,
+           y = continentes$y,
+           label = continentes$label,
+           size = 3.,
+           color = "olivedrab3",
+           family = "Cambria") +
+  labs(x = "Logaritmo del PIB per cápita",
+       y = "Índice de democracia",
+       caption = "\nFuente: Banco Mundial y V-Dem | Elaboración: @GEsteban_Gomez\nLa visualización contiene información de 174 paises | El tamaño de los puntos esta en función de la población total") 
+
+```
+
+Finalmente, modifíco el diseño del gráfico con especificaciones dentro del comando `theme()`
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+#| width: 9
+#| height: 5
+
+
+dispersion <- mapa %>% 
+  ggplot(mapping = aes(x = log(NY.GDP.PCAP.KD), y = v2x_polyarchy)) +
+  geom_point(mapping = aes(shape = continentes,
+                           color = v2x_polyarchy,
+                           size = SP.POP.TOTL),
+             alpha = 0.7,
+             show.legend = F) +
+  scale_color_gradientn(
+    name = "Índice de\nDemocracia",
+    breaks = breaks,
+    labels = round(breaks, 1),
+    colors = textura
+  ) +
+  scale_shape_manual(values = c(15,16,17,18,3)) +
+  scale_size_continuous(range = c(1,8)) +
+  geom_smooth(method = "lm", se = F,
+              color = "olivedrab3",
+              linetype = "longdash") +
+  scale_y_continuous(breaks = breaks) +
+  geom_text_repel(mapping = aes(label = ISO3_CODE,
+                          color = v2x_polyarchy),
+            size = 2.3,
+            show.legend = F) +
+  geom_point(data = continentes,              # Incluyo los puntos para simbolizar los continentes
+             mapping = aes(x = x,
+                           y = y,
+                           shape = continentes,
+                           color = mean),
+             show.legend = F) +
+  annotate(geom = "text",                     # Incluyo el nombre de los continentes con una leyenda del promedio del índice de democracia
+           x = continentes$x + 0.4,
+           y = continentes$y,
+           label = continentes$label,
+           size = 3.,
+           color = "olivedrab3",
+           family = "Cambria") +
+  labs(x = "Logaritmo del PIB per cápita",
+       y = "Índice de democracia",
+       caption = "\nFuente: Banco Mundial y V-Dem | Elaboración: @GEsteban_Gomez\nLa visualización contiene información de 174 paises | El tamaño de los puntos esta en función de la población total") +
+  theme(text = element_text(family = "Cambria"),
+        plot.caption = element_text(hjust = 0, color = "darkslategray"),
+        plot.background = element_rect(fill = "lightcyan"),
+        panel.background = element_rect(fill = "beige"),
+        panel.grid = element_line(color = "gray90", linetype = "dashed"),
+        axis.title = element_text(color = "darkslategray"))
+
+dispersion
+
+```
+
+## Unión de los gráficos
+
+Ya generamos las visualizaciones por separado, ahora, utilizando la librería `patchwork` es posible juntar ambas visualizaciones en una sola.
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+#| width: 10
+#| height: 12
+
+
+graficoFinal <- wrap_plots(graficoMapa,       # Primer grafico
+                           dispersion,        # segundo grafico
+                           nrow = 2,          # Numero de filas (al ser dos graficos y especificar 2 filas, vamos a tener un grafico encima del otro)
+                           heights = c(0.7,   # Altura del primer grafico
+                                       1)     # Altura del segundo grafico
+                           )
+
+graficoFinal
+
+```
+
+La previsualización de los gráficos unidos es limitada, para verificar que el gráfico quedo como esperabas y que tiene las dimensiones correctas lo mejor es exportarlo, es importante ajustar los comandos `height` y `width` dentro de la función `ggsave()` hasta obtener las dimensiones deseadas.
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+ggsave(filename = "mapaDispersion_soloDemoc.png",
+       plot = graficoFinal,
+       dpi = 500,
+       width = 10,
+       height = 12)
+
+```

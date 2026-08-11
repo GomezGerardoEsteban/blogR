@@ -1,0 +1,614 @@
+---
+title: "Módulo 2: Análisis estadístico univariado"
+author: "Gerardo Esteban, Gómez-Santiago"
+toc: true
+format: 
+  html:
+    code-links:
+      - text: Video YouTube
+        icon: camera-reels
+        href: https://youtu.be/92DX5px65JI
+      - text: Repositorio GitHub
+        icon: file-code
+        href: https://github.com/GomezGerardoEsteban/Tidyverso/tree/main/TallerR/Modulo2
+    html-math-method: katex
+    code-tools: true
+    self-contained: true
+execute:
+  warning: false
+image: "modulo2.png"
+---
+
+## Introducción
+
+Analizar datos consiste en gran medida en resumirlos, buscamos caracterizar a las observaciones a partir de medidas que resuman aspectos importantes o que nos generan interés.\
+Siempre que se realiza un análisis estadístico, el primer paso está en conocer la distribución de los datos, buscamos determinar qué tan parecidos o que tan diferentes son las observaciones en una dimensión determinada (en estadística, dimensión es sinónimo de variable). Lo cual requiere calcular la media y la desviación estándar de la variable.
+
+La media y la desviación estándar son los estadísticos más utilizados, pero no son los únicos que sirven para describir a los datos y, en algunas ocasiones, no son los más adecuados. La media por ejemplo, es una medida de posición que es sensible a datos atípicos, por lo que en algunas ocasiones resulta más conveniente utilizar la mediana o la moda. Igualmente, si bien la desviación estándar no tiene un sustituto en términos analíticos como medida de dispersión, muchas veces el rango de los datos (la diferencia entre el máximo y el mínimo) o el rango intercuartílico nos puede dar información más relevante sobre qué tan diferentes son las observaciones.
+
+Saber ejecutar los comandos para calcular la media, la desviación estándar o el valor máximo de una variable es importante y es el objetivo principal de este tutorial. Sin embargo, es igual de relevante conocer algo de teoría estadística a los fines de entender las implicaciones de estas medidas.\
+Un buen material de texto, con ejemplos en R lo pueden encontrar en este link [Introduction to Statistics and Data Analysis](https://www.filepicker.io/api/file/TgilBNiCSk26axWSRDVA), lo que concierne a este módulo está en los capítulos 2 y 3 de este libro.
+
+## Que vamos a aprender en este módulo?
+
+-   Cómo calcular frecuencias absolutas y relativas
+-   Cómo calcular la media, la mediana y la moda
+-   Cómo calcular la varianza y la desviación estándar
+-   Cómo presentar estas medidas en tablas y gráficos
+
+## Frecuencias absolutas y relativas
+
+Cuando tenemos variables categóricas en nuestra base de datos, una pregunta que siempre resulta necesario contestar es cuantas observaciones hay en una categoría y cuantas en otra, la base de datos de Latinobarómetro, con la cual trabajamos en el módulo 1 y la cual utilizaremos para este ejemplo, contiene muchas variables categóricas, por lo que la mayoría de los análisis consisten en conocer ***la proporción*** de personas que están de acuerdo o en desacuerdo con cierta afirmación.
+
+Tomemos por ejemplo la variable `P18ST.A`, la cual almacena el grado de acuerdo con la afirmación *"La democracia puede tener sus problemas pero es el mejor sistema de gobierno"*, si logramos establecer cuantas personas están muy de acuerdo con esa afirmación por país, podríamos establecer en que países existe una mayor proporción de personas con valores democráticos.\
+Obtener el número de personas por respuesta, es lo que llamamos frecuencia absoluta. Si a esa frecuencia absoluta la dividimos por el total de personas que respondieron, obtenemos la frecuencia relativa.
+
+::: {.callout-note appearance="simple"}
+La frecuencia relativa es una proporción o porcentaje por lo que sus valores están acotados de 0 a 1 o de 0 a 100.\
+
+$$Frecuencia \hspace{0.1cm} relativa = \frac{Frecuencia \hspace{0.1cm} Absoluta}{Total \hspace{0.1cm} de \hspace{0.1cm} observaciones}$$
+:::
+
+Obtengamos la frecuencia relativa por país y veamos cuales son los países que están más de acuerdo con esa afirmación.
+
+```{r}
+
+rm(list = ls()) # Limpieza de ambiente
+
+# Activacion de paquetes
+
+library(foreign)
+library(readxl)
+library(tidyverse)
+
+# Carga de la base
+
+latinBase <- read.dta(file = "bases/Latinobarometro_2023_Esp_Stata_v1_0.dta")
+
+```
+
+#### Creación de variable categórica
+
+Como la variable `P18ST_A` tiene varias respuestas posibles (utilizar función `unique()` para verificar), debemos crear una variable que tome el valor de **"Acuerdo"** si la respuesta es **Muy de acuerdo** o **De acuerdo**, de **"Desacuerdo"** si la respuesta es **En desacuerdo** o **Muy en desacuerdo** y **NA** si la respuesta es **No sabe/No responde**.\
+A esta nueva variable le pondremos de nombre `democ`.
+
+```{r}
+
+# Verifico valores únicos
+
+unique(latinBase$P18ST_A) 
+
+# Utilizó la función case_when()
+
+latinBase$democ <- case_when(latinBase$P18ST_A == "Muy de acuerdo" | latinBase$P18ST_A == "De acuerdo" ~ "Acuerdo",
+                             latinBase$P18ST_A == "Muy en desacuerdo" | latinBase$P18ST_A == "En desacuerdo" ~ "Desacuerdo",
+                             latinBase$P18ST_A == "No sabe / No contesta" ~ NA)
+
+
+# Verifico valores únicos de la nueva variable
+
+unique(latinBase$democ)
+
+```
+
+### Cálculo de frecuencias absolutas
+
+Para obtener una frecuencia relativa (la proporción de personas que están de acuerdo), primero debo obtener frecuencias absolutas, es decir, el número de personas que puedo categorizar como **"Acuerdo"**, **"Desacuerdo"** o **"NA"**.\
+Para ello debo agrupar los datos con la función `group_by()` y posteriormente utilizar la función `summarize()`, `tally()` o `count()`.
+
+```{r message=FALSE}
+
+# La función tally cuenta los valores respetando la agrupación y almacena el conteo con el nombre 'n'
+
+frecuencias <- latinBase %>% 
+  group_by(idenpa, democ) %>% 
+  tally() 
+
+frecuencias
+
+# Opcion con summarise()
+
+latinBase %>% 
+  group_by(idenpa, democ) %>% 
+  summarise(frecAbs = n())
+
+# Opcion con count()
+
+latinBase %>% 
+  group_by(idenpa, democ) %>%
+  count()
+
+```
+
+Note que hicimos la agrupación por dos variables (`idenpa` y `democ`), debido a que nuestro objetivo es obtener la frecuencia relativa por país.
+
+### Cálculo de frecuencias relativas
+
+Para obtener las frecuencias relativas por país, debemos obtener el total de personas por país y luego dividir la frecuencia absoluta en el total por país, en el código de abajo se muestra como agregar el total por país utilizando la misma sintaxis del paquete `{dplyr}`.
+
+```{r}
+
+frecuencias <- frecuencias %>% 
+  ungroup() %>% 
+  group_by(idenpa) %>% 
+  mutate(total = sum(n, na.rm = T))
+
+```
+
+Ahora tenemos una nueva variable de nombre `total` que nos muestra el total de observaciones por país, siguiendo lo antes formulado, para la frecuencia relativa debemos dividir `n` entre la variable `total`.
+
+```{r}
+
+frecuencias <- frecuencias %>% 
+  mutate(frecRela = n/total)
+
+```
+
+Ya calculamos las frecuencias relativas, por último, para comparar el grado de acuerdo de los países con la afirmación *"La democracia puede tener sus problemas pero es el mejor sistema de gobierno"*, vamos a filtrar a la base y a seleccionar solamente `latinBase$democ == "Acuerdo"`, organizandola de mayor a menor.
+
+```{r}
+
+frecuencias <- frecuencias %>% 
+  filter(democ == "Acuerdo") %>% 
+  arrange(desc(frecRela))
+
+frecuencias
+
+
+# Mayor acuerdo con la afirmación
+frecuencias[1:3,c(1,5)]
+
+
+# Menor acuerdo con la afirmación
+frecuencias[15:17, c(1,5)]
+```
+
+### Como interpretarlo?
+
+Tomando al país con máximo grado de acuerdo y al país con mínimo grado de acuerdo podemos afirmar que, *"En Uruguay el 84.9% de las personas considera que la democracia, aún con sus problemas es el mejor sistema de gobierno, mientras que en Ecuador solo el 49.4% está de acuerdo con esa afirmación"*
+
+### Como exportarlo?
+
+Ya construida la tabla de frecuencias que me informa sobre el porcentaje de acuerdo por país, puedo exportarla en excel, el comando para ello se muestra a continuación
+
+```{r}
+
+writexl::write_xlsx(x = frecuencias,               # Nombre del objeto creado en R
+                    path = "tablaFrecuencias.xlsx") # Nombre del archivo a exportar
+
+
+```
+
+### Alternativa gráfica
+
+Vamos a realizar un gráfico de barras (sin muchos detalles) que muestre la proporción por país y este organizado de mayor a menor
+
+```{r}
+
+frecuencias %>% 
+  ggplot(mapping = aes(x = frecRela, y = reorder(idenpa, frecRela))) +
+  geom_col()
+
+```
+
+## Realización de mapa con dato de frecuencias
+
+Los mapas se han convertido en una alternativa de visualización cada vez más usada en ciencias sociales, por ello decidí incluir esta alternativa de visualización con los datos de la proporción de acuerdo con la afirmación *"la democracia puede tener sus problemas, pero es el mejor sistema de gobierno"*.
+
+Normalmente para gráficar mapas, es necesario tener algún archivo georeferenciado (como un archivo raster o un shapefile) que contenga la información a colocar en el mapa.\
+Para este caso, que vamos a colorear a los países a partir de la variable de proporción, podemos utilizar la información geográfica que esta almacenada en el paquete `giscoR`
+
+Lo primero entonces es instalar y activar esa librería
+
+```{r}
+# Instalación de giscoR
+
+# install.packages("giscoR")
+
+# Activación de giscoR
+
+library(giscoR)
+library(sf)
+
+```
+
+Este paquete contiene los poligonos de los paises, solo debemos asegurarnos de generar bien la información para no tener problemas al momento de pegar los datos
+
+Debemos asegurarnos que la base `frecuencias` la cual tiene la frecuencia relativa de acuerdo por país, este organizada de mayor a menor
+
+```{r}
+frecuencias <- frecuencias %>% 
+  arrange(-frecRela)
+```
+
+Añado el codigo ISO3 de los 17 paises que tengo, esto para poder pegar las proporciones a los datos geograficos.
+
+```{r}
+code <- c("URY", "ARG", "CHL", 
+          "SLV", "BRA", "CRI", 
+          "MEX", "DOM", "COL", 
+          "BOL", "VEN", "PRY", 
+          "HND", "PER", "GTM", 
+          "PAN", "ECU")
+
+frecuencias <- frecuencias %>% 
+  ungroup() %>% 
+  mutate(iso = code)
+
+frecuencias
+```
+
+Guardo como `paises` una base que contiene los poligonos de los países, esta tiene la informacion geografica de todos los paises del mundo
+
+```{r}
+
+paises <- giscoR::gisco_countries
+
+# filtro por aquellos paises que estan en mis datos de proporcion
+
+paises <- paises %>% 
+  filter(ISO3_CODE %in% code)
+
+```
+
+Pego la proporcion a los datos geograficos
+
+```{r}
+paises <- paises %>% 
+  left_join(y = frecuencias %>% 
+              select(iso, frecRela), by = c("ISO3_CODE" = "iso"))
+```
+
+Realizo la visulizacion del mapa
+
+```{r}
+
+mapa <- paises %>% 
+  ggplot() +
+  geom_sf(mapping = aes(fill = frecRela)) +
+  scale_fill_continuous(type = "viridis") # Elijo una paleta que haga mas visibles las diferencias
+
+mapa
+
+```
+
+Con el comando `ggsave()` puedo exportar el mapa o cualquier grafico en formato imagen a mi directorio de trabajo
+
+```{r}
+
+ggsave(filename = "mapaDemoc.png",
+       plot = mapa,
+       dpi = 500,
+       width = 5.48,
+       height = 4.29
+         )
+
+```
+
+## Medidas de posición
+
+En variables cuantitativas, tenemos medidas de posición y medidas de dispersión, las medidas de posición buscan reflejar los valores más representativos de la variable, por ello la más utilizada y conocida es la media.
+
+### Media
+
+En nuestro lenguaje natural esta incorporado hablar de promedios, lo cual está bien, en general busca reflejar cual es el valor más probable a observar. La función para calcular promedios en R es `mean()`, cuyo argumento indispensable es un conjunto de valores a promediar.
+
+Por ejemplo, el promedio de los números del 1 al 10 es `r round(mean(1:10),2)` y la manera de obtenerlo en R es:
+
+```{r}
+
+mean(1:10)
+
+```
+
+Matemáticamente, un promedio se expresa como la suma de los valores dividido en el número total de valores. Es decir, lo que acabo de hacer el R es:
+
+$$mean = \frac{1+2+3+4+5+6+7+8+9+10}{10}=\frac{55}{10}=5.5$$
+
+Otra manera en la que se puede expresar lo anterior es:
+
+$$mean = \frac{\sum_{i = 1}^{10}x_i}{10} = \frac{1}{10} \cdot \sum_{i=1}^{10}x_i$$
+
+Aunque lo anterior es ilustrativo para reflejar lo que subyace a la función promedio, no solemos trabajar así, en general tenemos una base de datos y nos interesa obtener el promedio de algunas de las variables que la componen.
+
+Para ver esto utilicemos la base con nombre "baseClase2.xlsx", en esta base hay algunos indicadores del Banco Mundial sobre el desarrollo, previo a su análisis, hay algunas modificaciones de formato que debemos realizar (pasarla de formato ancho a largo), hecho eso, seleccionemos alguna de las variables y elijamos un subconjunto de países para calcular la media.
+
+```{r}
+
+# Levantamos la base con función read_excel() del paquete {readxl}
+
+baseWB <- readxl::read_excel(path = "bases/baseClase2.xlsx")
+
+
+```
+
+Al utilizar la función `glimpse()`, vemos que los años aparecen como variables, si bien esto no esta mal conceptualmente, es necesario modificar su estructura para realizar ciertos análisis, la función a utilizar para ello es `gather()`.
+
+```{r}
+
+baseWB <- baseWB %>% # Pasamos de formato largo a ancho
+  gather(key = "year",     # Nombre de la variable que almacenara las columnas
+         value = "valor",  # Nombre de la variable con la que relleno los valores
+         5:ncol(baseWB))   # Columnas a pasar de ancho a lago
+
+```
+
+Ahora tenemos una base de datos con 6 columnas, sin embargo, el número de variables contenidas en la base es mayor, la columna "Indicator Name" señala a que variable pertenece el valor, observando los valores únicos de "Indicator Name", vemos que en total son 11 variables.
+
+```{r}
+
+unique(baseWB$`Indicator Name`)
+
+```
+
+Para finalmente tener una base de datos con una estructura tradicional, donde cada fila es una medición y cada columna es una variable, debemos hacer la transformación inversa a la realizada con `gather`, pero sobre la variable `Indicator Code` o `Indicator Name`, de esa forma tendremos a cada una de las 11 variables como una columna.\
+Por practicidad en los nombres, utilizaremos a la variable `Indicator Code` pues esta no contiene caracteres especiales ni espacios.
+
+La función que me permite hacer la operación inversa a `gather` es `spread`.
+
+```{r}
+
+baseWB <- baseWB %>% 
+  select(-`Indicator Name`) %>% 
+  spread(key = `Indicator Code`, value = valor)
+
+baseWB %>% glimpse()
+
+```
+
+Ahora si tenemos nuestra base de datos con una estructura tradicional, siendo más precisos, tenemos un panel de datos, es decir, mediciones repetidas de las mismas unidades de observación (paises) en distintos momentos del tiempo.
+
+Para analizar el promedio, utilicemos la variable **"Life expectancy at birth, total (years)"**, esta variable esta medida desde 1990 y hasta 2021 para la mayoría de países, sin embargo, los valores de año aparecen desde 1960. Por simplicidad acotemos el análisis a algunos países, el código de la variable es `SP.DYN.LE00.IN`.
+
+```{r}
+
+# Genero un vector a partir del cual filtrar la base
+# estos paises son los que voy a analizar
+
+paises <- c("MEX", "CRI", "COL", "URY", "PRY", "ARG",
+            "BRA", "USA", "JPN", "DEU", "CHL", "CAN")
+```
+
+Ahora calculemos el promedio de la expectativa de vida al nacer por país, es decir, promediemos los valores de cada país para los distintos años.\
+Para ello debemos usar la función `group_by()` acompañada de la función `summarise()`, en la primera señalamos la variable categórica, en este caso país, a partir de la cual deseamos desagregar el análisis y en la segunda ponemos la medida a calcular, en este caso el nombre de la variable que es `SP.DYN.LE00.IN`.
+
+```{r}
+
+resumenMedia <- baseWB %>%                                   # Base inicial
+  filter(`Country Code` %in% paises) %>%                            # filtro los paises que me interesan
+  group_by(`Country Code`) %>%                                      # agrupo por país  
+  summarise(mediaEspVida = mean(SP.DYN.LE00.IN))
+
+resumenMedia
+
+```
+
+Al ejecutar el código vemos que muchas observaciones arrojan `NA` o valores perdidos, esto es porque para algunos años, esta variable no esta medida en esos países, la manera de solucionar ese problema es utilizando el argumento `'na.rm = T'` dentro de la función mean `mean(..., na.rm = T)`, con este argumento lo que hace R es tomar el promedio de los valores DISPONIBLES.
+
+```{r}
+
+resumenMedia <- baseWB %>%                                   # Base inicial
+  filter(`Country Code` %in% paises) %>%                            # filtro los paises que me interesan
+  group_by(`Country Code`) %>%                                      # agrupo por país  
+  summarise(mediaEspVida = mean(SP.DYN.LE00.IN, na.rm = T))
+
+resumenMedia
+
+```
+
+Las conclusiones que podemos sacar de esta última tabla, es que Japón es el país que muestra mayor promedio en la expectativa de vida al nacer entre 1960 y 2021, mientras que Brasil es el país que muestra el valor más bajo.
+
+### Mediana
+
+La mediana es el valor que, organizados los datos de menor a mayor, divide a los datos en dos partes iguales. Cuando existen valores atípicos (valores que se salen de la tendencia del resto de observaciones), la mediana es una mejor medida de posición, en el sentido que puede aportar una medida mas representativa del conjunto de los datos.
+
+La lógica para obtenerla es la misma, y puede ser obtenida al tiempo que obtenemos la media, la función a utilizar es `median()`.\
+A la tabla anterior con la media `resumenMedia`, añadiremos una columna que contenga la mediana.
+
+```{r}
+
+resumenMedia <- baseWB %>%                                   # Base inicial
+  filter(`Country Code` %in% paises) %>%                            # filtro los paises que me interesan
+  group_by(`Country Code`) %>%                                      # agrupo por país  
+  summarise(mediaEspVida = mean(SP.DYN.LE00.IN, na.rm = T),
+            medianaEspVida = median(SP.DYN.LE00.IN, na.rm = T))
+
+resumenMedia
+
+```
+
+### Graficando las medias obtenidas
+
+Una vez obtuvimos los resultados, una buena manera de presentarlos es a partir de un gráfico de barras que muestre el promedio por país y añadir una línea recta que muestre el promedio general, de manera que se pueda observar que países están por encima y que países están por debajo de la media general. Para hacer esto hay algo que hasta ahora no hemos obtenido, la media general.
+
+```{r}
+
+mediaGeneral <- mean(baseWB$SP.DYN.LE00.IN[baseWB$`Country Code` %in% paises], na.rm = T)
+
+resumenMedia %>% 
+  ggplot(mapping = aes(x = reorder(`Country Code`, desc(mediaEspVida)), y = mediaEspVida)) +
+  geom_col() +
+  geom_text(mapping = aes(label = round(mediaEspVida, 1)), # Añadimos valores a las columnas
+            nudge_y = 3) +
+  geom_hline(mapping = aes(yintercept = mediaGeneral), color = "red") # Añadimos media general en rojo
+
+
+```
+
+Otra manera de ver el comportamiento por país es a partir de un gráfico de cajas (boxplot), este mostraría no solo los valores centrales por país (puntualmente la mediana), sino la distribución por país para los distintos años.
+
+```{r}
+
+baseWB %>% 
+  filter(`Country Code` %in% paises) %>%
+  group_by(`Country Code`) %>% 
+  mutate(median = median(SP.DYN.LE00.IN, na.rm = T)) %>% 
+  ggplot(mapping = aes(x = reorder(`Country Code`, desc(median)), y = SP.DYN.LE00.IN)) +
+  geom_boxplot()
+
+```
+
+## Medidas de dispersión
+
+Siempre es importante saber no solamente cual es el valor medio de una variable (medida de posición como media o mediana), sino también, que tanto se parecen cada uno de los datos a ese valor medio. Es decir, como se distribuyen los datos.
+
+A partir de las dos gráficas anteriores esto puede ser más intuitivo, en la gráfica de la media, vimos solamente la medida de posición (media) que le correspondía a cada país, de esta concluimos por ejemplo, que Japón es el que tiene mayor expectativa de vida al nacer y Brasil el que menos.\
+Sin embargo, viendo la segunda gráfica (gráfico de cajas) es posible ver que Brasil presento en algunos años valores por encima de 70 y en otros valores menores a 60. El hecho de que la caja de Brasil sea una de las más alargadas, implica que Brasil es uno de los países que muestra mayor dispersión en los datos.
+
+El estadístico más usado para medir la dispersión de los datos, es la desviación estándar, el cual es la raíz cuadrada de la varianza. En general a mayor desviación estándar mayor variabilidad o dispersión de los datos y menos representativa resulta la media del conjunto de datos.
+
+Para obtener la desviación estandar la función a utilizar es `sd()`, su estructura de uso es idéntica a la que vimos con la media y con la mediana. Por ello añadiremos la desviación estandar como una columna adicional en `resumenMedia`
+
+```{r}
+
+resumenMedia <- baseWB %>%                                   # Base inicial
+  filter(`Country Code` %in% paises) %>%                            # filtro los paises que me interesan
+  group_by(`Country Code`) %>%                                      # agrupo por país  
+  summarise(mediaEspVida = mean(SP.DYN.LE00.IN, na.rm = T),
+            medianaEspVida = median(SP.DYN.LE00.IN, na.rm = T),
+            desvioEspVida = sd(SP.DYN.LE00.IN, na.rm = T))
+
+resumenMedia
+
+```
+
+Formalmente, la desviación estándar es la raíz de la suma de las distancias al cuadrado de cada observación con respecto a la media, en términos más llanos, refleja la distancia promedio de las observaciones con respecto al promedio.
+
+Por ejemplo, interpretando el dato de desviación estándar para Colombia, la distancia promedio de cada dato con respecto al promedio es de 5.64 años de expectativa de vida al nacer.
+
+$$\sigma = \sqrt{\frac{\sum_{i=1}^{n}(x_i - \mu)\cdot\sum_{i=1}^{n}(x_i - \mu)}{n-1}} = \sqrt{\frac{\sum_{i=1}^{n}(x_i-\mu)^2}{n-1}}$$
+
+Una manera de observar gráficamente la dispersión de los datos es a partir de histogramas, a continuación se presenta el histograma comparando a Colombia con Brasil y Japón.
+
+```{r}
+
+baseWB %>% 
+  filter(`Country Name` %in% c("Colombia", "Brazil", "Japan")) %>% 
+  ggplot() +
+  geom_histogram(mapping = aes(x = SP.DYN.LE00.IN), 
+                 bins = 15, 
+                 color = "black",
+                 fill = "lightgrey") +
+  facet_wrap( ~ `Country Name`)
+
+
+```
+
+Otra herramienta gráfica que suele utilizarse para ver a distribución de los datos, es la visualización de lo que se conoce como función de densidad. No profundizaremos demasiado al respecto, pero para que observen la lógica de la misma, se muestra la función de densidad de la expectativa de vida al nacer en 2019 para todos los países para los que existen datos, sobrepuesta al histograma.
+
+```{r}
+
+baseWB %>% 
+  filter(year == 2019) %>% 
+  ggplot(mapping = aes(x = SP.DYN.LE00.IN, y = ..density..)) +
+  geom_histogram(bins = 15,
+                 color = "black",
+                 fill = "lightgrey") +
+  geom_density(fill = "blue",
+               alpha = 0.15,
+               color = "darkblue")
+
+```
+
+## Otras medidas de dispersión
+
+Además de la desviación estándar, otras dos medidas que suelen presentarse son la varianza y el rango.\
+La varianza es el cuadrado de la desviación estandar, la cual se puede obtener con la funcion `var()` y el rango es la distancia entre el valor máximo y mínimo.
+
+A continuación añadimos estos valores en la tabla de `resumenMedia`
+
+```{r}
+
+resumenMedia <- baseWB %>%                                   # Base inicial
+  filter(`Country Code` %in% paises) %>%                            # filtro los paises que me interesan
+  group_by(`Country Code`) %>%                                      # agrupo por país  
+  summarise(mediaEspVida = mean(SP.DYN.LE00.IN, na.rm = T),         # obtengo la media
+            medianaEspVida = median(SP.DYN.LE00.IN, na.rm = T),     # obtengo la mediana 
+            desvioEspVida = sd(SP.DYN.LE00.IN, na.rm = T),          # obtengo el desvio estandar
+            varEspVida = var(SP.DYN.LE00.IN, na.rm = T),            # obtengo la varianza
+            maxEspVida = max(SP.DYN.LE00.IN, na.rm = T),            # obtengo el maximo
+            minEspVida = min(SP.DYN.LE00.IN, na.rm = T))            # obtengo el minimo
+
+resumenMedia <- resumenMedia %>% 
+  mutate(rango = maxEspVida - minEspVida)                           # obtengo el rango, la distancia entre el maximo y el minimo
+
+resumenMedia
+
+```
+
+## Una alternativa para el análisis
+
+Hasta ahora nos hemos concentrado en desagregar el análisis por países, una alternativa valida para el análisis es deasagregar la información por años, de manera que podamos observar la tendencia promedio de la expectativa de vida al nacer.
+
+Realizaremos una tabla resumen que presente esa información, la estructura del código con `group_by()` y `summarise()` es la misma, pero, en lugar de agrupar la información por países debemos agruparla por año.
+
+```{r}
+
+resumenAnios <-  baseWB %>% 
+  filter(year != 2023) %>% 
+  group_by(year) %>% 
+  summarise(mediaEspVida = mean(SP.DYN.LE00.IN, na.rm = T),
+            medianaEspVida = median(SP.DYN.LE00.IN, na.rm = T),
+            desvioEspVida = sd(SP.DYN.LE00.IN, na.rm = T),
+            varEspVida = var(SP.DYN.LE00.IN, na.rm = T),
+            maxEspVida = max(SP.DYN.LE00.IN, na.rm = T),
+            minEspVida = min(SP.DYN.LE00.IN, na.rm = T))
+
+
+print(resumenAnios, n = 70) # Con este comando veo todo el resultado en mi consola
+
+```
+
+De esta tabla que contiene el promedio general por año, podemos generar un gráfico en el que observemos como se ha comportado la misma a lo largo del tiempo.
+
+```{r}
+
+resumenAnios <- resumenAnios %>% 
+  mutate(year = as.numeric(year)) # La variable 'year' esta almacenada como tipo <chr> (character = almacena texto)
+                                  # para grafical la tendenia debo transformarla en numerica.   
+
+
+# Genero un grafico de linea que muestra la tendencia
+
+resumenAnios %>% 
+  ggplot(mapping = aes(x = year, y = mediaEspVida)) +
+  geom_line()
+
+```
+
+La tendencia es positiva, por lo tanto, es posible afirmar que la expectativa de vida al nacer es una variable que ha mejorado con el tiempo alrededor del mundo.\
+Si además profundizamos el análisis de la media y la desviación estándar por año, no solo la media crecio, sino que la desviación estándar se redujo, lo que quiere decir que en general, todos los países están mejor.
+
+```{r}
+
+resumenAnios %>% 
+  select(year, mediaEspVida, desvioEspVida) %>% 
+  filter(year %in% c(1960,2022))
+
+
+```
+
+## Una digresión sobre la distribución normal
+
+En general, quien ha tomado un curso de estadística alguna vez, ha escuchado sobre la distribución normal o distribución normal estándar. Introduzco este tema acá, porque en muchos de nuestros análisis, asumimos que los datos se distribuyen de manera normal, aunque empíricamente no sea así. Por ejemplo, si los datos de la expectativa de vida al nacer que acabamos de graficar, tuvieran una distribución normal, tendrían que verse más o menos así:
+
+```{r}
+
+baseN <- baseWB %>% 
+  filter(year == 2019)
+
+df <- tibble(variable = rnorm(n = 1000, mean = mean(baseN$SP.DYN.LE00.IN, na.rm = T), sd = sd(baseN$SP.DYN.LE00.IN, na.rm = T)))
+
+df %>% 
+  ggplot(mapping = aes(x = variable, y = ..density..)) +
+  geom_histogram(bins = 15,
+                 color = "black",
+                 fill = "lightgrey") +
+    geom_density(fill = "blue",
+               alpha = 0.15,
+               color = "darkblue")
+
+
+```
+
+Esta forma acampanada es la que frecuentemente asumimos tiene la distribución de nuestros datos, la diferencia con respecto a la verdadera distribución es innegable, no ampliaremos demasiado sobre esto, pero es importante conocer de que se habla cuando se dice que una variable tiene una distribución normal y que en muchos de nuestros análisis se asume que los datos tienen una distribución normal.

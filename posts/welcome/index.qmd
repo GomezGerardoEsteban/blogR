@@ -1,0 +1,55 @@
+---
+title: "Bienvenidos al Taller introductorio al análisis estadístico en R"
+author: "Gerardo Esteban Gómez-Santiago"
+date: "2025-01-14"
+image: "imagenAzul.png"
+---
+
+## Descripción General
+
+El análisis estadístico ha sido siempre una herramienta de investigación fundamental en ciencias sociales, sin embargo, el incremento en el volumen de datos y la mayor capacidad de computo, ha generado que esta herramienta se vuelva indispensable en los procesos de investigación.
+
+La disponibilidad de herramientas de software libre como R o Python, hace del análisis estadístico algo accesible para todos, pero condicionado a que se atraviese cierta curva de aprendizaje en la utilización de estos lenguajes de programación.
+
+Teniendo en cuenta lo anterior, el objetivo de este taller es enseñar la sintaxis del lenguaje R para realizar análisis estadísticos rigurosos y completos, complementando la enseñanza de la teoría estadística con su aplicación practica, lo cual implica manipulación y limpieza de bases de datos, generación de resúmenes estadísticos, implementación de modelos y alternativas de comunicación a través de tablas y gráficos.
+
+## Que encontraras en este material?
+
+El taller esta pensado en cinco módulos, buscando ir avanzando en las complejidades del lenguaje de programación R y en los temas estadísticos más utilizados para la investigación en ciencias sociales.\
+Cada uno de los módulos cuenta con material escrito y de video, encontraras el enlace al video de YouTube en la esquina inferior derecha de cada módulo. Adicionalmente, las bases y los scripts están disponibles en el [repositorio de GitHub del curso](https://github.com/GomezGerardoEsteban/Tidyverso/tree/7ed8174f0c753a0ceed3c82fce135f7d55cd145f/TallerR).\
+La duración de cada video es de entre 1 hora y media y 2 horas, asegurate de contar con las bases de datos que se usan en cada módulo antes de iniciar.
+
+### Módulos
+
+#### Módulo 1: Introducción al IDE RStudio y manipulación de bases de datos
+
+-   Definición y organización del directorio de trabajo
+-   Levantado de bases de datos en distintos formatos
+-   Organización de los datos en formato largo y ancho
+-   Filtrado de observaciones y selección de variables
+-   Agrupación de los datos por variables categóricas para resúmenes estadísticos
+-   Pegado de bases de datos
+
+#### Módulo 2: Análisis estadístico univariado
+
+-   Distribución de los datos
+-   Cálculo de medidas de posición
+-   Cálculo de medidas de dispersión
+
+#### Módulo 3: Análisis estadístico bivariado
+
+-   Covarianza
+-   Correlación
+-   Regresión
+
+#### Módulo 4: Inferencia estadística
+
+-   Intervalos de confianza
+-   Prueba de hipótesis de diferencia de medias
+-   Prueba de hipótesis de diferencia de proporciones
+-   Prueba ANOVA de un factor
+-   Significatividad de los coeficientes de regresión
+
+#### Módulo 5: Visualización de datos
+
+-   Utilización del paquete `{ggplot2}` para realizar visualizaciones personalizadas con rigor profesional, en esta clase se incluye la visualización a través de mapas.

@@ -1,0 +1,443 @@
+---
+title: "Módulo 4: Inferencia Estadística"
+author: "Gerardo Esteban, Gómez-Santiago"
+toc: true
+format: 
+  html:
+    code-links:
+      - text: Video YouTube
+        icon: camera-reels
+        href: https://youtu.be/tOZHymuvgmE
+      - text: Repositorio GitHub
+        icon: file-code
+        href: https://github.com/GomezGerardoEsteban/Tidyverso/tree/main/TallerR/Modulo4
+    mathjax: default
+    code-tools: true
+    self-contained: true
+execute:
+  warning: false
+image: "modulo4.png"
+---
+
+## Introducción
+
+La inferencia estadística es la búsqueda de parámetros poblacionales a partir de la información muestral a la que tenemos acceso.
+
+Cómo es usual en análisis de datos en ciencias sociales *(también en casi todas las disciplinas científicas, no solo en las sociales)*, los datos disponibles se corresponden con muestras poblacionales que, si fueron seleccionadas de manera **ALEATORIA**, nos permiten hacer inferencias respecto al comportamiento o los valores paramétricos de la población.\
+En general no tenemos acceso a toda la información sobre algo que queremos medir, cuando es así, la inferencia estadística no hace falta, pero como casi nunca es así, es fundamental conocer las nociones básicas de inferencia estadística.
+
+Pensemos en un ejemplo, creemos que en las ciudades capitales por ser capitales el promedio de ingreso de la población es mayor al de ciudades que no son capitales. Para corroborar esa creencia, tendríamos que conocer los ingresos de todos los habitantes tanto de la ciudad capital que estemos analizando (Ej. Bogotá) como de las otras ciudades, eso es una ardua tarea que requiere toda la capacidad del Estado, no solo por cobertura, sino también por consideraciones éticas y normativas (*¿porque tendríamos la obligación de contestar preguntas respecto a nuestro ingreso o modos de vida?*). Esa tarea el Estado la realiza con cierta periodicidad (entre 4 y 10 años) en lo que se conoce como **CENSOS**.\
+Sin embargo, la periodicidad entre censos es muy larga y se requiere información sobre características poblacionales para por ejemplo, tomar decisiones de política pública en salud, educación, vivienda, etc.\
+
+Es ahí donde entran las encuestas permanentes de hogares, aquellas que se realizan con mayor frecuencia sobre una **muestra** de la población, a la cual se le aplican los principios de inferencia estadística para responder, si efectivamente el promedio de ingresos en las ciudades capitales es mayor a la del resto de ciudades.
+
+De manera muy sencilla, lo que se hace es utilizar algunas propiedades de la teoría estadística, para determinar bajo cierto nivel de confianza (que puede ser entendido como *'bajo cierta probabilidad'*) cual es el verdadero valor de una medida (Ej. El promedio de ingreso en Bogotá) a partir de un subconjunto de la totalidad de los datos.
+
+Hacer inferencia estadística me permite no solo conocer una medida particular sobre cierta unidad de observación, sino también tener mayor certeza y rigurosidad estadística sobre la comparación entre unidades de observación (Ej.: el promedio de ingresos de Bogotá es significativamente superior al de Cali).
+
+Detrás de esto hay intervalos de confianza, pruebas de hipótesis y teorías sobre la distribución de los datos que requerirían más de tres horas de clase, por ello nos centraremos en intervalos de confianza (con los cuales se pueden realizar pruebas de hipótesis) y en los comandos para hacer pruebas de hipótesis sin revisar con tanto detalle la teoría estadística subyacente, si la requieren un buen material de apoyo con ejemplos en R está disponible en [Introduction to Statistics and Data Analysis](https://www.filepicker.io/api/file/TgilBNiCSk26axWSRDVA).
+
+## Intervalos de confianza
+
+En el módulo 2 cuando hicimos análisis univariado, calculamos la media de alguna variable continua, ese cálculo es lo que se conoce como estimación puntual, la información que obtenemos de ella, solo se corresponde con los datos disponibles.\
+Un mayor grado de información lo podemos obtener calculando los intervalos de confianza, partiendo de que la estimación puntual es obtenida de una muestra y que nuestro interés es el valor poblacional (no muestral), podemos calcular un límite inferior y un límite superior entre cuyos valores se encuentra, bajo cierto nivel de confianza ($95\%$ generalmente) el parámetro poblacional.
+
+Veámoslo con un ejemplo, la **Encuesta Nacional de Ocupación y Empleo - ENOE** es un proyecto estadístico realizado por el INEGI trimestralmente en México y del cual se obtienen medidas estadísticas que pueden ser de interés, por ejemplo, el promedio de ingresos por Estados Federales, hagamos ese cálculo y posteriormente añadámosle los intervalos de confianza.
+
+La base a utilizar es **"ENOE_SDEMT224.dta"** la cual corresponde al cuestionario sociodemográfico del segundo trimestre de 2024.
+
+### Paso 1: Obtener la estimación puntual
+
+Lo primero que debemos hacer es obtener la estimación puntual del ingreso para cada estado, eso lo hacemos utilizando las funciones `group_by()` y `summarise()`. Además del promedio, vamos a obtener el desvió estándar del ingreso por entidad y el tamaño de la muestra por entidad.
+
+::: {.callout-note appearance="simple"}
+Para los cálculos, vamos a tener en cuenta solamente a aquellas personas cuyo ingreso es mayor a 0, por lo tanto debemos agregar un filtro que garantice está condición
+
+`base %>% filter(inocup > 0)`
+:::
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+rm(list = ls()) # Limpieza del ambiente de trabajo
+
+library(tidyverse) # Activación de librería
+
+base <- haven::read_dta(file = "bases/ENOE_SDEMT224.dta") # Carga de la base de datos
+
+# la variable 'ent' corresponte al Estado y la variable 'ingocup' al
+# ingreso mensual
+
+# calculo de la media, el desvio estandar del ingreso y el tamaño de muestra por estado
+
+mediasEnt <- base %>% 
+  filter(ingocup > 0) %>% 
+  group_by(ent) %>% 
+  summarise(mediaIngreso = mean(ingocup),
+            desvioIngreso = sd(ingocup),
+            tamanio = n())
+
+mediasEnt
+
+```
+
+La variable `ent` es un código que se corresponde con cada uno de los 32 estados federativos de los Estados Unidos Mexicanos, tanto si eres mexicano o no, es más cómodo ver los nombres de los estados y no esos números.\
+Dado que la base es un archivo ".dta", en la variable `ent` esta almacenado el nombre del estado al que corresponde el código. Incorporemos los nombres como una variable más.\
+Podemos hacerlo creando una nueva variable (para ello debemos asegurarnos que el orden den vector con los nombres) coincide con el orden de las filas de `mediasEnt`; la otra alternativa es hacer un Join de bases, en este caso no hace falta revisar el orden de las filas y del vector.
+
+```{r}
+#| echo: true
+
+# Creo una base de datos que contenga la etiqueta y los nombres
+
+numeroEstado <- attr(mediasEnt$ent, which = "labels")
+nombreEstado <- names(attr(mediasEnt$ent, which = "labels"))
+
+estados <- tibble(etiqueta = numeroEstado,
+                  nombre = nombreEstado)
+
+# Pego los nombres a la base 'estados' a la base 'mediasEnt' a partir de la funcion left_join()
+
+mediasEnt <- mediasEnt %>% 
+  left_join(y = estados,
+            by = c("ent" = "etiqueta")) %>% 
+  relocate(nombre, .after = ent) %>%        # con relocate puedo modificar la posición de la variable
+  arrange(desc(mediaIngreso))               # organizo los datos de mayor a menor media de ingreso
+
+# Veo el resultado
+
+print(mediasEnt, n = 32)
+
+```
+
+### Paso 2: Calcular el Margen
+
+Para calcular el intervalo de confianza, matemáticamente lo que debemos hacer es bastante simple. Tomar la media para cada estado, que podemos simbolizar con $\bar{X}_i$, restarle un valor para el límite inferior ($L_{i}$) y sumarle un valor para el límite superior ($L_{s}$). Además, el valor que sumamos es igual al valor que restamos.\
+
+¿Qué valor sumar y restar?\
+Este valor depende fundamentalmente de tres cosas:
+
+-   El tamaño de la muestra `n` (el cual obtuvimos en la tabla inicial).
+-   La distribución de los datos, es decir, que tan dispersos con respecto a la media se encuentran las observaciones.
+-   El que la varianza poblacional sea conocida o no (en general es no conocida).
+-   El nivel de significancia $\alpha$ (o el nivel de confianza con el que decidamos trabajar).
+
+llamaremos a ese valor **Margen** y se obtiene de la siguiente forma
+
+-   Con varianza poblacional conocida $(\sigma^2)$
+
+    -   Se utiliza la distribución normal estándar.
+    -   Margen = $Z_{\frac{\alpha}{2}}\cdot\frac{\sigma}{\sqrt{n}}$
+    -   Sintaxis R: `abs(qnorm(p = 0.025))*(desvío/(n)^(1/2))`
+
+-   Con varianza poblacional desconocida $(S^2)$
+
+    -   Se utiliza la distribución t-Student.\
+    -   Margen = $t_{(\frac{\alpha}{2}, n-1)}\cdot\frac{S}{\sqrt{n}}$
+    -   Sintaxis R: `abs(qt(p = 0.025, df = (n-1)))*(desvío/(n)^(1/2))`
+
+Obtengamos el margen a sumar y restar para obtener los límites del intervalo de confianza del promedio de ingresos en cada estado.\
+Para ello debemos utilizar la fórmula para varianza poblacional desconocida, y lo haremos con un nivel de confianza del $95\%$.\
+Operacionalmente añadiremos variables a la base `mediasEnt`, lo cual nos permitirá más adelante calcular la amplitud de los intervalos y graficarlos.
+
+```{r}
+#| echo: true
+
+mediasEnt <- mediasEnt %>% 
+  mutate(cuantil95 = abs(qt(p = 0.025, df = tamanio-1)),
+         margen = cuantil95*desvioIngreso/sqrt(tamanio))
+
+mediasEnt
+
+```
+
+### Paso 3: Calcular los intervalos de confianza
+
+Ya obtenido el margen (el valor a sumar y restar) para calcular el límite inferior y superior del intervalo, solo queda calcularlos.\
+Añadamos dos variables a nuestra base `mediasEnt`, una con el límite inferior (con nombre Li) y otra con el límite superior (con nombre Ls).\
+Algo que suele interesar es la amplitud del intervalo (la distancia entre el límite superior e inferior), entre menos amplio sea, más precisa es la información que estamos obteniendo sobe el valor del parámetro, incluyamos este cálculo en la base `mediasEnt`.
+
+```{r}
+#| echo: true
+
+mediasEnt <- mediasEnt %>% 
+  mutate(Li = mediaIngreso - margen,
+         Ls = mediaIngreso + margen,
+         amplitud = Ls - Li)
+
+print(mediasEnt %>% 
+  select(nombre, mediaIngreso, Li, Ls, amplitud), n = 32)
+
+
+```
+
+### Paso 4: Gráfico de los intervalos
+
+Ya los intervalos de confianza de la media de ingreso para cada estado están calculados, una manera de presentarlos es en la tabla que acabamos de mostrar, de ella podemos decir que en el segundo trimestre de 2024, el ingreso promedio en Ciudad de México estaba entre los `r format(mediasEnt$Li[mediasEnt$ent == 9], scientific = F)` y `r format(mediasEnt$Ls[mediasEnt$ent == 9], scientific = F)` pesos mexicanos con un nivel del confianza del $95\%$, eso es mucho mejor que decir que el pomedio de ingreso en Ciudad de México fue de `r format(mediasEnt$mediaIngreso[mediasEnt$ent == 9], scientific = F)`, al menos para quienes valoran la información.
+
+Sin embargo, una mejor manera de presentar estos resultados es a partir de un gráfico que me permita hacer la comparación entre estados, el código es relativamente sencillo con **{ggplot2}**.
+
+```{r}
+#| echo: true
+
+# Grafico de intervalos de confianza de ingreso promedio por estado
+
+mediasEnt %>% 
+  ggplot(mapping = aes(x = mediaIngreso, y = reorder(nombre, desc(mediaIngreso)))) +
+  geom_point() +
+  geom_errorbar(mapping = aes(xmin = Li, xmax = Ls)) +
+  labs(title = "Media de ingreso mensual por entidades federativas en México",
+       subtitle = "Los datos corresponden al 2 trimestre de 2024",
+       y = NULL,
+       x = "Pesos Mexicanos",
+       caption = "Fuente: elaboración propia en base a ENOE-INEGI 2024")
+
+```
+
+### ¿Qué información adicional me ofrecen los intervalos de confianza?
+
+Al inicio se mencionó algo respecto a la prueba de hipótesis subyacente a los intervalos de confianza, el razonamiento es muy sencillo, si no existen solapamientos entre los intervalos de confianza de dos unidades de observación, podemos afirmar que las medias de esas dos unidades de observación, son significativamente diferentes, caso contrario, no puedo afirmar que las medias sean significativamente distintas. Esto no reemplaza la prueba de hipótesis y en casos en que los intervalos de confianza estén muy cerca deberiamos realizar un `t.test()`.\
+Utilizando la información que acabamos de calcular, podemos afirmar que no existen diferencias significativas en el ingreso promedio entre Ciudad de México y Chihuahua, pero si entre Ciudad de México y Baja California.
+
+```{r}
+#| echo: true
+
+mediasEnt %>% 
+  filter(nombre %in% c("Baja California",
+                       "Ciudad de México",
+                       "Chihuahua")) %>% 
+  ggplot(mapping = aes(x = mediaIngreso, y = reorder(nombre, desc(mediaIngreso)))) +
+  geom_point() +
+  geom_errorbar(mapping = aes(xmin = Li, xmax = Ls)) +
+  labs(title = "Prueba de diferencia de medias a partir de los Intervalos de Confianza\n",
+       subtitle = "Dado que se solapan los intervalos de CDMX y Chihuahua, no existen diferencias\nsignificativas en el ingreso promedio mensual de estas dos entidades.\n\nMientras que Baja California muestra un ingreso promedio mensual significativamente\nsuperior a CDMX",
+       y = NULL,
+       x = "Pesos Mexicanos",
+       caption = "Fuente: elaboración propia en base a ENOE-INEGI 2024")
+
+
+```
+
+## Prueba de hipótesis de diferencia de medias
+
+Ya nos aproximamos a la prueba de diferencia de medias, pero vale la pena abordarla de manera más completa debido a que es muy utilizada para sostener argumentos y en algunas ocasiones, es evidencia suficiente para una tesis o establecer un efecto causal.\
+Nos interesa saber si dada una condición o tratamiento sobre ciertas unidades de observación, se genera una diferencia significativa en el valor de una variable cuantitativa observada. El ejemplo de ingresos es un buen ejemplo y podemos tomar como condición de tratamiento el sexo.
+
+Para poder determinar si en México las mujeres tienen un ingreso significativamente diferente al de los hombres, debemos realizar una prueba de hipótesis que verifique si para cierto nivel de confianza esas medias son significativamente diferentes o no.
+
+Formalmente, para realizar una prueba de hipótesis de diferencia de medias, debemos definir un nivel de confianza y plantear nuestra prueba de hipótesis en términos de hipótesis nula e hipótesis alternativa.\
+En general y por principio espistemológico de cómo hacemos ciencia, lo que buscamos al utilizar nuestros datos es falsar la hipótesis nula (principio popperiano de falsación), en el ejemplo puntual planteado aquí, hay argumentos económicos y sociales que sostienen que las mujeres enfrentan una discriminación en el ingreso, por lo que *a priori* esperaríamos que el ingreso de las mujeres sea menor que el de los hombres o al menos diferente, esa sería nuestra hipótesis alternativa (lo que esperamos encontrar), nuestra hipótesis nula sería que las mujeres tienen un ingreso mayor o igual al de los hombres (buscamos falsar esta aseveración).
+
+En el caso concreto de diferencia de ingresos por género, siendo $\bar{X}_M$ la media de ingresos de mujeres y $\bar{X}_H$ la media de ingresos de hombres, nuestras hipótesis nula ($H_0$) y alternativa ($H_1$) son:
+
+$$H_0: \bar{X}_M = \bar{X}_H$$ $$H_1: \bar{X}_M \neq \bar{X}_H$$
+
+Esta hipótesis se conoce como prueba de dos colas, porque solo se afirma que son distintas, no se afirma nada respecto a si una de las medias es mayor o menor que la otra.
+
+Como criterios de decisión respecto a la prueba, tenemos el intervalo de confianza de la diferencia de medias, el p-valor y el valor crítico, todos estos criterios son devueltos por la función `t.test()`
+
+```{r}
+#| echo: true
+
+pruebaMedias <- t.test(formula = ingocup ~ sex,        # En el argumento formula va 'var_cuanti' ~ 'var_categorica'
+                       data = base %>%                 # En data pongo la base de datos que contiene las variables
+                              filter(ingocup > 0))             
+
+# La variable 'sex' esta codificada de la forma:
+# 1 = Hombre
+# 2 = Mujer
+
+pruebaMedias
+
+```
+
+La salida del `t.test()` es similar a la salida de la regresión, centrémonos en tres cosas, el *P-Valor*, el Valor del test estadístico *t-Student* y los *intervalos de confianza*.
+
+-   **P-Valor:** Lo encontramos en la parte superior derecha, dado que es menor que el nivel de significancia de 0.05, podemos afirmar que la media de ingreso entre hombres y mujeres es diferente a un nivel de confianza del $95\%$
+-   **Valor del test estadístico 't':** Lo encontramos en la parte superior izquierda, este valor debe compararse con un valor teórico de la distribución t-Student, el cual depende del nivel de confianza y del número de observaciones, en general, valores mayores a 2 implican el rechazo de la hipótesis nula cuando la hipótesis es de igualdad de medias, en este caso el valor de `r round(pruebaMedias$statistic,2)` es muy superior a 2, por lo que podemos afirmar por este criterio que las medias de ingreso entre hombres y mujeres son diferentes.
+-   **Intervalos de confianza:** Aparecen como *'95 percent confidence interval'*, lo que nos muestran es el intervalo de confianza de la diferencia (de la resta) entre la media de ingreso de hombres y la media de ingreso de mujeres. Dado que los intervalos no contienen el cero (tienen el mismo signo, ambos positivos), podemos afirmar que la media de ingresos entre hombres y mujeres es diferente, además, el ingreso de los hombres es superior al de las mujeres.
+
+Algo que resulta evidente de los tres criterios anteriores, es que todos coinciden, lo cual debería ayudarme en situaciones donde la interpretación es algo más compleja, si rechazo la hipótesis nula por el criterio de intervalos de confianza, la tengo que rechazar también por criterio de p-valor o por criterio de valor crítico.
+
+A continuación se muestra el gráfico de los intervalos de confianza de la diferencia de medias, lo relevante del mismo es mostrar la distancia del intervalo respecto al cero, pues esto demuestra que la diferencia es significativa al nivel de confianza elegido.
+
+```{r}
+#| echo: true
+
+pruebaMedias <- t.test(formula = ingocup ~ sex,
+                 data = base)
+
+df <- tibble(dif = pruebaMedias$estimate[1] - pruebaMedias$estimate[2],
+             Li = pruebaMedias$conf.int[1],
+             Ls = pruebaMedias$conf.int[2])
+
+df %>% 
+  ggplot(mapping = aes(x = "Diferencia de Medias Ingreso_Hombre - Ingreso_Mujer", 
+                       y = dif)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = Li, ymax = Ls), width = 0.4) +
+  geom_hline(mapping = aes(yintercept = 0),
+             linetype = "dashed",
+             color = "red") +
+  labs(title = "Intervalo de confianza de la diferencia de medias de ingreso por sexo\nIngreso Hombres - Ingreso Mujeres",
+       x = NULL,
+       y = "Pesos Mexicanos") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+Lo que podemos concluir del test de diferencia de medias, es que efectivamente la diferencia en el promedio de ingresos entre hombres y mujeres es significativa, los hombres ganan entre `r round(df$Li,1)` y `r round(df$Ls, 1)` pesos más que las mujeres.
+
+## Prueba de hipótesis de diferencia de proporciones
+
+La prueba de diferencia de proporciones es otro test estadístico muy utilizado en ciencias sociales, la lógica subyacente es muy similar a la de diferencia de medias, sin embargo, por cuestiones relativas a la teoría estadística, en lugar de utilizar la distribución t-Student se utiliza la distribución normal.\
+Respecto a la selección del nivel de confianza, de los criterios para determinar el resultado del test o del planteamiento de hipótesis nula y alternativa, no hay cambios relevantes.
+
+Para ver cómo hacer una prueba de diferencia de proporciones, utilicemos la variable **'sub_o'**, la cual toma el valor de 1 si el individuo se considera subocupado y el de 0 si el individuo no se encuentra subocupado.\
+Hagamos la comparación entre las entidades de Chihuahua y Ciudad de México, las cuales muestran niveles de ingreso mensual parecidos.
+
+```{r}
+
+pruebaProp <- base %>% 
+  filter(ent %in% c(9, 8)) %>% 
+  group_by(ent, sub_o) %>% 
+  summarise(frecAbs = n())
+
+pruebaProp <- pruebaProp %>% 
+  ungroup() %>% 
+  group_by(ent) %>% 
+  mutate(total = sum(frecAbs)) %>% 
+  ungroup() %>% 
+  mutate(frecRel = frecAbs/total)
+
+pruebaProp <- pruebaProp %>% 
+  filter(sub_o != 0)
+
+pruebaProp <- pruebaProp %>% 
+  left_join(y = estados,
+            by = c("ent" = "etiqueta"))
+
+# Tabla con las proprciones a comparar
+
+pruebaProp %>% 
+  select(nombre, frecAbs, total, frecRel)
+
+# Función para realizar la diferencia de proporciones
+
+prop.test(x = pruebaProp$frecAbs, n = pruebaProp$total)
+
+```
+
+En los valores de la tabla se observan diferencias importantes, mientras en Ciudad de México hay un $5\%$ de población subocupada, en Chihuahua ese valor es del $2.2\%$.\
+Eso ya me permite intuir que la diferencia en las proporciones es estadísticamente significativa, lo que se comprueba al realizar el `prop.test()`.
+
+Lo que pide la función para realizar el test, son las frecuencias absolutas y el total de observaciones de cada una de las unidades a comparar, en este caso Ciudad de México tiene `r pruebaProp$total[pruebaProp$ent == 9]` personas encuestadas, mientras Chihuahua tiene `r pruebaProp$total[pruebaProp$ent == 8]`.
+
+Una vez obtenidos los resultados, la lectura es similar al de diferencia de medias, el P-Valor menor al 0.05 indica que la diferencia de proporciones es significativa al $95\%$ de confianza, el valor critico *X-squared* es muy alto, lo que me conduce a rechazar la hipótesis nula de que las proporciones son iguales, finalmente, lo intervalos de confianza no contienen el cero, dando cuenta de que la diferencia es significativa, teniendo CDMX una proporción de subocupados superior a la de Chihuahua.
+
+## Prueba ANOVA (ANalysis Of VAriance)
+
+De la misma familia de la diferencia de medias, viene la prueba ANOVA, ¿Que me aporta la prueba ANOVA respecto a la prueba de diferencia de medias?, la prueba de diferencia de medias solo me permite comparar dos poblaciones, mientras que la prueba ANOVA me permite comparar más de dos.\
+Ahora bien, si se llama análisis de varianza, porque sirve para comparar medias, porque verifica si existen diferencias significativas en las medias a partir de la dispersión de los datos.
+
+Un ejemplo gráfico puede ayudar, el siguiente gráfico es a partir de datos simulados, en el gráfico de la izquierda hay una dispersión entre grupos mucho mayor a la dispersión adentro de cada grupo, pasa lo contrario con el gráfico de la derecha.\
+Esto indicaría que la diferencia de medias en los grupos de la izquierda es significativa, mientras la diferencia de medias en los grupos de la derecha no es tan evidente.
+
+```{r}
+#| echo: false
+
+set.seed(12)
+anovaA <- rnorm(n = 10, mean = 1, sd = 1)
+anovaB <- rnorm(n = 10, mean = 5, sd = 1)
+anovaC <- rnorm(n = 10, mean = 9, sd = 1)
+
+set.seed(13)
+anovaNoA <- rnorm(n = 10, mean = 3, sd = 4)
+anovaNoB <- rnorm(n = 10, mean = 2.5, sd = 4)
+anovaNoC <- rnorm(n = 10, mean = 3.5, sd = 4)
+
+tablaAnova <- tibble(prueba = c(rep("Diferencia Evidente", 30), rep("Diferencia No Evidente", 30)),
+                     ref = rep(c(rep("Sample 1",10),rep("Sample 2",10),rep("Sample 3",10)),2),
+                     valores = c(anovaA, anovaB, anovaC, anovaNoA, anovaNoB, anovaNoC))
+
+tablaAnova %>% 
+  ggplot() +
+  geom_point(mapping = aes(x = ref, 
+                           y = valores, 
+                           shape = ref, 
+                           color = ref),
+             size = 3,
+             show.legend = F) +
+  facet_grid(~prueba) +
+  labs(title = "Ejemplo de varianzas entre grupos y al interior de los grupos\n",
+       subtitle = "En el gráfico de la izquierda es evidente que la diferencia entre grupos es mayor a la diferencia\nal interior de los grupos. Por el contrario, en el gráfico de la derecha se observa que la diferencia\nentre grupos es menor a la diferencia al interior de los grupos\n",
+       x = NULL,
+       y = "Valores")
+```
+
+Utilicemos la prueba ANOVA para ver las diferencias en el ingreso según el máximo nivel educativo alcanzado, para aplicarla debemos utilizar los comandos vistos en el análisis de regresión simple (en el fondo la prueba ANOVA es una regresión siendo la variable 'X' una variable categórica de al menos dos niveles).\
+
+La variable `cs_p_13` contiene la información sobre máximo nivel educativo alcanzado, desde ninguna educación formal hasta doctorado, convirtamos esta variable en categórica y apliquemos la prueba ANOVA.
+
+Lo primero es filtrar los NA y los casos '99', que corresponden a datos no disponibles, para ser coherentes con los análisis anteriores, nos quedamos solo con las observaciones cuyo ingreso es mayor a 0.
+
+```{r}
+#| echo: true
+
+anova <- base %>% 
+  filter(!is.na(cs_p13_1) & cs_p13_1 != 99 & ingocup > 0)
+
+nombresEdu <- names(attr(anova$cs_p13_1, which = "labels"))
+
+anova$educacion <- factor(case_when(
+  anova$cs_p13_1 == 0 ~ nombresEdu[1],
+  anova$cs_p13_1 == 1 ~ nombresEdu[2],
+  anova$cs_p13_1 == 2 ~ nombresEdu[3],
+  anova$cs_p13_1 == 3 ~ nombresEdu[4],
+  anova$cs_p13_1 == 4 ~ nombresEdu[5],
+  anova$cs_p13_1 == 5 ~ nombresEdu[6],
+  anova$cs_p13_1 == 6 ~ nombresEdu[7],
+  anova$cs_p13_1 == 7 ~ nombresEdu[8],
+  anova$cs_p13_1 == 8 ~ nombresEdu[9],
+  anova$cs_p13_1 == 9 ~ nombresEdu[10]), 
+  levels = nombresEdu[1:10])
+
+regAnova <- lm(formula = ingocup ~ educacion,
+               data = anova)
+
+summary(regAnova)
+
+```
+
+La interpretación de la salida es un poco compleja, lo que nos muestra cada uno de los coeficientes es en cuanto se incrementaría en promedio alcanzar ese nivel especifico de educación, respecto a una categoría de referencia que en este caso es no tener educación formal.\
+En general se observa que a mayores niveles de educación mayor es el incremento en el ingreso promedio, se observan tres niveles relevantes. En primer lugar, terminar la secundaria, el bachillerato o tener una carrera técnica, hace que el ingreso promedio se incremente entre $\$2,792.6$ y $\$4,641.4$ pesos mexicanos. En segundo lugar, ser profesional hace que el ingreso promedio se incremente $\$8,073.1$ pesos mexicanos. Por último, tener maestría o doctorado, hace que los ingresos se incrementen entre $\$15,072.8$ y $\$17,877.3$ pesos mexicanos.
+
+¿Como saber si las diferencias entre grupos son significativas? de nuevo aparecen los intervalos de confianza, de allí la utilidad de saberlos calcular, nos permite hacer pruebas de hipótesis entre grupos sin necesidad de abordar toda la teoría estadística subyacente a una prueba más compleja como la prueba ANOVA.
+
+Calculemos los intervalos de confianza del ingreso medio por nivel educativo alcanzado y verifiquemos en qué casos existen diferencias significativas y en qué casos no.
+
+```{r}
+
+mediaEduc <- anova %>%
+  group_by(educacion) %>%   
+  summarise(mediaIngreso = mean(ingocup),
+            desvioIngreso = sd(ingocup),
+            tamanio = n(),
+            cuantil95 = abs(qt(p = 0.025, df = tamanio-1)),
+            margen = cuantil95*desvioIngreso/sqrt(tamanio),
+            Li = mediaIngreso - margen,
+            Ls = mediaIngreso + margen)
+  
+
+mediaEduc %>% 
+  ggplot(mapping = aes(x = educacion, y = mediaIngreso)) +
+  geom_point() +
+  geom_errorbar(mapping = aes(ymin = Li, ymax = Ls)) +
+  theme(axis.text.x = element_text(angle = 90))
+
+
+```
+
+Las conclusiones a partir de este gráfico de intervalos de confianza de las medias son similares a los de la regresión de la prueba ANOVA, hay un primer salto si se terminó el bachillerato, la secundaria o se tiene una carrera técnica. Un segundo salto si se es profesional y un tercer salto si se tiene maestría o doctorado. Además, para quienes actualmente están realizando una maestría y tienen dudas respecto al doctorado, el gráfico nos muestra que la diferencia de ingresos es significativa a un nivel de confianza del $95\%$, un aliciente económico para decidir estudiar 4 o 5 años más, debido a su efecto sobre el ingreso medio.
