@@ -5,3 +5,6 @@
 .DS_Store
 .quarto
 posts/Modulo4/bases/*.dta
+
+/.quarto/
+**/*.quarto_ipynb

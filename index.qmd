@@ -2,9 +2,9 @@
 title: "Taller introductorio al análisis estadístico en R"
 listing:
   contents: posts
-  sort: "title asc"
-  type: grid
-  categories: false
+  sort: "date desc"
+  type: default
+  categories: true
   sort-ui: false
   filter-ui: false
 page-layout: full

@@ -11,9 +11,11 @@ website:
     right:
       - about.qmd
       - icon: github
-        href: https://github.com/GomezGerardoEsteban/Tidyverso/tree/6768070f783f1e849cb2b9a18276eae43e54a8c7/TallerR
+        href: https://github.com/GomezGerardoEsteban/
       - icon: twitter
         href: https://x.com/GEsteban_Gomez
+      - icon: linkedin
+        href: https://www.linkedin.com/in/gestebangomez/
 format:
   html:
     theme: 

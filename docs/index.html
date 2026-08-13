@@ -86,9 +86,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-author','listing-date','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -330,12 +330,17 @@ window.Quarto = {
 <span class="menu-text">Sobre mi y el blog</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/GomezGerardoEsteban/Tidyverso/tree/6768070f783f1e849cb2b9a18276eae43e54a8c7/TallerR"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/GomezGerardoEsteban/"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="https://x.com/GEsteban_Gomez"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/gestebangomez/"> <i class="bi bi-linkedin" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -350,13 +355,13 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page">
+    <div class="quarto-title column-page-left">
       <h1 class="title">Taller introductorio al análisis estadístico en R</h1>
                       </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page">
+  <div class="quarto-title-meta column-page-left">
 
       
     
@@ -367,9 +372,11 @@ window.Quarto = {
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(6)</span></div></div></div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
 
 
@@ -380,136 +387,142 @@ window.Quarto = {
 
 
 
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-date-sort="1736830800000" data-listing-file-modified-sort="1736895169973" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="427">
-<a href="./posts/welcome/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/welcome/imagenAzul.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Bienvenidos al Taller introductorio al análisis estadístico en R
-</h5>
-<div class="card-text listing-description delink">
-El análisis estadístico ha sido siempre una herramienta de investigación fundamental en ciencias sociales, sin embargo, el incremento en el volumen de datos y la mayor…
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1786464275444" data-listing-reading-time-sort="28" data-listing-word-count-sort="5583">
+<div class="thumbnail"><a href="./posts/Modulo1/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/Modulo1/modulo1.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/Modulo1/index.html" class="no-external">Módulo 1: Introducción al IDE RStudio y Manipulación de bases de datos</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/Modulo1/index.html" class="no-external">
+En general, en RStudio se trabaja con cuatro cuadrantes entre los cuales se distribuye la pantalla (imagen de abajo).
+</a></div>
 </div>
-<div class="card-attribution card-text-small justify">
+<div class="metadata">
+<a href="./posts/Modulo1/index.html" class="no-external">
 <div class="listing-author">
-Gerardo Esteban Gómez-Santiago
+Gerardo Esteban, Gómez-Santiago
 </div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1766857839400" data-listing-reading-time-sort="26" data-listing-word-count-sort="5006">
+<div class="thumbnail"><a href="./posts/Modulo2/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/Modulo2/modulo2.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/Modulo2/index.html" class="no-external">Módulo 2: Análisis estadístico univariado</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/Modulo2/index.html" class="no-external">
+Analizar datos consiste en gran medida en resumirlos, buscamos caracterizar a las observaciones a partir de medidas que resuman aspectos importantes o que nos generan interés.<br>…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/Modulo2/index.html" class="no-external">
+<div class="listing-author">
+Gerardo Esteban, Gómez-Santiago
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1766858190394" data-listing-reading-time-sort="16" data-listing-word-count-sort="3015">
+<div class="thumbnail"><a href="./posts/Modulo3/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/Modulo3/modulo3.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/Modulo3/index.html" class="no-external">Módulo 3: Análisis estadístico bivariado</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/Modulo3/index.html" class="no-external">
+La principal razón por la que utilizamos la estadística como herramienta de investigación, es porque nos permite generar evidencia empírica sobre la relación entre dos o más…<br><br>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/Modulo3/index.html" class="no-external">
+<div class="listing-author">
+Gerardo Esteban, Gómez-Santiago
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-listing-file-modified-sort="1766858608186" data-listing-reading-time-sort="24" data-listing-word-count-sort="4748">
+<div class="thumbnail"><a href="./posts/Modulo4/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/Modulo4/modulo4.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/Modulo4/index.html" class="no-external">Módulo 4: Inferencia Estadística</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/Modulo4/index.html" class="no-external">
+La inferencia estadística es la búsqueda de parámetros poblacionales a partir de la información muestral a la que tenemos acceso.
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/Modulo4/index.html" class="no-external">
+<div class="listing-author">
+Gerardo Esteban, Gómez-Santiago
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-listing-file-modified-sort="1766858998871" data-listing-reading-time-sort="25" data-listing-word-count-sort="4986">
+<div class="thumbnail"><a href="./posts/Modulo5/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/Modulo5/modulo5.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/Modulo5/index.html" class="no-external">Módulo 5: Visualización de datos con <code>{ggplot2}</code></a>
+</h3>
+<div class="delink listing-description"><a href="./posts/Modulo5/index.html" class="no-external">
+El software R ya no se queda solamente en el análisis estrictamente estadístico, es tambien una herramienta con grandes capacidades comunicativas, la personalización de…<br><code></code><br><br>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/Modulo5/index.html" class="no-external">
+<div class="listing-author">
+Gerardo Esteban, Gómez-Santiago
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-listing-date-sort="1736830800000" data-listing-file-modified-sort="1736895169973" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="427">
+<div class="thumbnail"><a href="./posts/welcome/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/welcome/imagenAzul.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/welcome/index.html" class="no-external">Bienvenidos al Taller introductorio al análisis estadístico en R</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/welcome/index.html" class="no-external">
+El análisis estadístico ha sido siempre una herramienta de investigación fundamental en ciencias sociales, sin embargo, el incremento en el volumen de datos y la mayor…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/welcome/index.html" class="no-external">
 <div class="listing-date">
 Jan 14, 2025
 </div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1786464275444" data-listing-reading-time-sort="28" data-listing-word-count-sort="5583">
-<a href="./posts/Modulo1/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/Modulo1/modulo1.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Módulo 1: Introducción al IDE RStudio y Manipulación de bases de datos
-</h5>
-<div class="card-text listing-description delink">
-En general, en RStudio se trabaja con cuatro cuadrantes entre los cuales se distribuye la pantalla (imagen de abajo).
-</div>
-<div class="card-attribution card-text-small start">
 <div class="listing-author">
-Gerardo Esteban, Gómez-Santiago
+Gerardo Esteban Gómez-Santiago
 </div>
+</a>
 </div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="2" data-listing-file-modified-sort="1766857839400" data-listing-reading-time-sort="26" data-listing-word-count-sort="5006">
-<a href="./posts/Modulo2/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/Modulo2/modulo2.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Módulo 2: Análisis estadístico univariado
-</h5>
-<div class="card-text listing-description delink">
-Analizar datos consiste en gran medida en resumirlos, buscamos caracterizar a las observaciones a partir de medidas que resuman aspectos importantes o que nos generan interés.<br>…
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Gerardo Esteban, Gómez-Santiago
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="3" data-listing-file-modified-sort="1766858190394" data-listing-reading-time-sort="16" data-listing-word-count-sort="3015">
-<a href="./posts/Modulo3/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/Modulo3/modulo3.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Módulo 3: Análisis estadístico bivariado
-</h5>
-<div class="card-text listing-description delink">
-La principal razón por la que utilizamos la estadística como herramienta de investigación, es porque nos permite generar evidencia empírica sobre la relación entre dos o más…<br><br>
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Gerardo Esteban, Gómez-Santiago
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="4" data-listing-file-modified-sort="1766858608186" data-listing-reading-time-sort="24" data-listing-word-count-sort="4748">
-<a href="./posts/Modulo4/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/Modulo4/modulo4.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Módulo 4: Inferencia Estadística
-</h5>
-<div class="card-text listing-description delink">
-La inferencia estadística es la búsqueda de parámetros poblacionales a partir de la información muestral a la que tenemos acceso.
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Gerardo Esteban, Gómez-Santiago
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="5" data-listing-file-modified-sort="1766858998871" data-listing-reading-time-sort="25" data-listing-word-count-sort="4986">
-<a href="./posts/Modulo5/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./posts/Modulo5/modulo5.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Módulo 5: Visualización de datos con <code>{ggplot2}</code>
-</h5>
-<div class="card-text listing-description delink">
-El software R ya no se queda solamente en el análisis estrictamente estadístico, es tambien una herramienta con grandes capacidades comunicativas, la personalización de…<br><code></code><br><br>
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Gerardo Esteban, Gómez-Santiago
-</div>
-</div>
-</div>
-</div></a>
 </div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
