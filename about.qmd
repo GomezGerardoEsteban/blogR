@@ -14,7 +14,6 @@ about:
       text: Github
       href: https://github.com/GomezGerardoEsteban
     - icon: youtube
-      text: YouTube
       href: https://www.youtube.com/@GEstebanGomez
 ---
 
