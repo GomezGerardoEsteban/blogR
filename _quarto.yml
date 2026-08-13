@@ -16,6 +16,8 @@ website:
         href: https://x.com/GEsteban_Gomez
       - icon: linkedin
         href: https://www.linkedin.com/in/gestebangomez/
+      - icon: youtube
+        href: https://www.youtube.com/@GEstebanGomez
 format:
   html:
     theme: 
