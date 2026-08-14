@@ -1,6 +1,12 @@
 ---
 title: "Módulo 4: Inferencia Estadística"
 author: "Gerardo Esteban, Gómez-Santiago"
+date: "2026-08-14"
+categories:
+  - Curso R
+  - Bases de datos
+  - Visualización
+  - Estadística
 toc: true
 format: 
   html:
@@ -119,24 +125,24 @@ Para calcular el intervalo de confianza, matemáticamente lo que debemos hacer e
 ¿Qué valor sumar y restar?\
 Este valor depende fundamentalmente de tres cosas:
 
--   El tamaño de la muestra `n` (el cual obtuvimos en la tabla inicial).
--   La distribución de los datos, es decir, que tan dispersos con respecto a la media se encuentran las observaciones.
--   El que la varianza poblacional sea conocida o no (en general es no conocida).
--   El nivel de significancia $\alpha$ (o el nivel de confianza con el que decidamos trabajar).
+- El tamaño de la muestra `n` (el cual obtuvimos en la tabla inicial).
+- La distribución de los datos, es decir, que tan dispersos con respecto a la media se encuentran las observaciones.
+- El que la varianza poblacional sea conocida o no (en general es no conocida).
+- El nivel de significancia $\alpha$ (o el nivel de confianza con el que decidamos trabajar).
 
 llamaremos a ese valor **Margen** y se obtiene de la siguiente forma
 
--   Con varianza poblacional conocida $(\sigma^2)$
+- Con varianza poblacional conocida $(\sigma^2)$
 
-    -   Se utiliza la distribución normal estándar.
-    -   Margen = $Z_{\frac{\alpha}{2}}\cdot\frac{\sigma}{\sqrt{n}}$
-    -   Sintaxis R: `abs(qnorm(p = 0.025))*(desvío/(n)^(1/2))`
+  - Se utiliza la distribución normal estándar.
+  - Margen = $Z_{\frac{\alpha}{2}}\cdot\frac{\sigma}{\sqrt{n}}$
+  - Sintaxis R: `abs(qnorm(p = 0.025))*(desvío/(n)^(1/2))`
 
--   Con varianza poblacional desconocida $(S^2)$
+- Con varianza poblacional desconocida $(S^2)$
 
-    -   Se utiliza la distribución t-Student.\
-    -   Margen = $t_{(\frac{\alpha}{2}, n-1)}\cdot\frac{S}{\sqrt{n}}$
-    -   Sintaxis R: `abs(qt(p = 0.025, df = (n-1)))*(desvío/(n)^(1/2))`
+  - Se utiliza la distribución t-Student.\
+  - Margen = $t_{(\frac{\alpha}{2}, n-1)}\cdot\frac{S}{\sqrt{n}}$
+  - Sintaxis R: `abs(qt(p = 0.025, df = (n-1)))*(desvío/(n)^(1/2))`
 
 Obtengamos el margen a sumar y restar para obtener los límites del intervalo de confianza del promedio de ingresos en cada estado.\
 Para ello debemos utilizar la fórmula para varianza poblacional desconocida, y lo haremos con un nivel de confianza del $95\%$.\
@@ -255,9 +261,9 @@ pruebaMedias
 
 La salida del `t.test()` es similar a la salida de la regresión, centrémonos en tres cosas, el *P-Valor*, el Valor del test estadístico *t-Student* y los *intervalos de confianza*.
 
--   **P-Valor:** Lo encontramos en la parte superior derecha, dado que es menor que el nivel de significancia de 0.05, podemos afirmar que la media de ingreso entre hombres y mujeres es diferente a un nivel de confianza del $95\%$
--   **Valor del test estadístico 't':** Lo encontramos en la parte superior izquierda, este valor debe compararse con un valor teórico de la distribución t-Student, el cual depende del nivel de confianza y del número de observaciones, en general, valores mayores a 2 implican el rechazo de la hipótesis nula cuando la hipótesis es de igualdad de medias, en este caso el valor de `r round(pruebaMedias$statistic,2)` es muy superior a 2, por lo que podemos afirmar por este criterio que las medias de ingreso entre hombres y mujeres son diferentes.
--   **Intervalos de confianza:** Aparecen como *'95 percent confidence interval'*, lo que nos muestran es el intervalo de confianza de la diferencia (de la resta) entre la media de ingreso de hombres y la media de ingreso de mujeres. Dado que los intervalos no contienen el cero (tienen el mismo signo, ambos positivos), podemos afirmar que la media de ingresos entre hombres y mujeres es diferente, además, el ingreso de los hombres es superior al de las mujeres.
+- **P-Valor:** Lo encontramos en la parte superior derecha, dado que es menor que el nivel de significancia de 0.05, podemos afirmar que la media de ingreso entre hombres y mujeres es diferente a un nivel de confianza del $95\%$
+- **Valor del test estadístico 't':** Lo encontramos en la parte superior izquierda, este valor debe compararse con un valor teórico de la distribución t-Student, el cual depende del nivel de confianza y del número de observaciones, en general, valores mayores a 2 implican el rechazo de la hipótesis nula cuando la hipótesis es de igualdad de medias, en este caso el valor de `r round(pruebaMedias$statistic,2)` es muy superior a 2, por lo que podemos afirmar por este criterio que las medias de ingreso entre hombres y mujeres son diferentes.
+- **Intervalos de confianza:** Aparecen como *'95 percent confidence interval'*, lo que nos muestran es el intervalo de confianza de la diferencia (de la resta) entre la media de ingreso de hombres y la media de ingreso de mujeres. Dado que los intervalos no contienen el cero (tienen el mismo signo, ambos positivos), podemos afirmar que la media de ingresos entre hombres y mujeres es diferente, además, el ingreso de los hombres es superior al de las mujeres.
 
 Algo que resulta evidente de los tres criterios anteriores, es que todos coinciden, lo cual debería ayudarme en situaciones donde la interpretación es algo más compleja, si rechazo la hipótesis nula por el criterio de intervalos de confianza, la tengo que rechazar también por criterio de p-valor o por criterio de valor crítico.
 

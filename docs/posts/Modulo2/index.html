@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Gerardo Esteban, Gómez-Santiago">
+<meta name="dcterms.date" content="2026-08-14">
 
 <title>Módulo 2: Análisis estadístico univariado – TallerR</title>
 <style>
@@ -4115,7 +4116,7 @@ window.Quarto = {
 };
 </script>
 
-<style type="text/css">body {background-color: #d9e8ed;font-family: "Century", sans-serif;color: #000000;}h1, h2, h3 {color: #09526d;}code {color: #ff4500; }</style>
+<style type="text/css">body {background-color: var(--bs-body-bg);font-family: "Century", sans-serif;color: var(--bs-body-color);}h1, h2, h3 {color: #09526d;}code {color: #ff4500; }[data-bs-theme="dark"] h1,[data-bs-theme="dark"] h2,[data-bs-theme="dark"] h3 {color: #bfe4f2 !important; }[data-bs-theme="dark"] code {color: #ff8c5a; }</style>
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -4341,7 +4342,13 @@ window.Quarto = {
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <div class="quarto-title-block"><div><h1 class="title">Módulo 2: Análisis estadístico univariado</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-                      </div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Curso R</div>
+                <div class="quarto-category">Bases de datos</div>
+                <div class="quarto-category">Estadística</div>
+                <div class="quarto-category">Visualización</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -4354,6 +4361,12 @@ window.Quarto = {
             </div>
     </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 14, 2026</p>
+      </div>
+    </div>
     
       
     </div>
@@ -5695,588 +5708,594 @@ Si además profundizamos el análisis de la media y la desviación estándar por
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb59" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Módulo 2: Análisis estadístico univariado&quot;</span></span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;Gerardo Esteban, Gómez-Santiago&quot;</span></span>
-<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
-<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a><span class="co">    code-links:</span></span>
-<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a><span class="co">      - text: Video YouTube</span></span>
-<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a><span class="co">        icon: camera-reels</span></span>
-<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a><span class="co">        href: https://youtu.be/92DX5px65JI</span></span>
-<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a><span class="co">      - text: Repositorio GitHub</span></span>
-<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a><span class="co">        icon: file-code</span></span>
-<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a><span class="co">        href: https://github.com/GomezGerardoEsteban/Tidyverso/tree/main/TallerR/Modulo2</span></span>
-<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a><span class="co">    html-math-method: katex</span></span>
-<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a><span class="co">    self-contained: true</span></span>
-<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
-<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
-<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a><span class="an">image:</span><span class="co"> &quot;modulo2.png&quot;</span></span>
-<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introducción</span></span>
-<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a>Analizar datos consiste en gran medida en resumirlos, buscamos caracterizar a las observaciones a partir de medidas que resuman aspectos importantes o que nos generan interés.\</span>
-<span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a>Siempre que se realiza un análisis estadístico, el primer paso está en conocer la distribución de los datos, buscamos determinar qué tan parecidos o que tan diferentes son las observaciones en una dimensión determinada (en estadística, dimensión es sinónimo de variable). Lo cual requiere calcular la media y la desviación estándar de la variable.</span>
-<span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a>La media y la desviación estándar son los estadísticos más utilizados, pero no son los únicos que sirven para describir a los datos y, en algunas ocasiones, no son los más adecuados. La media por ejemplo, es una medida de posición que es sensible a datos atípicos, por lo que en algunas ocasiones resulta más conveniente utilizar la mediana o la moda. Igualmente, si bien la desviación estándar no tiene un sustituto en términos analíticos como medida de dispersión, muchas veces el rango de los datos (la diferencia entre el máximo y el mínimo) o el rango intercuartílico nos puede dar información más relevante sobre qué tan diferentes son las observaciones.</span>
-<span id="cb59-28"><a href="#cb59-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-29"><a href="#cb59-29" aria-hidden="true" tabindex="-1"></a>Saber ejecutar los comandos para calcular la media, la desviación estándar o el valor máximo de una variable es importante y es el objetivo principal de este tutorial. Sin embargo, es igual de relevante conocer algo de teoría estadística a los fines de entender las implicaciones de estas medidas.\</span>
-<span id="cb59-30"><a href="#cb59-30" aria-hidden="true" tabindex="-1"></a>Un buen material de texto, con ejemplos en R lo pueden encontrar en este link <span class="co">[</span><span class="ot">Introduction to Statistics and Data Analysis</span><span class="co">](https://www.filepicker.io/api/file/TgilBNiCSk26axWSRDVA)</span>, lo que concierne a este módulo está en los capítulos 2 y 3 de este libro.</span>
-<span id="cb59-31"><a href="#cb59-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-32"><a href="#cb59-32" aria-hidden="true" tabindex="-1"></a><span class="fu">## Que vamos a aprender en este módulo?</span></span>
-<span id="cb59-33"><a href="#cb59-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-34"><a href="#cb59-34" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cómo calcular frecuencias absolutas y relativas</span>
-<span id="cb59-35"><a href="#cb59-35" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cómo calcular la media, la mediana y la moda</span>
-<span id="cb59-36"><a href="#cb59-36" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cómo calcular la varianza y la desviación estándar</span>
-<span id="cb59-37"><a href="#cb59-37" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Cómo presentar estas medidas en tablas y gráficos</span>
-<span id="cb59-38"><a href="#cb59-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-39"><a href="#cb59-39" aria-hidden="true" tabindex="-1"></a><span class="fu">## Frecuencias absolutas y relativas</span></span>
-<span id="cb59-40"><a href="#cb59-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-41"><a href="#cb59-41" aria-hidden="true" tabindex="-1"></a>Cuando tenemos variables categóricas en nuestra base de datos, una pregunta que siempre resulta necesario contestar es cuantas observaciones hay en una categoría y cuantas en otra, la base de datos de Latinobarómetro, con la cual trabajamos en el módulo 1 y la cual utilizaremos para este ejemplo, contiene muchas variables categóricas, por lo que la mayoría de los análisis consisten en conocer ***la proporción*** de personas que están de acuerdo o en desacuerdo con cierta afirmación.</span>
-<span id="cb59-42"><a href="#cb59-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-43"><a href="#cb59-43" aria-hidden="true" tabindex="-1"></a>Tomemos por ejemplo la variable <span class="in">`P18ST.A`</span>, la cual almacena el grado de acuerdo con la afirmación *&quot;La democracia puede tener sus problemas pero es el mejor sistema de gobierno&quot;*, si logramos establecer cuantas personas están muy de acuerdo con esa afirmación por país, podríamos establecer en que países existe una mayor proporción de personas con valores democráticos.\</span>
-<span id="cb59-44"><a href="#cb59-44" aria-hidden="true" tabindex="-1"></a>Obtener el número de personas por respuesta, es lo que llamamos frecuencia absoluta. Si a esa frecuencia absoluta la dividimos por el total de personas que respondieron, obtenemos la frecuencia relativa.</span>
-<span id="cb59-45"><a href="#cb59-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-46"><a href="#cb59-46" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance=&quot;simple&quot;}</span>
-<span id="cb59-47"><a href="#cb59-47" aria-hidden="true" tabindex="-1"></a>La frecuencia relativa es una proporción o porcentaje por lo que sus valores están acotados de 0 a 1 o de 0 a 100.\</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;2026-08-14&quot;</span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - Curso R</span></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a><span class="co">  - Bases de datos</span></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a><span class="co">  - Estadística</span></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a><span class="co">  - Visualización</span></span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a><span class="co">    code-links:</span></span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a><span class="co">      - text: Video YouTube</span></span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a><span class="co">        icon: camera-reels</span></span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a><span class="co">        href: https://youtu.be/92DX5px65JI</span></span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a><span class="co">      - text: Repositorio GitHub</span></span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a><span class="co">        icon: file-code</span></span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a><span class="co">        href: https://github.com/GomezGerardoEsteban/Tidyverso/tree/main/TallerR/Modulo2</span></span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a><span class="co">    html-math-method: katex</span></span>
+<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a><span class="co">    self-contained: true</span></span>
+<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a><span class="an">image:</span><span class="co"> &quot;modulo2.png&quot;</span></span>
+<span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-28"><a href="#cb59-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introducción</span></span>
+<span id="cb59-29"><a href="#cb59-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-30"><a href="#cb59-30" aria-hidden="true" tabindex="-1"></a>Analizar datos consiste en gran medida en resumirlos, buscamos caracterizar a las observaciones a partir de medidas que resuman aspectos importantes o que nos generan interés.\</span>
+<span id="cb59-31"><a href="#cb59-31" aria-hidden="true" tabindex="-1"></a>Siempre que se realiza un análisis estadístico, el primer paso está en conocer la distribución de los datos, buscamos determinar qué tan parecidos o que tan diferentes son las observaciones en una dimensión determinada (en estadística, dimensión es sinónimo de variable). Lo cual requiere calcular la media y la desviación estándar de la variable.</span>
+<span id="cb59-32"><a href="#cb59-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-33"><a href="#cb59-33" aria-hidden="true" tabindex="-1"></a>La media y la desviación estándar son los estadísticos más utilizados, pero no son los únicos que sirven para describir a los datos y, en algunas ocasiones, no son los más adecuados. La media por ejemplo, es una medida de posición que es sensible a datos atípicos, por lo que en algunas ocasiones resulta más conveniente utilizar la mediana o la moda. Igualmente, si bien la desviación estándar no tiene un sustituto en términos analíticos como medida de dispersión, muchas veces el rango de los datos (la diferencia entre el máximo y el mínimo) o el rango intercuartílico nos puede dar información más relevante sobre qué tan diferentes son las observaciones.</span>
+<span id="cb59-34"><a href="#cb59-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-35"><a href="#cb59-35" aria-hidden="true" tabindex="-1"></a>Saber ejecutar los comandos para calcular la media, la desviación estándar o el valor máximo de una variable es importante y es el objetivo principal de este tutorial. Sin embargo, es igual de relevante conocer algo de teoría estadística a los fines de entender las implicaciones de estas medidas.\</span>
+<span id="cb59-36"><a href="#cb59-36" aria-hidden="true" tabindex="-1"></a>Un buen material de texto, con ejemplos en R lo pueden encontrar en este link <span class="co">[</span><span class="ot">Introduction to Statistics and Data Analysis</span><span class="co">](https://www.filepicker.io/api/file/TgilBNiCSk26axWSRDVA)</span>, lo que concierne a este módulo está en los capítulos 2 y 3 de este libro.</span>
+<span id="cb59-37"><a href="#cb59-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-38"><a href="#cb59-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## Que vamos a aprender en este módulo?</span></span>
+<span id="cb59-39"><a href="#cb59-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-40"><a href="#cb59-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cómo calcular frecuencias absolutas y relativas</span>
+<span id="cb59-41"><a href="#cb59-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cómo calcular la media, la mediana y la moda</span>
+<span id="cb59-42"><a href="#cb59-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cómo calcular la varianza y la desviación estándar</span>
+<span id="cb59-43"><a href="#cb59-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cómo presentar estas medidas en tablas y gráficos</span>
+<span id="cb59-44"><a href="#cb59-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-45"><a href="#cb59-45" aria-hidden="true" tabindex="-1"></a><span class="fu">## Frecuencias absolutas y relativas</span></span>
+<span id="cb59-46"><a href="#cb59-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-47"><a href="#cb59-47" aria-hidden="true" tabindex="-1"></a>Cuando tenemos variables categóricas en nuestra base de datos, una pregunta que siempre resulta necesario contestar es cuantas observaciones hay en una categoría y cuantas en otra, la base de datos de Latinobarómetro, con la cual trabajamos en el módulo 1 y la cual utilizaremos para este ejemplo, contiene muchas variables categóricas, por lo que la mayoría de los análisis consisten en conocer ***la proporción*** de personas que están de acuerdo o en desacuerdo con cierta afirmación.</span>
 <span id="cb59-48"><a href="#cb59-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-49"><a href="#cb59-49" aria-hidden="true" tabindex="-1"></a>$$Frecuencia \hspace{0.1cm} relativa = \frac{Frecuencia \hspace{0.1cm} Absoluta}{Total \hspace{0.1cm} de \hspace{0.1cm} observaciones}$$</span>
-<span id="cb59-50"><a href="#cb59-50" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb59-49"><a href="#cb59-49" aria-hidden="true" tabindex="-1"></a>Tomemos por ejemplo la variable <span class="in">`P18ST.A`</span>, la cual almacena el grado de acuerdo con la afirmación *&quot;La democracia puede tener sus problemas pero es el mejor sistema de gobierno&quot;*, si logramos establecer cuantas personas están muy de acuerdo con esa afirmación por país, podríamos establecer en que países existe una mayor proporción de personas con valores democráticos.\</span>
+<span id="cb59-50"><a href="#cb59-50" aria-hidden="true" tabindex="-1"></a>Obtener el número de personas por respuesta, es lo que llamamos frecuencia absoluta. Si a esa frecuencia absoluta la dividimos por el total de personas que respondieron, obtenemos la frecuencia relativa.</span>
 <span id="cb59-51"><a href="#cb59-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-52"><a href="#cb59-52" aria-hidden="true" tabindex="-1"></a>Obtengamos la frecuencia relativa por país y veamos cuales son los países que están más de acuerdo con esa afirmación.</span>
-<span id="cb59-53"><a href="#cb59-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-56"><a href="#cb59-56" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-57"><a href="#cb59-57" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>()) <span class="co"># Limpieza de ambiente</span></span>
-<span id="cb59-58"><a href="#cb59-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-59"><a href="#cb59-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Activacion de paquetes</span></span>
-<span id="cb59-60"><a href="#cb59-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-61"><a href="#cb59-61" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreign)</span>
-<span id="cb59-62"><a href="#cb59-62" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb59-63"><a href="#cb59-63" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb59-52"><a href="#cb59-52" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance=&quot;simple&quot;}</span>
+<span id="cb59-53"><a href="#cb59-53" aria-hidden="true" tabindex="-1"></a>La frecuencia relativa es una proporción o porcentaje por lo que sus valores están acotados de 0 a 1 o de 0 a 100.\</span>
+<span id="cb59-54"><a href="#cb59-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-55"><a href="#cb59-55" aria-hidden="true" tabindex="-1"></a>$$Frecuencia \hspace{0.1cm} relativa = \frac{Frecuencia \hspace{0.1cm} Absoluta}{Total \hspace{0.1cm} de \hspace{0.1cm} observaciones}$$</span>
+<span id="cb59-56"><a href="#cb59-56" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb59-57"><a href="#cb59-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-58"><a href="#cb59-58" aria-hidden="true" tabindex="-1"></a>Obtengamos la frecuencia relativa por país y veamos cuales son los países que están más de acuerdo con esa afirmación.</span>
+<span id="cb59-59"><a href="#cb59-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-62"><a href="#cb59-62" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-63"><a href="#cb59-63" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>()) <span class="co"># Limpieza de ambiente</span></span>
 <span id="cb59-64"><a href="#cb59-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-65"><a href="#cb59-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga de la base</span></span>
+<span id="cb59-65"><a href="#cb59-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Activacion de paquetes</span></span>
 <span id="cb59-66"><a href="#cb59-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-67"><a href="#cb59-67" aria-hidden="true" tabindex="-1"></a>latinBase <span class="ot">&lt;-</span> <span class="fu">read.dta</span>(<span class="at">file =</span> <span class="st">&quot;bases/Latinobarometro_2023_Esp_Stata_v1_0.dta&quot;</span>)</span>
-<span id="cb59-68"><a href="#cb59-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-69"><a href="#cb59-69" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-67"><a href="#cb59-67" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreign)</span>
+<span id="cb59-68"><a href="#cb59-68" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb59-69"><a href="#cb59-69" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb59-70"><a href="#cb59-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-71"><a href="#cb59-71" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Creación de variable categórica</span></span>
+<span id="cb59-71"><a href="#cb59-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga de la base</span></span>
 <span id="cb59-72"><a href="#cb59-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-73"><a href="#cb59-73" aria-hidden="true" tabindex="-1"></a>Como la variable <span class="in">`P18ST_A`</span> tiene varias respuestas posibles (utilizar función <span class="in">`unique()`</span> para verificar), debemos crear una variable que tome el valor de **&quot;Acuerdo&quot;** si la respuesta es **Muy de acuerdo** o **De acuerdo**, de **&quot;Desacuerdo&quot;** si la respuesta es **En desacuerdo** o **Muy en desacuerdo** y **NA** si la respuesta es **No sabe/No responde**.\</span>
-<span id="cb59-74"><a href="#cb59-74" aria-hidden="true" tabindex="-1"></a>A esta nueva variable le pondremos de nombre <span class="in">`democ`</span>.</span>
-<span id="cb59-75"><a href="#cb59-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-78"><a href="#cb59-78" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-79"><a href="#cb59-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Verifico valores únicos</span></span>
-<span id="cb59-80"><a href="#cb59-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-81"><a href="#cb59-81" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(latinBase<span class="sc">$</span>P18ST_A) </span>
-<span id="cb59-82"><a href="#cb59-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-83"><a href="#cb59-83" aria-hidden="true" tabindex="-1"></a><span class="co"># Utilizó la función case_when()</span></span>
-<span id="cb59-84"><a href="#cb59-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-85"><a href="#cb59-85" aria-hidden="true" tabindex="-1"></a>latinBase<span class="sc">$</span>democ <span class="ot">&lt;-</span> <span class="fu">case_when</span>(latinBase<span class="sc">$</span>P18ST_A <span class="sc">==</span> <span class="st">&quot;Muy de acuerdo&quot;</span> <span class="sc">|</span> latinBase<span class="sc">$</span>P18ST_A <span class="sc">==</span> <span class="st">&quot;De acuerdo&quot;</span> <span class="sc">~</span> <span class="st">&quot;Acuerdo&quot;</span>,</span>
-<span id="cb59-86"><a href="#cb59-86" aria-hidden="true" tabindex="-1"></a>                             latinBase<span class="sc">$</span>P18ST_A <span class="sc">==</span> <span class="st">&quot;Muy en desacuerdo&quot;</span> <span class="sc">|</span> latinBase<span class="sc">$</span>P18ST_A <span class="sc">==</span> <span class="st">&quot;En desacuerdo&quot;</span> <span class="sc">~</span> <span class="st">&quot;Desacuerdo&quot;</span>,</span>
-<span id="cb59-87"><a href="#cb59-87" aria-hidden="true" tabindex="-1"></a>                             latinBase<span class="sc">$</span>P18ST_A <span class="sc">==</span> <span class="st">&quot;No sabe / No contesta&quot;</span> <span class="sc">~</span> <span class="cn">NA</span>)</span>
+<span id="cb59-73"><a href="#cb59-73" aria-hidden="true" tabindex="-1"></a>latinBase <span class="ot">&lt;-</span> <span class="fu">read.dta</span>(<span class="at">file =</span> <span class="st">&quot;bases/Latinobarometro_2023_Esp_Stata_v1_0.dta&quot;</span>)</span>
+<span id="cb59-74"><a href="#cb59-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-75"><a href="#cb59-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-76"><a href="#cb59-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-77"><a href="#cb59-77" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Creación de variable categórica</span></span>
+<span id="cb59-78"><a href="#cb59-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-79"><a href="#cb59-79" aria-hidden="true" tabindex="-1"></a>Como la variable <span class="in">`P18ST_A`</span> tiene varias respuestas posibles (utilizar función <span class="in">`unique()`</span> para verificar), debemos crear una variable que tome el valor de **&quot;Acuerdo&quot;** si la respuesta es **Muy de acuerdo** o **De acuerdo**, de **&quot;Desacuerdo&quot;** si la respuesta es **En desacuerdo** o **Muy en desacuerdo** y **NA** si la respuesta es **No sabe/No responde**.\</span>
+<span id="cb59-80"><a href="#cb59-80" aria-hidden="true" tabindex="-1"></a>A esta nueva variable le pondremos de nombre <span class="in">`democ`</span>.</span>
+<span id="cb59-81"><a href="#cb59-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-84"><a href="#cb59-84" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-85"><a href="#cb59-85" aria-hidden="true" tabindex="-1"></a><span class="co"># Verifico valores únicos</span></span>
+<span id="cb59-86"><a href="#cb59-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-87"><a href="#cb59-87" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(latinBase<span class="sc">$</span>P18ST_A) </span>
 <span id="cb59-88"><a href="#cb59-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-89"><a href="#cb59-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-90"><a href="#cb59-90" aria-hidden="true" tabindex="-1"></a><span class="co"># Verifico valores únicos de la nueva variable</span></span>
-<span id="cb59-91"><a href="#cb59-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-92"><a href="#cb59-92" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(latinBase<span class="sc">$</span>democ)</span>
-<span id="cb59-93"><a href="#cb59-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-94"><a href="#cb59-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-89"><a href="#cb59-89" aria-hidden="true" tabindex="-1"></a><span class="co"># Utilizó la función case_when()</span></span>
+<span id="cb59-90"><a href="#cb59-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-91"><a href="#cb59-91" aria-hidden="true" tabindex="-1"></a>latinBase<span class="sc">$</span>democ <span class="ot">&lt;-</span> <span class="fu">case_when</span>(latinBase<span class="sc">$</span>P18ST_A <span class="sc">==</span> <span class="st">&quot;Muy de acuerdo&quot;</span> <span class="sc">|</span> latinBase<span class="sc">$</span>P18ST_A <span class="sc">==</span> <span class="st">&quot;De acuerdo&quot;</span> <span class="sc">~</span> <span class="st">&quot;Acuerdo&quot;</span>,</span>
+<span id="cb59-92"><a href="#cb59-92" aria-hidden="true" tabindex="-1"></a>                             latinBase<span class="sc">$</span>P18ST_A <span class="sc">==</span> <span class="st">&quot;Muy en desacuerdo&quot;</span> <span class="sc">|</span> latinBase<span class="sc">$</span>P18ST_A <span class="sc">==</span> <span class="st">&quot;En desacuerdo&quot;</span> <span class="sc">~</span> <span class="st">&quot;Desacuerdo&quot;</span>,</span>
+<span id="cb59-93"><a href="#cb59-93" aria-hidden="true" tabindex="-1"></a>                             latinBase<span class="sc">$</span>P18ST_A <span class="sc">==</span> <span class="st">&quot;No sabe / No contesta&quot;</span> <span class="sc">~</span> <span class="cn">NA</span>)</span>
+<span id="cb59-94"><a href="#cb59-94" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-95"><a href="#cb59-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-96"><a href="#cb59-96" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cálculo de frecuencias absolutas</span></span>
+<span id="cb59-96"><a href="#cb59-96" aria-hidden="true" tabindex="-1"></a><span class="co"># Verifico valores únicos de la nueva variable</span></span>
 <span id="cb59-97"><a href="#cb59-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-98"><a href="#cb59-98" aria-hidden="true" tabindex="-1"></a>Para obtener una frecuencia relativa (la proporción de personas que están de acuerdo), primero debo obtener frecuencias absolutas, es decir, el número de personas que puedo categorizar como **&quot;Acuerdo&quot;**, **&quot;Desacuerdo&quot;** o **&quot;NA&quot;**.\</span>
-<span id="cb59-99"><a href="#cb59-99" aria-hidden="true" tabindex="-1"></a>Para ello debo agrupar los datos con la función <span class="in">`group_by()`</span> y posteriormente utilizar la función <span class="in">`summarize()`</span>, <span class="in">`tally()`</span> o <span class="in">`count()`</span>.</span>
-<span id="cb59-100"><a href="#cb59-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-101"><a href="#cb59-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r message=FALSE}</span></span>
-<span id="cb59-102"><a href="#cb59-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-103"><a href="#cb59-103" aria-hidden="true" tabindex="-1"></a><span class="co"># La función tally cuenta los valores respetando la agrupación y almacena el conteo con el nombre &#39;n&#39;</span></span>
-<span id="cb59-104"><a href="#cb59-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-105"><a href="#cb59-105" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> latinBase <span class="sc">%&gt;%</span> </span>
-<span id="cb59-106"><a href="#cb59-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(idenpa, democ) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-107"><a href="#cb59-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>() </span>
+<span id="cb59-98"><a href="#cb59-98" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(latinBase<span class="sc">$</span>democ)</span>
+<span id="cb59-99"><a href="#cb59-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-100"><a href="#cb59-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-101"><a href="#cb59-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-102"><a href="#cb59-102" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cálculo de frecuencias absolutas</span></span>
+<span id="cb59-103"><a href="#cb59-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-104"><a href="#cb59-104" aria-hidden="true" tabindex="-1"></a>Para obtener una frecuencia relativa (la proporción de personas que están de acuerdo), primero debo obtener frecuencias absolutas, es decir, el número de personas que puedo categorizar como **&quot;Acuerdo&quot;**, **&quot;Desacuerdo&quot;** o **&quot;NA&quot;**.\</span>
+<span id="cb59-105"><a href="#cb59-105" aria-hidden="true" tabindex="-1"></a>Para ello debo agrupar los datos con la función <span class="in">`group_by()`</span> y posteriormente utilizar la función <span class="in">`summarize()`</span>, <span class="in">`tally()`</span> o <span class="in">`count()`</span>.</span>
+<span id="cb59-106"><a href="#cb59-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-107"><a href="#cb59-107" aria-hidden="true" tabindex="-1"></a><span class="in">```{r message=FALSE}</span></span>
 <span id="cb59-108"><a href="#cb59-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-109"><a href="#cb59-109" aria-hidden="true" tabindex="-1"></a>frecuencias</span>
+<span id="cb59-109"><a href="#cb59-109" aria-hidden="true" tabindex="-1"></a><span class="co"># La función tally cuenta los valores respetando la agrupación y almacena el conteo con el nombre &#39;n&#39;</span></span>
 <span id="cb59-110"><a href="#cb59-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-111"><a href="#cb59-111" aria-hidden="true" tabindex="-1"></a><span class="co"># Opcion con summarise()</span></span>
-<span id="cb59-112"><a href="#cb59-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-113"><a href="#cb59-113" aria-hidden="true" tabindex="-1"></a>latinBase <span class="sc">%&gt;%</span> </span>
-<span id="cb59-114"><a href="#cb59-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(idenpa, democ) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-115"><a href="#cb59-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">frecAbs =</span> <span class="fu">n</span>())</span>
+<span id="cb59-111"><a href="#cb59-111" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> latinBase <span class="sc">%&gt;%</span> </span>
+<span id="cb59-112"><a href="#cb59-112" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(idenpa, democ) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-113"><a href="#cb59-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>() </span>
+<span id="cb59-114"><a href="#cb59-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-115"><a href="#cb59-115" aria-hidden="true" tabindex="-1"></a>frecuencias</span>
 <span id="cb59-116"><a href="#cb59-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-117"><a href="#cb59-117" aria-hidden="true" tabindex="-1"></a><span class="co"># Opcion con count()</span></span>
+<span id="cb59-117"><a href="#cb59-117" aria-hidden="true" tabindex="-1"></a><span class="co"># Opcion con summarise()</span></span>
 <span id="cb59-118"><a href="#cb59-118" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-119"><a href="#cb59-119" aria-hidden="true" tabindex="-1"></a>latinBase <span class="sc">%&gt;%</span> </span>
-<span id="cb59-120"><a href="#cb59-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(idenpa, democ) <span class="sc">%&gt;%</span></span>
-<span id="cb59-121"><a href="#cb59-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span>
+<span id="cb59-120"><a href="#cb59-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(idenpa, democ) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-121"><a href="#cb59-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">frecAbs =</span> <span class="fu">n</span>())</span>
 <span id="cb59-122"><a href="#cb59-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-123"><a href="#cb59-123" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-123"><a href="#cb59-123" aria-hidden="true" tabindex="-1"></a><span class="co"># Opcion con count()</span></span>
 <span id="cb59-124"><a href="#cb59-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-125"><a href="#cb59-125" aria-hidden="true" tabindex="-1"></a>Note que hicimos la agrupación por dos variables (<span class="in">`idenpa`</span> y <span class="in">`democ`</span>), debido a que nuestro objetivo es obtener la frecuencia relativa por país.</span>
-<span id="cb59-126"><a href="#cb59-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-127"><a href="#cb59-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cálculo de frecuencias relativas</span></span>
+<span id="cb59-125"><a href="#cb59-125" aria-hidden="true" tabindex="-1"></a>latinBase <span class="sc">%&gt;%</span> </span>
+<span id="cb59-126"><a href="#cb59-126" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(idenpa, democ) <span class="sc">%&gt;%</span></span>
+<span id="cb59-127"><a href="#cb59-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span>
 <span id="cb59-128"><a href="#cb59-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-129"><a href="#cb59-129" aria-hidden="true" tabindex="-1"></a>Para obtener las frecuencias relativas por país, debemos obtener el total de personas por país y luego dividir la frecuencia absoluta en el total por país, en el código de abajo se muestra como agregar el total por país utilizando la misma sintaxis del paquete <span class="in">`{dplyr}`</span>.</span>
+<span id="cb59-129"><a href="#cb59-129" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb59-130"><a href="#cb59-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-133"><a href="#cb59-133" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-134"><a href="#cb59-134" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span> </span>
-<span id="cb59-135"><a href="#cb59-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb59-136"><a href="#cb59-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(idenpa) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-137"><a href="#cb59-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total =</span> <span class="fu">sum</span>(n, <span class="at">na.rm =</span> T))</span>
-<span id="cb59-138"><a href="#cb59-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-139"><a href="#cb59-139" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-140"><a href="#cb59-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-141"><a href="#cb59-141" aria-hidden="true" tabindex="-1"></a>Ahora tenemos una nueva variable de nombre <span class="in">`total`</span> que nos muestra el total de observaciones por país, siguiendo lo antes formulado, para la frecuencia relativa debemos dividir <span class="in">`n`</span> entre la variable <span class="in">`total`</span>.</span>
-<span id="cb59-142"><a href="#cb59-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-145"><a href="#cb59-145" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-146"><a href="#cb59-146" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span> </span>
-<span id="cb59-147"><a href="#cb59-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">frecRela =</span> n<span class="sc">/</span>total)</span>
+<span id="cb59-131"><a href="#cb59-131" aria-hidden="true" tabindex="-1"></a>Note que hicimos la agrupación por dos variables (<span class="in">`idenpa`</span> y <span class="in">`democ`</span>), debido a que nuestro objetivo es obtener la frecuencia relativa por país.</span>
+<span id="cb59-132"><a href="#cb59-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-133"><a href="#cb59-133" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cálculo de frecuencias relativas</span></span>
+<span id="cb59-134"><a href="#cb59-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-135"><a href="#cb59-135" aria-hidden="true" tabindex="-1"></a>Para obtener las frecuencias relativas por país, debemos obtener el total de personas por país y luego dividir la frecuencia absoluta en el total por país, en el código de abajo se muestra como agregar el total por país utilizando la misma sintaxis del paquete <span class="in">`{dplyr}`</span>.</span>
+<span id="cb59-136"><a href="#cb59-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-139"><a href="#cb59-139" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-140"><a href="#cb59-140" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span> </span>
+<span id="cb59-141"><a href="#cb59-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb59-142"><a href="#cb59-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(idenpa) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-143"><a href="#cb59-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total =</span> <span class="fu">sum</span>(n, <span class="at">na.rm =</span> T))</span>
+<span id="cb59-144"><a href="#cb59-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-145"><a href="#cb59-145" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-146"><a href="#cb59-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-147"><a href="#cb59-147" aria-hidden="true" tabindex="-1"></a>Ahora tenemos una nueva variable de nombre <span class="in">`total`</span> que nos muestra el total de observaciones por país, siguiendo lo antes formulado, para la frecuencia relativa debemos dividir <span class="in">`n`</span> entre la variable <span class="in">`total`</span>.</span>
 <span id="cb59-148"><a href="#cb59-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-149"><a href="#cb59-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-150"><a href="#cb59-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-151"><a href="#cb59-151" aria-hidden="true" tabindex="-1"></a>Ya calculamos las frecuencias relativas, por último, para comparar el grado de acuerdo de los países con la afirmación *&quot;La democracia puede tener sus problemas pero es el mejor sistema de gobierno&quot;*, vamos a filtrar a la base y a seleccionar solamente <span class="in">`latinBase$democ == &quot;Acuerdo&quot;`</span>, organizandola de mayor a menor.</span>
-<span id="cb59-152"><a href="#cb59-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-155"><a href="#cb59-155" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-156"><a href="#cb59-156" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span> </span>
-<span id="cb59-157"><a href="#cb59-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(democ <span class="sc">==</span> <span class="st">&quot;Acuerdo&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-158"><a href="#cb59-158" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(frecRela))</span>
-<span id="cb59-159"><a href="#cb59-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-160"><a href="#cb59-160" aria-hidden="true" tabindex="-1"></a>frecuencias</span>
-<span id="cb59-161"><a href="#cb59-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-162"><a href="#cb59-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-163"><a href="#cb59-163" aria-hidden="true" tabindex="-1"></a><span class="co"># Mayor acuerdo con la afirmación</span></span>
-<span id="cb59-164"><a href="#cb59-164" aria-hidden="true" tabindex="-1"></a>frecuencias[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">5</span>)]</span>
+<span id="cb59-151"><a href="#cb59-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-152"><a href="#cb59-152" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span> </span>
+<span id="cb59-153"><a href="#cb59-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">frecRela =</span> n<span class="sc">/</span>total)</span>
+<span id="cb59-154"><a href="#cb59-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-155"><a href="#cb59-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-156"><a href="#cb59-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-157"><a href="#cb59-157" aria-hidden="true" tabindex="-1"></a>Ya calculamos las frecuencias relativas, por último, para comparar el grado de acuerdo de los países con la afirmación *&quot;La democracia puede tener sus problemas pero es el mejor sistema de gobierno&quot;*, vamos a filtrar a la base y a seleccionar solamente <span class="in">`latinBase$democ == &quot;Acuerdo&quot;`</span>, organizandola de mayor a menor.</span>
+<span id="cb59-158"><a href="#cb59-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-161"><a href="#cb59-161" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-162"><a href="#cb59-162" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span> </span>
+<span id="cb59-163"><a href="#cb59-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(democ <span class="sc">==</span> <span class="st">&quot;Acuerdo&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-164"><a href="#cb59-164" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(frecRela))</span>
 <span id="cb59-165"><a href="#cb59-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-166"><a href="#cb59-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-167"><a href="#cb59-167" aria-hidden="true" tabindex="-1"></a><span class="co"># Menor acuerdo con la afirmación</span></span>
-<span id="cb59-168"><a href="#cb59-168" aria-hidden="true" tabindex="-1"></a>frecuencias[<span class="dv">15</span><span class="sc">:</span><span class="dv">17</span>, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">5</span>)]</span>
-<span id="cb59-169"><a href="#cb59-169" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-170"><a href="#cb59-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-171"><a href="#cb59-171" aria-hidden="true" tabindex="-1"></a><span class="fu">### Como interpretarlo?</span></span>
+<span id="cb59-166"><a href="#cb59-166" aria-hidden="true" tabindex="-1"></a>frecuencias</span>
+<span id="cb59-167"><a href="#cb59-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-168"><a href="#cb59-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-169"><a href="#cb59-169" aria-hidden="true" tabindex="-1"></a><span class="co"># Mayor acuerdo con la afirmación</span></span>
+<span id="cb59-170"><a href="#cb59-170" aria-hidden="true" tabindex="-1"></a>frecuencias[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">5</span>)]</span>
+<span id="cb59-171"><a href="#cb59-171" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-172"><a href="#cb59-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-173"><a href="#cb59-173" aria-hidden="true" tabindex="-1"></a>Tomando al país con máximo grado de acuerdo y al país con mínimo grado de acuerdo podemos afirmar que, *&quot;En Uruguay el 84.9% de las personas considera que la democracia, aún con sus problemas es el mejor sistema de gobierno, mientras que en Ecuador solo el 49.4% está de acuerdo con esa afirmación&quot;*</span>
-<span id="cb59-174"><a href="#cb59-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-175"><a href="#cb59-175" aria-hidden="true" tabindex="-1"></a><span class="fu">### Como exportarlo?</span></span>
+<span id="cb59-173"><a href="#cb59-173" aria-hidden="true" tabindex="-1"></a><span class="co"># Menor acuerdo con la afirmación</span></span>
+<span id="cb59-174"><a href="#cb59-174" aria-hidden="true" tabindex="-1"></a>frecuencias[<span class="dv">15</span><span class="sc">:</span><span class="dv">17</span>, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">5</span>)]</span>
+<span id="cb59-175"><a href="#cb59-175" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb59-176"><a href="#cb59-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-177"><a href="#cb59-177" aria-hidden="true" tabindex="-1"></a>Ya construida la tabla de frecuencias que me informa sobre el porcentaje de acuerdo por país, puedo exportarla en excel, el comando para ello se muestra a continuación</span>
+<span id="cb59-177"><a href="#cb59-177" aria-hidden="true" tabindex="-1"></a><span class="fu">### Como interpretarlo?</span></span>
 <span id="cb59-178"><a href="#cb59-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-181"><a href="#cb59-181" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-182"><a href="#cb59-182" aria-hidden="true" tabindex="-1"></a>writexl<span class="sc">::</span><span class="fu">write_xlsx</span>(<span class="at">x =</span> frecuencias,               <span class="co"># Nombre del objeto creado en R</span></span>
-<span id="cb59-183"><a href="#cb59-183" aria-hidden="true" tabindex="-1"></a>                    <span class="at">path =</span> <span class="st">&quot;tablaFrecuencias.xlsx&quot;</span>) <span class="co"># Nombre del archivo a exportar</span></span>
+<span id="cb59-179"><a href="#cb59-179" aria-hidden="true" tabindex="-1"></a>Tomando al país con máximo grado de acuerdo y al país con mínimo grado de acuerdo podemos afirmar que, *&quot;En Uruguay el 84.9% de las personas considera que la democracia, aún con sus problemas es el mejor sistema de gobierno, mientras que en Ecuador solo el 49.4% está de acuerdo con esa afirmación&quot;*</span>
+<span id="cb59-180"><a href="#cb59-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-181"><a href="#cb59-181" aria-hidden="true" tabindex="-1"></a><span class="fu">### Como exportarlo?</span></span>
+<span id="cb59-182"><a href="#cb59-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-183"><a href="#cb59-183" aria-hidden="true" tabindex="-1"></a>Ya construida la tabla de frecuencias que me informa sobre el porcentaje de acuerdo por país, puedo exportarla en excel, el comando para ello se muestra a continuación</span>
 <span id="cb59-184"><a href="#cb59-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-185"><a href="#cb59-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-186"><a href="#cb59-186" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-187"><a href="#cb59-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-188"><a href="#cb59-188" aria-hidden="true" tabindex="-1"></a><span class="fu">### Alternativa gráfica</span></span>
-<span id="cb59-189"><a href="#cb59-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-190"><a href="#cb59-190" aria-hidden="true" tabindex="-1"></a>Vamos a realizar un gráfico de barras (sin muchos detalles) que muestre la proporción por país y este organizado de mayor a menor</span>
+<span id="cb59-187"><a href="#cb59-187" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-188"><a href="#cb59-188" aria-hidden="true" tabindex="-1"></a>writexl<span class="sc">::</span><span class="fu">write_xlsx</span>(<span class="at">x =</span> frecuencias,               <span class="co"># Nombre del objeto creado en R</span></span>
+<span id="cb59-189"><a href="#cb59-189" aria-hidden="true" tabindex="-1"></a>                    <span class="at">path =</span> <span class="st">&quot;tablaFrecuencias.xlsx&quot;</span>) <span class="co"># Nombre del archivo a exportar</span></span>
+<span id="cb59-190"><a href="#cb59-190" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-191"><a href="#cb59-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-194"><a href="#cb59-194" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-195"><a href="#cb59-195" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="sc">%&gt;%</span> </span>
-<span id="cb59-196"><a href="#cb59-196" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> frecRela, <span class="at">y =</span> <span class="fu">reorder</span>(idenpa, frecRela))) <span class="sc">+</span></span>
-<span id="cb59-197"><a href="#cb59-197" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span>
-<span id="cb59-198"><a href="#cb59-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-199"><a href="#cb59-199" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-200"><a href="#cb59-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-201"><a href="#cb59-201" aria-hidden="true" tabindex="-1"></a><span class="fu">## Realización de mapa con dato de frecuencias</span></span>
-<span id="cb59-202"><a href="#cb59-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-203"><a href="#cb59-203" aria-hidden="true" tabindex="-1"></a>Los mapas se han convertido en una alternativa de visualización cada vez más usada en ciencias sociales, por ello decidí incluir esta alternativa de visualización con los datos de la proporción de acuerdo con la afirmación *&quot;la democracia puede tener sus problemas, pero es el mejor sistema de gobierno&quot;*.</span>
+<span id="cb59-192"><a href="#cb59-192" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-193"><a href="#cb59-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-194"><a href="#cb59-194" aria-hidden="true" tabindex="-1"></a><span class="fu">### Alternativa gráfica</span></span>
+<span id="cb59-195"><a href="#cb59-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-196"><a href="#cb59-196" aria-hidden="true" tabindex="-1"></a>Vamos a realizar un gráfico de barras (sin muchos detalles) que muestre la proporción por país y este organizado de mayor a menor</span>
+<span id="cb59-197"><a href="#cb59-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-200"><a href="#cb59-200" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-201"><a href="#cb59-201" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="sc">%&gt;%</span> </span>
+<span id="cb59-202"><a href="#cb59-202" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> frecRela, <span class="at">y =</span> <span class="fu">reorder</span>(idenpa, frecRela))) <span class="sc">+</span></span>
+<span id="cb59-203"><a href="#cb59-203" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span>
 <span id="cb59-204"><a href="#cb59-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-205"><a href="#cb59-205" aria-hidden="true" tabindex="-1"></a>Normalmente para gráficar mapas, es necesario tener algún archivo georeferenciado (como un archivo raster o un shapefile) que contenga la información a colocar en el mapa.\</span>
-<span id="cb59-206"><a href="#cb59-206" aria-hidden="true" tabindex="-1"></a>Para este caso, que vamos a colorear a los países a partir de la variable de proporción, podemos utilizar la información geográfica que esta almacenada en el paquete <span class="in">`giscoR`</span></span>
-<span id="cb59-207"><a href="#cb59-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-208"><a href="#cb59-208" aria-hidden="true" tabindex="-1"></a>Lo primero entonces es instalar y activar esa librería</span>
-<span id="cb59-209"><a href="#cb59-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-212"><a href="#cb59-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-213"><a href="#cb59-213" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalación de giscoR</span></span>
-<span id="cb59-214"><a href="#cb59-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-215"><a href="#cb59-215" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;giscoR&quot;)</span></span>
-<span id="cb59-216"><a href="#cb59-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-217"><a href="#cb59-217" aria-hidden="true" tabindex="-1"></a><span class="co"># Activación de giscoR</span></span>
-<span id="cb59-218"><a href="#cb59-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-219"><a href="#cb59-219" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(giscoR)</span>
-<span id="cb59-220"><a href="#cb59-220" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb59-221"><a href="#cb59-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-222"><a href="#cb59-222" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-223"><a href="#cb59-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-224"><a href="#cb59-224" aria-hidden="true" tabindex="-1"></a>Este paquete contiene los poligonos de los paises, solo debemos asegurarnos de generar bien la información para no tener problemas al momento de pegar los datos</span>
-<span id="cb59-225"><a href="#cb59-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-226"><a href="#cb59-226" aria-hidden="true" tabindex="-1"></a>Debemos asegurarnos que la base <span class="in">`frecuencias`</span> la cual tiene la frecuencia relativa de acuerdo por país, este organizada de mayor a menor</span>
+<span id="cb59-205"><a href="#cb59-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-206"><a href="#cb59-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-207"><a href="#cb59-207" aria-hidden="true" tabindex="-1"></a><span class="fu">## Realización de mapa con dato de frecuencias</span></span>
+<span id="cb59-208"><a href="#cb59-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-209"><a href="#cb59-209" aria-hidden="true" tabindex="-1"></a>Los mapas se han convertido en una alternativa de visualización cada vez más usada en ciencias sociales, por ello decidí incluir esta alternativa de visualización con los datos de la proporción de acuerdo con la afirmación *&quot;la democracia puede tener sus problemas, pero es el mejor sistema de gobierno&quot;*.</span>
+<span id="cb59-210"><a href="#cb59-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-211"><a href="#cb59-211" aria-hidden="true" tabindex="-1"></a>Normalmente para gráficar mapas, es necesario tener algún archivo georeferenciado (como un archivo raster o un shapefile) que contenga la información a colocar en el mapa.\</span>
+<span id="cb59-212"><a href="#cb59-212" aria-hidden="true" tabindex="-1"></a>Para este caso, que vamos a colorear a los países a partir de la variable de proporción, podemos utilizar la información geográfica que esta almacenada en el paquete <span class="in">`giscoR`</span></span>
+<span id="cb59-213"><a href="#cb59-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-214"><a href="#cb59-214" aria-hidden="true" tabindex="-1"></a>Lo primero entonces es instalar y activar esa librería</span>
+<span id="cb59-215"><a href="#cb59-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-218"><a href="#cb59-218" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-219"><a href="#cb59-219" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalación de giscoR</span></span>
+<span id="cb59-220"><a href="#cb59-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-221"><a href="#cb59-221" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;giscoR&quot;)</span></span>
+<span id="cb59-222"><a href="#cb59-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-223"><a href="#cb59-223" aria-hidden="true" tabindex="-1"></a><span class="co"># Activación de giscoR</span></span>
+<span id="cb59-224"><a href="#cb59-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-225"><a href="#cb59-225" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(giscoR)</span>
+<span id="cb59-226"><a href="#cb59-226" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
 <span id="cb59-227"><a href="#cb59-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-230"><a href="#cb59-230" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-231"><a href="#cb59-231" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span> </span>
-<span id="cb59-232"><a href="#cb59-232" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>frecRela)</span>
-<span id="cb59-233"><a href="#cb59-233" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-234"><a href="#cb59-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-235"><a href="#cb59-235" aria-hidden="true" tabindex="-1"></a>Añado el codigo ISO3 de los 17 paises que tengo, esto para poder pegar las proporciones a los datos geograficos.</span>
-<span id="cb59-236"><a href="#cb59-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-239"><a href="#cb59-239" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-240"><a href="#cb59-240" aria-hidden="true" tabindex="-1"></a>code <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;URY&quot;</span>, <span class="st">&quot;ARG&quot;</span>, <span class="st">&quot;CHL&quot;</span>, </span>
-<span id="cb59-241"><a href="#cb59-241" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;SLV&quot;</span>, <span class="st">&quot;BRA&quot;</span>, <span class="st">&quot;CRI&quot;</span>, </span>
-<span id="cb59-242"><a href="#cb59-242" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;MEX&quot;</span>, <span class="st">&quot;DOM&quot;</span>, <span class="st">&quot;COL&quot;</span>, </span>
-<span id="cb59-243"><a href="#cb59-243" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;BOL&quot;</span>, <span class="st">&quot;VEN&quot;</span>, <span class="st">&quot;PRY&quot;</span>, </span>
-<span id="cb59-244"><a href="#cb59-244" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;HND&quot;</span>, <span class="st">&quot;PER&quot;</span>, <span class="st">&quot;GTM&quot;</span>, </span>
-<span id="cb59-245"><a href="#cb59-245" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;PAN&quot;</span>, <span class="st">&quot;ECU&quot;</span>)</span>
-<span id="cb59-246"><a href="#cb59-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-247"><a href="#cb59-247" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span> </span>
-<span id="cb59-248"><a href="#cb59-248" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb59-249"><a href="#cb59-249" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">iso =</span> code)</span>
-<span id="cb59-250"><a href="#cb59-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-251"><a href="#cb59-251" aria-hidden="true" tabindex="-1"></a>frecuencias</span>
-<span id="cb59-252"><a href="#cb59-252" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-253"><a href="#cb59-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-254"><a href="#cb59-254" aria-hidden="true" tabindex="-1"></a>Guardo como <span class="in">`paises`</span> una base que contiene los poligonos de los países, esta tiene la informacion geografica de todos los paises del mundo</span>
-<span id="cb59-255"><a href="#cb59-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-258"><a href="#cb59-258" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-259"><a href="#cb59-259" aria-hidden="true" tabindex="-1"></a>paises <span class="ot">&lt;-</span> giscoR<span class="sc">::</span>gisco_countries</span>
-<span id="cb59-260"><a href="#cb59-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-261"><a href="#cb59-261" aria-hidden="true" tabindex="-1"></a><span class="co"># filtro por aquellos paises que estan en mis datos de proporcion</span></span>
-<span id="cb59-262"><a href="#cb59-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-263"><a href="#cb59-263" aria-hidden="true" tabindex="-1"></a>paises <span class="ot">&lt;-</span> paises <span class="sc">%&gt;%</span> </span>
-<span id="cb59-264"><a href="#cb59-264" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ISO3_CODE <span class="sc">%in%</span> code)</span>
-<span id="cb59-265"><a href="#cb59-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-266"><a href="#cb59-266" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-267"><a href="#cb59-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-268"><a href="#cb59-268" aria-hidden="true" tabindex="-1"></a>Pego la proporcion a los datos geograficos</span>
-<span id="cb59-269"><a href="#cb59-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-272"><a href="#cb59-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-273"><a href="#cb59-273" aria-hidden="true" tabindex="-1"></a>paises <span class="ot">&lt;-</span> paises <span class="sc">%&gt;%</span> </span>
-<span id="cb59-274"><a href="#cb59-274" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="at">y =</span> frecuencias <span class="sc">%&gt;%</span> </span>
-<span id="cb59-275"><a href="#cb59-275" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(iso, frecRela), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;ISO3_CODE&quot;</span> <span class="ot">=</span> <span class="st">&quot;iso&quot;</span>))</span>
-<span id="cb59-276"><a href="#cb59-276" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-277"><a href="#cb59-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-278"><a href="#cb59-278" aria-hidden="true" tabindex="-1"></a>Realizo la visulizacion del mapa</span>
-<span id="cb59-279"><a href="#cb59-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-282"><a href="#cb59-282" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-283"><a href="#cb59-283" aria-hidden="true" tabindex="-1"></a>mapa <span class="ot">&lt;-</span> paises <span class="sc">%&gt;%</span> </span>
-<span id="cb59-284"><a href="#cb59-284" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb59-285"><a href="#cb59-285" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> frecRela)) <span class="sc">+</span></span>
-<span id="cb59-286"><a href="#cb59-286" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_continuous</span>(<span class="at">type =</span> <span class="st">&quot;viridis&quot;</span>) <span class="co"># Elijo una paleta que haga mas visibles las diferencias</span></span>
-<span id="cb59-287"><a href="#cb59-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-288"><a href="#cb59-288" aria-hidden="true" tabindex="-1"></a>mapa</span>
-<span id="cb59-289"><a href="#cb59-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-290"><a href="#cb59-290" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-291"><a href="#cb59-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-292"><a href="#cb59-292" aria-hidden="true" tabindex="-1"></a>Con el comando <span class="in">`ggsave()`</span> puedo exportar el mapa o cualquier grafico en formato imagen a mi directorio de trabajo</span>
+<span id="cb59-228"><a href="#cb59-228" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-229"><a href="#cb59-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-230"><a href="#cb59-230" aria-hidden="true" tabindex="-1"></a>Este paquete contiene los poligonos de los paises, solo debemos asegurarnos de generar bien la información para no tener problemas al momento de pegar los datos</span>
+<span id="cb59-231"><a href="#cb59-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-232"><a href="#cb59-232" aria-hidden="true" tabindex="-1"></a>Debemos asegurarnos que la base <span class="in">`frecuencias`</span> la cual tiene la frecuencia relativa de acuerdo por país, este organizada de mayor a menor</span>
+<span id="cb59-233"><a href="#cb59-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-236"><a href="#cb59-236" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-237"><a href="#cb59-237" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span> </span>
+<span id="cb59-238"><a href="#cb59-238" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>frecRela)</span>
+<span id="cb59-239"><a href="#cb59-239" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-240"><a href="#cb59-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-241"><a href="#cb59-241" aria-hidden="true" tabindex="-1"></a>Añado el codigo ISO3 de los 17 paises que tengo, esto para poder pegar las proporciones a los datos geograficos.</span>
+<span id="cb59-242"><a href="#cb59-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-245"><a href="#cb59-245" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-246"><a href="#cb59-246" aria-hidden="true" tabindex="-1"></a>code <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;URY&quot;</span>, <span class="st">&quot;ARG&quot;</span>, <span class="st">&quot;CHL&quot;</span>, </span>
+<span id="cb59-247"><a href="#cb59-247" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;SLV&quot;</span>, <span class="st">&quot;BRA&quot;</span>, <span class="st">&quot;CRI&quot;</span>, </span>
+<span id="cb59-248"><a href="#cb59-248" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;MEX&quot;</span>, <span class="st">&quot;DOM&quot;</span>, <span class="st">&quot;COL&quot;</span>, </span>
+<span id="cb59-249"><a href="#cb59-249" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;BOL&quot;</span>, <span class="st">&quot;VEN&quot;</span>, <span class="st">&quot;PRY&quot;</span>, </span>
+<span id="cb59-250"><a href="#cb59-250" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;HND&quot;</span>, <span class="st">&quot;PER&quot;</span>, <span class="st">&quot;GTM&quot;</span>, </span>
+<span id="cb59-251"><a href="#cb59-251" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;PAN&quot;</span>, <span class="st">&quot;ECU&quot;</span>)</span>
+<span id="cb59-252"><a href="#cb59-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-253"><a href="#cb59-253" aria-hidden="true" tabindex="-1"></a>frecuencias <span class="ot">&lt;-</span> frecuencias <span class="sc">%&gt;%</span> </span>
+<span id="cb59-254"><a href="#cb59-254" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb59-255"><a href="#cb59-255" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">iso =</span> code)</span>
+<span id="cb59-256"><a href="#cb59-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-257"><a href="#cb59-257" aria-hidden="true" tabindex="-1"></a>frecuencias</span>
+<span id="cb59-258"><a href="#cb59-258" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-259"><a href="#cb59-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-260"><a href="#cb59-260" aria-hidden="true" tabindex="-1"></a>Guardo como <span class="in">`paises`</span> una base que contiene los poligonos de los países, esta tiene la informacion geografica de todos los paises del mundo</span>
+<span id="cb59-261"><a href="#cb59-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-264"><a href="#cb59-264" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-265"><a href="#cb59-265" aria-hidden="true" tabindex="-1"></a>paises <span class="ot">&lt;-</span> giscoR<span class="sc">::</span>gisco_countries</span>
+<span id="cb59-266"><a href="#cb59-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-267"><a href="#cb59-267" aria-hidden="true" tabindex="-1"></a><span class="co"># filtro por aquellos paises que estan en mis datos de proporcion</span></span>
+<span id="cb59-268"><a href="#cb59-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-269"><a href="#cb59-269" aria-hidden="true" tabindex="-1"></a>paises <span class="ot">&lt;-</span> paises <span class="sc">%&gt;%</span> </span>
+<span id="cb59-270"><a href="#cb59-270" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ISO3_CODE <span class="sc">%in%</span> code)</span>
+<span id="cb59-271"><a href="#cb59-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-272"><a href="#cb59-272" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-273"><a href="#cb59-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-274"><a href="#cb59-274" aria-hidden="true" tabindex="-1"></a>Pego la proporcion a los datos geograficos</span>
+<span id="cb59-275"><a href="#cb59-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-278"><a href="#cb59-278" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-279"><a href="#cb59-279" aria-hidden="true" tabindex="-1"></a>paises <span class="ot">&lt;-</span> paises <span class="sc">%&gt;%</span> </span>
+<span id="cb59-280"><a href="#cb59-280" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="at">y =</span> frecuencias <span class="sc">%&gt;%</span> </span>
+<span id="cb59-281"><a href="#cb59-281" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(iso, frecRela), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;ISO3_CODE&quot;</span> <span class="ot">=</span> <span class="st">&quot;iso&quot;</span>))</span>
+<span id="cb59-282"><a href="#cb59-282" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-283"><a href="#cb59-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-284"><a href="#cb59-284" aria-hidden="true" tabindex="-1"></a>Realizo la visulizacion del mapa</span>
+<span id="cb59-285"><a href="#cb59-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-288"><a href="#cb59-288" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-289"><a href="#cb59-289" aria-hidden="true" tabindex="-1"></a>mapa <span class="ot">&lt;-</span> paises <span class="sc">%&gt;%</span> </span>
+<span id="cb59-290"><a href="#cb59-290" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb59-291"><a href="#cb59-291" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> frecRela)) <span class="sc">+</span></span>
+<span id="cb59-292"><a href="#cb59-292" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_continuous</span>(<span class="at">type =</span> <span class="st">&quot;viridis&quot;</span>) <span class="co"># Elijo una paleta que haga mas visibles las diferencias</span></span>
 <span id="cb59-293"><a href="#cb59-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-296"><a href="#cb59-296" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-297"><a href="#cb59-297" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;mapaDemoc.png&quot;</span>,</span>
-<span id="cb59-298"><a href="#cb59-298" aria-hidden="true" tabindex="-1"></a>       <span class="at">plot =</span> mapa,</span>
-<span id="cb59-299"><a href="#cb59-299" aria-hidden="true" tabindex="-1"></a>       <span class="at">dpi =</span> <span class="dv">500</span>,</span>
-<span id="cb59-300"><a href="#cb59-300" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="fl">5.48</span>,</span>
-<span id="cb59-301"><a href="#cb59-301" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="fl">4.29</span></span>
-<span id="cb59-302"><a href="#cb59-302" aria-hidden="true" tabindex="-1"></a>         )</span>
-<span id="cb59-303"><a href="#cb59-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-304"><a href="#cb59-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-305"><a href="#cb59-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-306"><a href="#cb59-306" aria-hidden="true" tabindex="-1"></a><span class="fu">## Medidas de posición</span></span>
-<span id="cb59-307"><a href="#cb59-307" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-308"><a href="#cb59-308" aria-hidden="true" tabindex="-1"></a>En variables cuantitativas, tenemos medidas de posición y medidas de dispersión, las medidas de posición buscan reflejar los valores más representativos de la variable, por ello la más utilizada y conocida es la media.</span>
+<span id="cb59-294"><a href="#cb59-294" aria-hidden="true" tabindex="-1"></a>mapa</span>
+<span id="cb59-295"><a href="#cb59-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-296"><a href="#cb59-296" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-297"><a href="#cb59-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-298"><a href="#cb59-298" aria-hidden="true" tabindex="-1"></a>Con el comando <span class="in">`ggsave()`</span> puedo exportar el mapa o cualquier grafico en formato imagen a mi directorio de trabajo</span>
+<span id="cb59-299"><a href="#cb59-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-302"><a href="#cb59-302" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-303"><a href="#cb59-303" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;mapaDemoc.png&quot;</span>,</span>
+<span id="cb59-304"><a href="#cb59-304" aria-hidden="true" tabindex="-1"></a>       <span class="at">plot =</span> mapa,</span>
+<span id="cb59-305"><a href="#cb59-305" aria-hidden="true" tabindex="-1"></a>       <span class="at">dpi =</span> <span class="dv">500</span>,</span>
+<span id="cb59-306"><a href="#cb59-306" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="fl">5.48</span>,</span>
+<span id="cb59-307"><a href="#cb59-307" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="fl">4.29</span></span>
+<span id="cb59-308"><a href="#cb59-308" aria-hidden="true" tabindex="-1"></a>         )</span>
 <span id="cb59-309"><a href="#cb59-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-310"><a href="#cb59-310" aria-hidden="true" tabindex="-1"></a><span class="fu">### Media</span></span>
+<span id="cb59-310"><a href="#cb59-310" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb59-311"><a href="#cb59-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-312"><a href="#cb59-312" aria-hidden="true" tabindex="-1"></a>En nuestro lenguaje natural esta incorporado hablar de promedios, lo cual está bien, en general busca reflejar cual es el valor más probable a observar. La función para calcular promedios en R es <span class="in">`mean()`</span>, cuyo argumento indispensable es un conjunto de valores a promediar.</span>
+<span id="cb59-312"><a href="#cb59-312" aria-hidden="true" tabindex="-1"></a><span class="fu">## Medidas de posición</span></span>
 <span id="cb59-313"><a href="#cb59-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-314"><a href="#cb59-314" aria-hidden="true" tabindex="-1"></a>Por ejemplo, el promedio de los números del 1 al 10 es <span class="in">`r round(mean(1:10),2)`</span> y la manera de obtenerlo en R es:</span>
+<span id="cb59-314"><a href="#cb59-314" aria-hidden="true" tabindex="-1"></a>En variables cuantitativas, tenemos medidas de posición y medidas de dispersión, las medidas de posición buscan reflejar los valores más representativos de la variable, por ello la más utilizada y conocida es la media.</span>
 <span id="cb59-315"><a href="#cb59-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-318"><a href="#cb59-318" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-319"><a href="#cb59-319" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
-<span id="cb59-320"><a href="#cb59-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-321"><a href="#cb59-321" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-322"><a href="#cb59-322" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-323"><a href="#cb59-323" aria-hidden="true" tabindex="-1"></a>Matemáticamente, un promedio se expresa como la suma de los valores dividido en el número total de valores. Es decir, lo que acabo de hacer el R es:</span>
-<span id="cb59-324"><a href="#cb59-324" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-325"><a href="#cb59-325" aria-hidden="true" tabindex="-1"></a>$$mean = \frac{1+2+3+4+5+6+7+8+9+10}{10}=\frac{55}{10}=5.5$$</span>
+<span id="cb59-316"><a href="#cb59-316" aria-hidden="true" tabindex="-1"></a><span class="fu">### Media</span></span>
+<span id="cb59-317"><a href="#cb59-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-318"><a href="#cb59-318" aria-hidden="true" tabindex="-1"></a>En nuestro lenguaje natural esta incorporado hablar de promedios, lo cual está bien, en general busca reflejar cual es el valor más probable a observar. La función para calcular promedios en R es <span class="in">`mean()`</span>, cuyo argumento indispensable es un conjunto de valores a promediar.</span>
+<span id="cb59-319"><a href="#cb59-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-320"><a href="#cb59-320" aria-hidden="true" tabindex="-1"></a>Por ejemplo, el promedio de los números del 1 al 10 es <span class="in">`r round(mean(1:10),2)`</span> y la manera de obtenerlo en R es:</span>
+<span id="cb59-321"><a href="#cb59-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-324"><a href="#cb59-324" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-325"><a href="#cb59-325" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
 <span id="cb59-326"><a href="#cb59-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-327"><a href="#cb59-327" aria-hidden="true" tabindex="-1"></a>Otra manera en la que se puede expresar lo anterior es:</span>
+<span id="cb59-327"><a href="#cb59-327" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb59-328"><a href="#cb59-328" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-329"><a href="#cb59-329" aria-hidden="true" tabindex="-1"></a>$$mean = \frac{\sum_{i = 1}^{10}x_i}{10} = \frac{1}{10} \cdot \sum_{i=1}^{10}x_i$$</span>
+<span id="cb59-329"><a href="#cb59-329" aria-hidden="true" tabindex="-1"></a>Matemáticamente, un promedio se expresa como la suma de los valores dividido en el número total de valores. Es decir, lo que acabo de hacer el R es:</span>
 <span id="cb59-330"><a href="#cb59-330" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-331"><a href="#cb59-331" aria-hidden="true" tabindex="-1"></a>Aunque lo anterior es ilustrativo para reflejar lo que subyace a la función promedio, no solemos trabajar así, en general tenemos una base de datos y nos interesa obtener el promedio de algunas de las variables que la componen.</span>
+<span id="cb59-331"><a href="#cb59-331" aria-hidden="true" tabindex="-1"></a>$$mean = \frac{1+2+3+4+5+6+7+8+9+10}{10}=\frac{55}{10}=5.5$$</span>
 <span id="cb59-332"><a href="#cb59-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-333"><a href="#cb59-333" aria-hidden="true" tabindex="-1"></a>Para ver esto utilicemos la base con nombre &quot;baseClase2.xlsx&quot;, en esta base hay algunos indicadores del Banco Mundial sobre el desarrollo, previo a su análisis, hay algunas modificaciones de formato que debemos realizar (pasarla de formato ancho a largo), hecho eso, seleccionemos alguna de las variables y elijamos un subconjunto de países para calcular la media.</span>
+<span id="cb59-333"><a href="#cb59-333" aria-hidden="true" tabindex="-1"></a>Otra manera en la que se puede expresar lo anterior es:</span>
 <span id="cb59-334"><a href="#cb59-334" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-337"><a href="#cb59-337" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-338"><a href="#cb59-338" aria-hidden="true" tabindex="-1"></a><span class="co"># Levantamos la base con función read_excel() del paquete {readxl}</span></span>
-<span id="cb59-339"><a href="#cb59-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-340"><a href="#cb59-340" aria-hidden="true" tabindex="-1"></a>baseWB <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="at">path =</span> <span class="st">&quot;bases/baseClase2.xlsx&quot;</span>)</span>
-<span id="cb59-341"><a href="#cb59-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-342"><a href="#cb59-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-343"><a href="#cb59-343" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-344"><a href="#cb59-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-345"><a href="#cb59-345" aria-hidden="true" tabindex="-1"></a>Al utilizar la función <span class="in">`glimpse()`</span>, vemos que los años aparecen como variables, si bien esto no esta mal conceptualmente, es necesario modificar su estructura para realizar ciertos análisis, la función a utilizar para ello es <span class="in">`gather()`</span>.</span>
-<span id="cb59-346"><a href="#cb59-346" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-349"><a href="#cb59-349" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-350"><a href="#cb59-350" aria-hidden="true" tabindex="-1"></a>baseWB <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span> <span class="co"># Pasamos de formato largo a ancho</span></span>
-<span id="cb59-351"><a href="#cb59-351" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">&quot;year&quot;</span>,     <span class="co"># Nombre de la variable que almacenara las columnas</span></span>
-<span id="cb59-352"><a href="#cb59-352" aria-hidden="true" tabindex="-1"></a>         <span class="at">value =</span> <span class="st">&quot;valor&quot;</span>,  <span class="co"># Nombre de la variable con la que relleno los valores</span></span>
-<span id="cb59-353"><a href="#cb59-353" aria-hidden="true" tabindex="-1"></a>         <span class="dv">5</span><span class="sc">:</span><span class="fu">ncol</span>(baseWB))   <span class="co"># Columnas a pasar de ancho a lago</span></span>
-<span id="cb59-354"><a href="#cb59-354" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-355"><a href="#cb59-355" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-356"><a href="#cb59-356" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-357"><a href="#cb59-357" aria-hidden="true" tabindex="-1"></a>Ahora tenemos una base de datos con 6 columnas, sin embargo, el número de variables contenidas en la base es mayor, la columna &quot;Indicator Name&quot; señala a que variable pertenece el valor, observando los valores únicos de &quot;Indicator Name&quot;, vemos que en total son 11 variables.</span>
-<span id="cb59-358"><a href="#cb59-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-361"><a href="#cb59-361" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-362"><a href="#cb59-362" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(baseWB<span class="sc">$</span><span class="st">`</span><span class="at">Indicator Name</span><span class="st">`</span>)</span>
-<span id="cb59-363"><a href="#cb59-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-364"><a href="#cb59-364" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-365"><a href="#cb59-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-366"><a href="#cb59-366" aria-hidden="true" tabindex="-1"></a>Para finalmente tener una base de datos con una estructura tradicional, donde cada fila es una medición y cada columna es una variable, debemos hacer la transformación inversa a la realizada con <span class="in">`gather`</span>, pero sobre la variable <span class="in">`Indicator Code`</span> o <span class="in">`Indicator Name`</span>, de esa forma tendremos a cada una de las 11 variables como una columna.\</span>
-<span id="cb59-367"><a href="#cb59-367" aria-hidden="true" tabindex="-1"></a>Por practicidad en los nombres, utilizaremos a la variable <span class="in">`Indicator Code`</span> pues esta no contiene caracteres especiales ni espacios.</span>
-<span id="cb59-368"><a href="#cb59-368" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-369"><a href="#cb59-369" aria-hidden="true" tabindex="-1"></a>La función que me permite hacer la operación inversa a <span class="in">`gather`</span> es <span class="in">`spread`</span>.</span>
-<span id="cb59-370"><a href="#cb59-370" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-373"><a href="#cb59-373" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-374"><a href="#cb59-374" aria-hidden="true" tabindex="-1"></a>baseWB <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span> </span>
-<span id="cb59-375"><a href="#cb59-375" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="st">`</span><span class="at">Indicator Name</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-376"><a href="#cb59-376" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(<span class="at">key =</span> <span class="st">`</span><span class="at">Indicator Code</span><span class="st">`</span>, <span class="at">value =</span> valor)</span>
-<span id="cb59-377"><a href="#cb59-377" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-378"><a href="#cb59-378" aria-hidden="true" tabindex="-1"></a>baseWB <span class="sc">%&gt;%</span> <span class="fu">glimpse</span>()</span>
-<span id="cb59-379"><a href="#cb59-379" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-380"><a href="#cb59-380" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-381"><a href="#cb59-381" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-382"><a href="#cb59-382" aria-hidden="true" tabindex="-1"></a>Ahora si tenemos nuestra base de datos con una estructura tradicional, siendo más precisos, tenemos un panel de datos, es decir, mediciones repetidas de las mismas unidades de observación (paises) en distintos momentos del tiempo.</span>
+<span id="cb59-335"><a href="#cb59-335" aria-hidden="true" tabindex="-1"></a>$$mean = \frac{\sum_{i = 1}^{10}x_i}{10} = \frac{1}{10} \cdot \sum_{i=1}^{10}x_i$$</span>
+<span id="cb59-336"><a href="#cb59-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-337"><a href="#cb59-337" aria-hidden="true" tabindex="-1"></a>Aunque lo anterior es ilustrativo para reflejar lo que subyace a la función promedio, no solemos trabajar así, en general tenemos una base de datos y nos interesa obtener el promedio de algunas de las variables que la componen.</span>
+<span id="cb59-338"><a href="#cb59-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-339"><a href="#cb59-339" aria-hidden="true" tabindex="-1"></a>Para ver esto utilicemos la base con nombre &quot;baseClase2.xlsx&quot;, en esta base hay algunos indicadores del Banco Mundial sobre el desarrollo, previo a su análisis, hay algunas modificaciones de formato que debemos realizar (pasarla de formato ancho a largo), hecho eso, seleccionemos alguna de las variables y elijamos un subconjunto de países para calcular la media.</span>
+<span id="cb59-340"><a href="#cb59-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-343"><a href="#cb59-343" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-344"><a href="#cb59-344" aria-hidden="true" tabindex="-1"></a><span class="co"># Levantamos la base con función read_excel() del paquete {readxl}</span></span>
+<span id="cb59-345"><a href="#cb59-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-346"><a href="#cb59-346" aria-hidden="true" tabindex="-1"></a>baseWB <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="at">path =</span> <span class="st">&quot;bases/baseClase2.xlsx&quot;</span>)</span>
+<span id="cb59-347"><a href="#cb59-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-348"><a href="#cb59-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-349"><a href="#cb59-349" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-350"><a href="#cb59-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-351"><a href="#cb59-351" aria-hidden="true" tabindex="-1"></a>Al utilizar la función <span class="in">`glimpse()`</span>, vemos que los años aparecen como variables, si bien esto no esta mal conceptualmente, es necesario modificar su estructura para realizar ciertos análisis, la función a utilizar para ello es <span class="in">`gather()`</span>.</span>
+<span id="cb59-352"><a href="#cb59-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-355"><a href="#cb59-355" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-356"><a href="#cb59-356" aria-hidden="true" tabindex="-1"></a>baseWB <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span> <span class="co"># Pasamos de formato largo a ancho</span></span>
+<span id="cb59-357"><a href="#cb59-357" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">&quot;year&quot;</span>,     <span class="co"># Nombre de la variable que almacenara las columnas</span></span>
+<span id="cb59-358"><a href="#cb59-358" aria-hidden="true" tabindex="-1"></a>         <span class="at">value =</span> <span class="st">&quot;valor&quot;</span>,  <span class="co"># Nombre de la variable con la que relleno los valores</span></span>
+<span id="cb59-359"><a href="#cb59-359" aria-hidden="true" tabindex="-1"></a>         <span class="dv">5</span><span class="sc">:</span><span class="fu">ncol</span>(baseWB))   <span class="co"># Columnas a pasar de ancho a lago</span></span>
+<span id="cb59-360"><a href="#cb59-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-361"><a href="#cb59-361" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-362"><a href="#cb59-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-363"><a href="#cb59-363" aria-hidden="true" tabindex="-1"></a>Ahora tenemos una base de datos con 6 columnas, sin embargo, el número de variables contenidas en la base es mayor, la columna &quot;Indicator Name&quot; señala a que variable pertenece el valor, observando los valores únicos de &quot;Indicator Name&quot;, vemos que en total son 11 variables.</span>
+<span id="cb59-364"><a href="#cb59-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-367"><a href="#cb59-367" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-368"><a href="#cb59-368" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(baseWB<span class="sc">$</span><span class="st">`</span><span class="at">Indicator Name</span><span class="st">`</span>)</span>
+<span id="cb59-369"><a href="#cb59-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-370"><a href="#cb59-370" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-371"><a href="#cb59-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-372"><a href="#cb59-372" aria-hidden="true" tabindex="-1"></a>Para finalmente tener una base de datos con una estructura tradicional, donde cada fila es una medición y cada columna es una variable, debemos hacer la transformación inversa a la realizada con <span class="in">`gather`</span>, pero sobre la variable <span class="in">`Indicator Code`</span> o <span class="in">`Indicator Name`</span>, de esa forma tendremos a cada una de las 11 variables como una columna.\</span>
+<span id="cb59-373"><a href="#cb59-373" aria-hidden="true" tabindex="-1"></a>Por practicidad en los nombres, utilizaremos a la variable <span class="in">`Indicator Code`</span> pues esta no contiene caracteres especiales ni espacios.</span>
+<span id="cb59-374"><a href="#cb59-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-375"><a href="#cb59-375" aria-hidden="true" tabindex="-1"></a>La función que me permite hacer la operación inversa a <span class="in">`gather`</span> es <span class="in">`spread`</span>.</span>
+<span id="cb59-376"><a href="#cb59-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-379"><a href="#cb59-379" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-380"><a href="#cb59-380" aria-hidden="true" tabindex="-1"></a>baseWB <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span> </span>
+<span id="cb59-381"><a href="#cb59-381" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="st">`</span><span class="at">Indicator Name</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-382"><a href="#cb59-382" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(<span class="at">key =</span> <span class="st">`</span><span class="at">Indicator Code</span><span class="st">`</span>, <span class="at">value =</span> valor)</span>
 <span id="cb59-383"><a href="#cb59-383" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-384"><a href="#cb59-384" aria-hidden="true" tabindex="-1"></a>Para analizar el promedio, utilicemos la variable **&quot;Life expectancy at birth, total (years)&quot;**, esta variable esta medida desde 1990 y hasta 2021 para la mayoría de países, sin embargo, los valores de año aparecen desde 1960. Por simplicidad acotemos el análisis a algunos países, el código de la variable es <span class="in">`SP.DYN.LE00.IN`</span>.</span>
+<span id="cb59-384"><a href="#cb59-384" aria-hidden="true" tabindex="-1"></a>baseWB <span class="sc">%&gt;%</span> <span class="fu">glimpse</span>()</span>
 <span id="cb59-385"><a href="#cb59-385" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-388"><a href="#cb59-388" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-389"><a href="#cb59-389" aria-hidden="true" tabindex="-1"></a><span class="co"># Genero un vector a partir del cual filtrar la base</span></span>
-<span id="cb59-390"><a href="#cb59-390" aria-hidden="true" tabindex="-1"></a><span class="co"># estos paises son los que voy a analizar</span></span>
+<span id="cb59-386"><a href="#cb59-386" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-387"><a href="#cb59-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-388"><a href="#cb59-388" aria-hidden="true" tabindex="-1"></a>Ahora si tenemos nuestra base de datos con una estructura tradicional, siendo más precisos, tenemos un panel de datos, es decir, mediciones repetidas de las mismas unidades de observación (paises) en distintos momentos del tiempo.</span>
+<span id="cb59-389"><a href="#cb59-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-390"><a href="#cb59-390" aria-hidden="true" tabindex="-1"></a>Para analizar el promedio, utilicemos la variable **&quot;Life expectancy at birth, total (years)&quot;**, esta variable esta medida desde 1990 y hasta 2021 para la mayoría de países, sin embargo, los valores de año aparecen desde 1960. Por simplicidad acotemos el análisis a algunos países, el código de la variable es <span class="in">`SP.DYN.LE00.IN`</span>.</span>
 <span id="cb59-391"><a href="#cb59-391" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-392"><a href="#cb59-392" aria-hidden="true" tabindex="-1"></a>paises <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;MEX&quot;</span>, <span class="st">&quot;CRI&quot;</span>, <span class="st">&quot;COL&quot;</span>, <span class="st">&quot;URY&quot;</span>, <span class="st">&quot;PRY&quot;</span>, <span class="st">&quot;ARG&quot;</span>,</span>
-<span id="cb59-393"><a href="#cb59-393" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;BRA&quot;</span>, <span class="st">&quot;USA&quot;</span>, <span class="st">&quot;JPN&quot;</span>, <span class="st">&quot;DEU&quot;</span>, <span class="st">&quot;CHL&quot;</span>, <span class="st">&quot;CAN&quot;</span>)</span>
-<span id="cb59-394"><a href="#cb59-394" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-395"><a href="#cb59-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-396"><a href="#cb59-396" aria-hidden="true" tabindex="-1"></a>Ahora calculemos el promedio de la expectativa de vida al nacer por país, es decir, promediemos los valores de cada país para los distintos años.\</span>
-<span id="cb59-397"><a href="#cb59-397" aria-hidden="true" tabindex="-1"></a>Para ello debemos usar la función <span class="in">`group_by()`</span> acompañada de la función <span class="in">`summarise()`</span>, en la primera señalamos la variable categórica, en este caso país, a partir de la cual deseamos desagregar el análisis y en la segunda ponemos la medida a calcular, en este caso el nombre de la variable que es <span class="in">`SP.DYN.LE00.IN`</span>.</span>
-<span id="cb59-398"><a href="#cb59-398" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-401"><a href="#cb59-401" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-402"><a href="#cb59-402" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span>                                   <span class="co"># Base inicial</span></span>
-<span id="cb59-403"><a href="#cb59-403" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span>                            <span class="co"># filtro los paises que me interesan</span></span>
-<span id="cb59-404"><a href="#cb59-404" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="sc">%&gt;%</span>                                      <span class="co"># agrupo por país  </span></span>
-<span id="cb59-405"><a href="#cb59-405" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mediaEspVida =</span> <span class="fu">mean</span>(SP.DYN.LE00.IN))</span>
-<span id="cb59-406"><a href="#cb59-406" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-407"><a href="#cb59-407" aria-hidden="true" tabindex="-1"></a>resumenMedia</span>
-<span id="cb59-408"><a href="#cb59-408" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-409"><a href="#cb59-409" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-410"><a href="#cb59-410" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-411"><a href="#cb59-411" aria-hidden="true" tabindex="-1"></a>Al ejecutar el código vemos que muchas observaciones arrojan <span class="in">`NA`</span> o valores perdidos, esto es porque para algunos años, esta variable no esta medida en esos países, la manera de solucionar ese problema es utilizando el argumento <span class="in">`&#39;na.rm = T&#39;`</span> dentro de la función mean <span class="in">`mean(..., na.rm = T)`</span>, con este argumento lo que hace R es tomar el promedio de los valores DISPONIBLES.</span>
+<span id="cb59-394"><a href="#cb59-394" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-395"><a href="#cb59-395" aria-hidden="true" tabindex="-1"></a><span class="co"># Genero un vector a partir del cual filtrar la base</span></span>
+<span id="cb59-396"><a href="#cb59-396" aria-hidden="true" tabindex="-1"></a><span class="co"># estos paises son los que voy a analizar</span></span>
+<span id="cb59-397"><a href="#cb59-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-398"><a href="#cb59-398" aria-hidden="true" tabindex="-1"></a>paises <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;MEX&quot;</span>, <span class="st">&quot;CRI&quot;</span>, <span class="st">&quot;COL&quot;</span>, <span class="st">&quot;URY&quot;</span>, <span class="st">&quot;PRY&quot;</span>, <span class="st">&quot;ARG&quot;</span>,</span>
+<span id="cb59-399"><a href="#cb59-399" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;BRA&quot;</span>, <span class="st">&quot;USA&quot;</span>, <span class="st">&quot;JPN&quot;</span>, <span class="st">&quot;DEU&quot;</span>, <span class="st">&quot;CHL&quot;</span>, <span class="st">&quot;CAN&quot;</span>)</span>
+<span id="cb59-400"><a href="#cb59-400" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-401"><a href="#cb59-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-402"><a href="#cb59-402" aria-hidden="true" tabindex="-1"></a>Ahora calculemos el promedio de la expectativa de vida al nacer por país, es decir, promediemos los valores de cada país para los distintos años.\</span>
+<span id="cb59-403"><a href="#cb59-403" aria-hidden="true" tabindex="-1"></a>Para ello debemos usar la función <span class="in">`group_by()`</span> acompañada de la función <span class="in">`summarise()`</span>, en la primera señalamos la variable categórica, en este caso país, a partir de la cual deseamos desagregar el análisis y en la segunda ponemos la medida a calcular, en este caso el nombre de la variable que es <span class="in">`SP.DYN.LE00.IN`</span>.</span>
+<span id="cb59-404"><a href="#cb59-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-407"><a href="#cb59-407" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-408"><a href="#cb59-408" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span>                                   <span class="co"># Base inicial</span></span>
+<span id="cb59-409"><a href="#cb59-409" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span>                            <span class="co"># filtro los paises que me interesan</span></span>
+<span id="cb59-410"><a href="#cb59-410" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="sc">%&gt;%</span>                                      <span class="co"># agrupo por país  </span></span>
+<span id="cb59-411"><a href="#cb59-411" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mediaEspVida =</span> <span class="fu">mean</span>(SP.DYN.LE00.IN))</span>
 <span id="cb59-412"><a href="#cb59-412" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-415"><a href="#cb59-415" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-416"><a href="#cb59-416" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span>                                   <span class="co"># Base inicial</span></span>
-<span id="cb59-417"><a href="#cb59-417" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span>                            <span class="co"># filtro los paises que me interesan</span></span>
-<span id="cb59-418"><a href="#cb59-418" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="sc">%&gt;%</span>                                      <span class="co"># agrupo por país  </span></span>
-<span id="cb59-419"><a href="#cb59-419" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mediaEspVida =</span> <span class="fu">mean</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T))</span>
-<span id="cb59-420"><a href="#cb59-420" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-421"><a href="#cb59-421" aria-hidden="true" tabindex="-1"></a>resumenMedia</span>
-<span id="cb59-422"><a href="#cb59-422" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-423"><a href="#cb59-423" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-424"><a href="#cb59-424" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-425"><a href="#cb59-425" aria-hidden="true" tabindex="-1"></a>Las conclusiones que podemos sacar de esta última tabla, es que Japón es el país que muestra mayor promedio en la expectativa de vida al nacer entre 1960 y 2021, mientras que Brasil es el país que muestra el valor más bajo.</span>
+<span id="cb59-413"><a href="#cb59-413" aria-hidden="true" tabindex="-1"></a>resumenMedia</span>
+<span id="cb59-414"><a href="#cb59-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-415"><a href="#cb59-415" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-416"><a href="#cb59-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-417"><a href="#cb59-417" aria-hidden="true" tabindex="-1"></a>Al ejecutar el código vemos que muchas observaciones arrojan <span class="in">`NA`</span> o valores perdidos, esto es porque para algunos años, esta variable no esta medida en esos países, la manera de solucionar ese problema es utilizando el argumento <span class="in">`&#39;na.rm = T&#39;`</span> dentro de la función mean <span class="in">`mean(..., na.rm = T)`</span>, con este argumento lo que hace R es tomar el promedio de los valores DISPONIBLES.</span>
+<span id="cb59-418"><a href="#cb59-418" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-421"><a href="#cb59-421" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-422"><a href="#cb59-422" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span>                                   <span class="co"># Base inicial</span></span>
+<span id="cb59-423"><a href="#cb59-423" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span>                            <span class="co"># filtro los paises que me interesan</span></span>
+<span id="cb59-424"><a href="#cb59-424" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="sc">%&gt;%</span>                                      <span class="co"># agrupo por país  </span></span>
+<span id="cb59-425"><a href="#cb59-425" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mediaEspVida =</span> <span class="fu">mean</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T))</span>
 <span id="cb59-426"><a href="#cb59-426" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-427"><a href="#cb59-427" aria-hidden="true" tabindex="-1"></a><span class="fu">### Mediana</span></span>
+<span id="cb59-427"><a href="#cb59-427" aria-hidden="true" tabindex="-1"></a>resumenMedia</span>
 <span id="cb59-428"><a href="#cb59-428" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-429"><a href="#cb59-429" aria-hidden="true" tabindex="-1"></a>La mediana es el valor que, organizados los datos de menor a mayor, divide a los datos en dos partes iguales. Cuando existen valores atípicos (valores que se salen de la tendencia del resto de observaciones), la mediana es una mejor medida de posición, en el sentido que puede aportar una medida mas representativa del conjunto de los datos.</span>
+<span id="cb59-429"><a href="#cb59-429" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb59-430"><a href="#cb59-430" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-431"><a href="#cb59-431" aria-hidden="true" tabindex="-1"></a>La lógica para obtenerla es la misma, y puede ser obtenida al tiempo que obtenemos la media, la función a utilizar es <span class="in">`median()`</span>.\</span>
-<span id="cb59-432"><a href="#cb59-432" aria-hidden="true" tabindex="-1"></a>A la tabla anterior con la media <span class="in">`resumenMedia`</span>, añadiremos una columna que contenga la mediana.</span>
-<span id="cb59-433"><a href="#cb59-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-436"><a href="#cb59-436" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-437"><a href="#cb59-437" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span>                                   <span class="co"># Base inicial</span></span>
-<span id="cb59-438"><a href="#cb59-438" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span>                            <span class="co"># filtro los paises que me interesan</span></span>
-<span id="cb59-439"><a href="#cb59-439" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="sc">%&gt;%</span>                                      <span class="co"># agrupo por país  </span></span>
-<span id="cb59-440"><a href="#cb59-440" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mediaEspVida =</span> <span class="fu">mean</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
-<span id="cb59-441"><a href="#cb59-441" aria-hidden="true" tabindex="-1"></a>            <span class="at">medianaEspVida =</span> <span class="fu">median</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T))</span>
-<span id="cb59-442"><a href="#cb59-442" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-443"><a href="#cb59-443" aria-hidden="true" tabindex="-1"></a>resumenMedia</span>
-<span id="cb59-444"><a href="#cb59-444" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-445"><a href="#cb59-445" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-446"><a href="#cb59-446" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-447"><a href="#cb59-447" aria-hidden="true" tabindex="-1"></a><span class="fu">### Graficando las medias obtenidas</span></span>
+<span id="cb59-431"><a href="#cb59-431" aria-hidden="true" tabindex="-1"></a>Las conclusiones que podemos sacar de esta última tabla, es que Japón es el país que muestra mayor promedio en la expectativa de vida al nacer entre 1960 y 2021, mientras que Brasil es el país que muestra el valor más bajo.</span>
+<span id="cb59-432"><a href="#cb59-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-433"><a href="#cb59-433" aria-hidden="true" tabindex="-1"></a><span class="fu">### Mediana</span></span>
+<span id="cb59-434"><a href="#cb59-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-435"><a href="#cb59-435" aria-hidden="true" tabindex="-1"></a>La mediana es el valor que, organizados los datos de menor a mayor, divide a los datos en dos partes iguales. Cuando existen valores atípicos (valores que se salen de la tendencia del resto de observaciones), la mediana es una mejor medida de posición, en el sentido que puede aportar una medida mas representativa del conjunto de los datos.</span>
+<span id="cb59-436"><a href="#cb59-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-437"><a href="#cb59-437" aria-hidden="true" tabindex="-1"></a>La lógica para obtenerla es la misma, y puede ser obtenida al tiempo que obtenemos la media, la función a utilizar es <span class="in">`median()`</span>.\</span>
+<span id="cb59-438"><a href="#cb59-438" aria-hidden="true" tabindex="-1"></a>A la tabla anterior con la media <span class="in">`resumenMedia`</span>, añadiremos una columna que contenga la mediana.</span>
+<span id="cb59-439"><a href="#cb59-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-442"><a href="#cb59-442" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-443"><a href="#cb59-443" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span>                                   <span class="co"># Base inicial</span></span>
+<span id="cb59-444"><a href="#cb59-444" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span>                            <span class="co"># filtro los paises que me interesan</span></span>
+<span id="cb59-445"><a href="#cb59-445" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="sc">%&gt;%</span>                                      <span class="co"># agrupo por país  </span></span>
+<span id="cb59-446"><a href="#cb59-446" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mediaEspVida =</span> <span class="fu">mean</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
+<span id="cb59-447"><a href="#cb59-447" aria-hidden="true" tabindex="-1"></a>            <span class="at">medianaEspVida =</span> <span class="fu">median</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T))</span>
 <span id="cb59-448"><a href="#cb59-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-449"><a href="#cb59-449" aria-hidden="true" tabindex="-1"></a>Una vez obtuvimos los resultados, una buena manera de presentarlos es a partir de un gráfico de barras que muestre el promedio por país y añadir una línea recta que muestre el promedio general, de manera que se pueda observar que países están por encima y que países están por debajo de la media general. Para hacer esto hay algo que hasta ahora no hemos obtenido, la media general.</span>
+<span id="cb59-449"><a href="#cb59-449" aria-hidden="true" tabindex="-1"></a>resumenMedia</span>
 <span id="cb59-450"><a href="#cb59-450" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-453"><a href="#cb59-453" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-454"><a href="#cb59-454" aria-hidden="true" tabindex="-1"></a>mediaGeneral <span class="ot">&lt;-</span> <span class="fu">mean</span>(baseWB<span class="sc">$</span>SP.DYN.LE00.IN[baseWB<span class="sc">$</span><span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises], <span class="at">na.rm =</span> T)</span>
-<span id="cb59-455"><a href="#cb59-455" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-456"><a href="#cb59-456" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="sc">%&gt;%</span> </span>
-<span id="cb59-457"><a href="#cb59-457" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>, <span class="fu">desc</span>(mediaEspVida)), <span class="at">y =</span> mediaEspVida)) <span class="sc">+</span></span>
-<span id="cb59-458"><a href="#cb59-458" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb59-459"><a href="#cb59-459" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(mediaEspVida, <span class="dv">1</span>)), <span class="co"># Añadimos valores a las columnas</span></span>
-<span id="cb59-460"><a href="#cb59-460" aria-hidden="true" tabindex="-1"></a>            <span class="at">nudge_y =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb59-461"><a href="#cb59-461" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">yintercept =</span> mediaGeneral), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="co"># Añadimos media general en rojo</span></span>
-<span id="cb59-462"><a href="#cb59-462" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-463"><a href="#cb59-463" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-464"><a href="#cb59-464" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-465"><a href="#cb59-465" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-466"><a href="#cb59-466" aria-hidden="true" tabindex="-1"></a>Otra manera de ver el comportamiento por país es a partir de un gráfico de cajas (boxplot), este mostraría no solo los valores centrales por país (puntualmente la mediana), sino la distribución por país para los distintos años.</span>
-<span id="cb59-467"><a href="#cb59-467" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-470"><a href="#cb59-470" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-471"><a href="#cb59-471" aria-hidden="true" tabindex="-1"></a>baseWB <span class="sc">%&gt;%</span> </span>
-<span id="cb59-472"><a href="#cb59-472" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span></span>
-<span id="cb59-473"><a href="#cb59-473" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-474"><a href="#cb59-474" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">median =</span> <span class="fu">median</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T)) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-475"><a href="#cb59-475" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>, <span class="fu">desc</span>(median)), <span class="at">y =</span> SP.DYN.LE00.IN)) <span class="sc">+</span></span>
-<span id="cb59-476"><a href="#cb59-476" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span>
-<span id="cb59-477"><a href="#cb59-477" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-478"><a href="#cb59-478" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-479"><a href="#cb59-479" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-480"><a href="#cb59-480" aria-hidden="true" tabindex="-1"></a><span class="fu">## Medidas de dispersión</span></span>
-<span id="cb59-481"><a href="#cb59-481" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-482"><a href="#cb59-482" aria-hidden="true" tabindex="-1"></a>Siempre es importante saber no solamente cual es el valor medio de una variable (medida de posición como media o mediana), sino también, que tanto se parecen cada uno de los datos a ese valor medio. Es decir, como se distribuyen los datos.</span>
+<span id="cb59-451"><a href="#cb59-451" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-452"><a href="#cb59-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-453"><a href="#cb59-453" aria-hidden="true" tabindex="-1"></a><span class="fu">### Graficando las medias obtenidas</span></span>
+<span id="cb59-454"><a href="#cb59-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-455"><a href="#cb59-455" aria-hidden="true" tabindex="-1"></a>Una vez obtuvimos los resultados, una buena manera de presentarlos es a partir de un gráfico de barras que muestre el promedio por país y añadir una línea recta que muestre el promedio general, de manera que se pueda observar que países están por encima y que países están por debajo de la media general. Para hacer esto hay algo que hasta ahora no hemos obtenido, la media general.</span>
+<span id="cb59-456"><a href="#cb59-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-459"><a href="#cb59-459" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-460"><a href="#cb59-460" aria-hidden="true" tabindex="-1"></a>mediaGeneral <span class="ot">&lt;-</span> <span class="fu">mean</span>(baseWB<span class="sc">$</span>SP.DYN.LE00.IN[baseWB<span class="sc">$</span><span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises], <span class="at">na.rm =</span> T)</span>
+<span id="cb59-461"><a href="#cb59-461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-462"><a href="#cb59-462" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="sc">%&gt;%</span> </span>
+<span id="cb59-463"><a href="#cb59-463" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>, <span class="fu">desc</span>(mediaEspVida)), <span class="at">y =</span> mediaEspVida)) <span class="sc">+</span></span>
+<span id="cb59-464"><a href="#cb59-464" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb59-465"><a href="#cb59-465" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(mediaEspVida, <span class="dv">1</span>)), <span class="co"># Añadimos valores a las columnas</span></span>
+<span id="cb59-466"><a href="#cb59-466" aria-hidden="true" tabindex="-1"></a>            <span class="at">nudge_y =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb59-467"><a href="#cb59-467" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">yintercept =</span> mediaGeneral), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="co"># Añadimos media general en rojo</span></span>
+<span id="cb59-468"><a href="#cb59-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-469"><a href="#cb59-469" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-470"><a href="#cb59-470" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-471"><a href="#cb59-471" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-472"><a href="#cb59-472" aria-hidden="true" tabindex="-1"></a>Otra manera de ver el comportamiento por país es a partir de un gráfico de cajas (boxplot), este mostraría no solo los valores centrales por país (puntualmente la mediana), sino la distribución por país para los distintos años.</span>
+<span id="cb59-473"><a href="#cb59-473" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-476"><a href="#cb59-476" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-477"><a href="#cb59-477" aria-hidden="true" tabindex="-1"></a>baseWB <span class="sc">%&gt;%</span> </span>
+<span id="cb59-478"><a href="#cb59-478" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span></span>
+<span id="cb59-479"><a href="#cb59-479" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-480"><a href="#cb59-480" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">median =</span> <span class="fu">median</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T)) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-481"><a href="#cb59-481" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>, <span class="fu">desc</span>(median)), <span class="at">y =</span> SP.DYN.LE00.IN)) <span class="sc">+</span></span>
+<span id="cb59-482"><a href="#cb59-482" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span>
 <span id="cb59-483"><a href="#cb59-483" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-484"><a href="#cb59-484" aria-hidden="true" tabindex="-1"></a>A partir de las dos gráficas anteriores esto puede ser más intuitivo, en la gráfica de la media, vimos solamente la medida de posición (media) que le correspondía a cada país, de esta concluimos por ejemplo, que Japón es el que tiene mayor expectativa de vida al nacer y Brasil el que menos.\</span>
-<span id="cb59-485"><a href="#cb59-485" aria-hidden="true" tabindex="-1"></a>Sin embargo, viendo la segunda gráfica (gráfico de cajas) es posible ver que Brasil presento en algunos años valores por encima de 70 y en otros valores menores a 60. El hecho de que la caja de Brasil sea una de las más alargadas, implica que Brasil es uno de los países que muestra mayor dispersión en los datos.</span>
-<span id="cb59-486"><a href="#cb59-486" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-487"><a href="#cb59-487" aria-hidden="true" tabindex="-1"></a>El estadístico más usado para medir la dispersión de los datos, es la desviación estándar, el cual es la raíz cuadrada de la varianza. En general a mayor desviación estándar mayor variabilidad o dispersión de los datos y menos representativa resulta la media del conjunto de datos.</span>
-<span id="cb59-488"><a href="#cb59-488" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-489"><a href="#cb59-489" aria-hidden="true" tabindex="-1"></a>Para obtener la desviación estandar la función a utilizar es <span class="in">`sd()`</span>, su estructura de uso es idéntica a la que vimos con la media y con la mediana. Por ello añadiremos la desviación estandar como una columna adicional en <span class="in">`resumenMedia`</span></span>
-<span id="cb59-490"><a href="#cb59-490" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-493"><a href="#cb59-493" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-494"><a href="#cb59-494" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span>                                   <span class="co"># Base inicial</span></span>
-<span id="cb59-495"><a href="#cb59-495" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span>                            <span class="co"># filtro los paises que me interesan</span></span>
-<span id="cb59-496"><a href="#cb59-496" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="sc">%&gt;%</span>                                      <span class="co"># agrupo por país  </span></span>
-<span id="cb59-497"><a href="#cb59-497" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mediaEspVida =</span> <span class="fu">mean</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
-<span id="cb59-498"><a href="#cb59-498" aria-hidden="true" tabindex="-1"></a>            <span class="at">medianaEspVida =</span> <span class="fu">median</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
-<span id="cb59-499"><a href="#cb59-499" aria-hidden="true" tabindex="-1"></a>            <span class="at">desvioEspVida =</span> <span class="fu">sd</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T))</span>
-<span id="cb59-500"><a href="#cb59-500" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-501"><a href="#cb59-501" aria-hidden="true" tabindex="-1"></a>resumenMedia</span>
-<span id="cb59-502"><a href="#cb59-502" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-503"><a href="#cb59-503" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-504"><a href="#cb59-504" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-505"><a href="#cb59-505" aria-hidden="true" tabindex="-1"></a>Formalmente, la desviación estándar es la raíz de la suma de las distancias al cuadrado de cada observación con respecto a la media, en términos más llanos, refleja la distancia promedio de las observaciones con respecto al promedio.</span>
+<span id="cb59-484"><a href="#cb59-484" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-485"><a href="#cb59-485" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-486"><a href="#cb59-486" aria-hidden="true" tabindex="-1"></a><span class="fu">## Medidas de dispersión</span></span>
+<span id="cb59-487"><a href="#cb59-487" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-488"><a href="#cb59-488" aria-hidden="true" tabindex="-1"></a>Siempre es importante saber no solamente cual es el valor medio de una variable (medida de posición como media o mediana), sino también, que tanto se parecen cada uno de los datos a ese valor medio. Es decir, como se distribuyen los datos.</span>
+<span id="cb59-489"><a href="#cb59-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-490"><a href="#cb59-490" aria-hidden="true" tabindex="-1"></a>A partir de las dos gráficas anteriores esto puede ser más intuitivo, en la gráfica de la media, vimos solamente la medida de posición (media) que le correspondía a cada país, de esta concluimos por ejemplo, que Japón es el que tiene mayor expectativa de vida al nacer y Brasil el que menos.\</span>
+<span id="cb59-491"><a href="#cb59-491" aria-hidden="true" tabindex="-1"></a>Sin embargo, viendo la segunda gráfica (gráfico de cajas) es posible ver que Brasil presento en algunos años valores por encima de 70 y en otros valores menores a 60. El hecho de que la caja de Brasil sea una de las más alargadas, implica que Brasil es uno de los países que muestra mayor dispersión en los datos.</span>
+<span id="cb59-492"><a href="#cb59-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-493"><a href="#cb59-493" aria-hidden="true" tabindex="-1"></a>El estadístico más usado para medir la dispersión de los datos, es la desviación estándar, el cual es la raíz cuadrada de la varianza. En general a mayor desviación estándar mayor variabilidad o dispersión de los datos y menos representativa resulta la media del conjunto de datos.</span>
+<span id="cb59-494"><a href="#cb59-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-495"><a href="#cb59-495" aria-hidden="true" tabindex="-1"></a>Para obtener la desviación estandar la función a utilizar es <span class="in">`sd()`</span>, su estructura de uso es idéntica a la que vimos con la media y con la mediana. Por ello añadiremos la desviación estandar como una columna adicional en <span class="in">`resumenMedia`</span></span>
+<span id="cb59-496"><a href="#cb59-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-499"><a href="#cb59-499" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-500"><a href="#cb59-500" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span>                                   <span class="co"># Base inicial</span></span>
+<span id="cb59-501"><a href="#cb59-501" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span>                            <span class="co"># filtro los paises que me interesan</span></span>
+<span id="cb59-502"><a href="#cb59-502" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="sc">%&gt;%</span>                                      <span class="co"># agrupo por país  </span></span>
+<span id="cb59-503"><a href="#cb59-503" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mediaEspVida =</span> <span class="fu">mean</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
+<span id="cb59-504"><a href="#cb59-504" aria-hidden="true" tabindex="-1"></a>            <span class="at">medianaEspVida =</span> <span class="fu">median</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
+<span id="cb59-505"><a href="#cb59-505" aria-hidden="true" tabindex="-1"></a>            <span class="at">desvioEspVida =</span> <span class="fu">sd</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T))</span>
 <span id="cb59-506"><a href="#cb59-506" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-507"><a href="#cb59-507" aria-hidden="true" tabindex="-1"></a>Por ejemplo, interpretando el dato de desviación estándar para Colombia, la distancia promedio de cada dato con respecto al promedio es de 5.64 años de expectativa de vida al nacer.</span>
+<span id="cb59-507"><a href="#cb59-507" aria-hidden="true" tabindex="-1"></a>resumenMedia</span>
 <span id="cb59-508"><a href="#cb59-508" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-509"><a href="#cb59-509" aria-hidden="true" tabindex="-1"></a>$$\sigma = \sqrt{\frac{\sum_{i=1}^{n}(x_i - \mu)\cdot\sum_{i=1}^{n}(x_i - \mu)}{n-1}} = \sqrt{\frac{\sum_{i=1}^{n}(x_i-\mu)^2}{n-1}}$$</span>
+<span id="cb59-509"><a href="#cb59-509" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb59-510"><a href="#cb59-510" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-511"><a href="#cb59-511" aria-hidden="true" tabindex="-1"></a>Una manera de observar gráficamente la dispersión de los datos es a partir de histogramas, a continuación se presenta el histograma comparando a Colombia con Brasil y Japón.</span>
+<span id="cb59-511"><a href="#cb59-511" aria-hidden="true" tabindex="-1"></a>Formalmente, la desviación estándar es la raíz de la suma de las distancias al cuadrado de cada observación con respecto a la media, en términos más llanos, refleja la distancia promedio de las observaciones con respecto al promedio.</span>
 <span id="cb59-512"><a href="#cb59-512" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-515"><a href="#cb59-515" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-516"><a href="#cb59-516" aria-hidden="true" tabindex="-1"></a>baseWB <span class="sc">%&gt;%</span> </span>
-<span id="cb59-517"><a href="#cb59-517" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Colombia&quot;</span>, <span class="st">&quot;Brazil&quot;</span>, <span class="st">&quot;Japan&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-518"><a href="#cb59-518" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb59-519"><a href="#cb59-519" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> SP.DYN.LE00.IN), </span>
-<span id="cb59-520"><a href="#cb59-520" aria-hidden="true" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">15</span>, </span>
-<span id="cb59-521"><a href="#cb59-521" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;black&quot;</span>,</span>
-<span id="cb59-522"><a href="#cb59-522" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;lightgrey&quot;</span>) <span class="sc">+</span></span>
-<span id="cb59-523"><a href="#cb59-523" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span>)</span>
-<span id="cb59-524"><a href="#cb59-524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-525"><a href="#cb59-525" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-526"><a href="#cb59-526" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-527"><a href="#cb59-527" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-528"><a href="#cb59-528" aria-hidden="true" tabindex="-1"></a>Otra herramienta gráfica que suele utilizarse para ver a distribución de los datos, es la visualización de lo que se conoce como función de densidad. No profundizaremos demasiado al respecto, pero para que observen la lógica de la misma, se muestra la función de densidad de la expectativa de vida al nacer en 2019 para todos los países para los que existen datos, sobrepuesta al histograma.</span>
-<span id="cb59-529"><a href="#cb59-529" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-532"><a href="#cb59-532" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-533"><a href="#cb59-533" aria-hidden="true" tabindex="-1"></a>baseWB <span class="sc">%&gt;%</span> </span>
-<span id="cb59-534"><a href="#cb59-534" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-535"><a href="#cb59-535" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> SP.DYN.LE00.IN, <span class="at">y =</span> ..density..)) <span class="sc">+</span></span>
-<span id="cb59-536"><a href="#cb59-536" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">15</span>,</span>
-<span id="cb59-537"><a href="#cb59-537" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;black&quot;</span>,</span>
-<span id="cb59-538"><a href="#cb59-538" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;lightgrey&quot;</span>) <span class="sc">+</span></span>
-<span id="cb59-539"><a href="#cb59-539" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">&quot;blue&quot;</span>,</span>
-<span id="cb59-540"><a href="#cb59-540" aria-hidden="true" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.15</span>,</span>
-<span id="cb59-541"><a href="#cb59-541" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">&quot;darkblue&quot;</span>)</span>
-<span id="cb59-542"><a href="#cb59-542" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-543"><a href="#cb59-543" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-544"><a href="#cb59-544" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-545"><a href="#cb59-545" aria-hidden="true" tabindex="-1"></a><span class="fu">## Otras medidas de dispersión</span></span>
-<span id="cb59-546"><a href="#cb59-546" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-547"><a href="#cb59-547" aria-hidden="true" tabindex="-1"></a>Además de la desviación estándar, otras dos medidas que suelen presentarse son la varianza y el rango.\</span>
-<span id="cb59-548"><a href="#cb59-548" aria-hidden="true" tabindex="-1"></a>La varianza es el cuadrado de la desviación estandar, la cual se puede obtener con la funcion <span class="in">`var()`</span> y el rango es la distancia entre el valor máximo y mínimo.</span>
-<span id="cb59-549"><a href="#cb59-549" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-550"><a href="#cb59-550" aria-hidden="true" tabindex="-1"></a>A continuación añadimos estos valores en la tabla de <span class="in">`resumenMedia`</span></span>
-<span id="cb59-551"><a href="#cb59-551" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-554"><a href="#cb59-554" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-555"><a href="#cb59-555" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span>                                   <span class="co"># Base inicial</span></span>
-<span id="cb59-556"><a href="#cb59-556" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span>                            <span class="co"># filtro los paises que me interesan</span></span>
-<span id="cb59-557"><a href="#cb59-557" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="sc">%&gt;%</span>                                      <span class="co"># agrupo por país  </span></span>
-<span id="cb59-558"><a href="#cb59-558" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mediaEspVida =</span> <span class="fu">mean</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),         <span class="co"># obtengo la media</span></span>
-<span id="cb59-559"><a href="#cb59-559" aria-hidden="true" tabindex="-1"></a>            <span class="at">medianaEspVida =</span> <span class="fu">median</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),     <span class="co"># obtengo la mediana </span></span>
-<span id="cb59-560"><a href="#cb59-560" aria-hidden="true" tabindex="-1"></a>            <span class="at">desvioEspVida =</span> <span class="fu">sd</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),          <span class="co"># obtengo el desvio estandar</span></span>
-<span id="cb59-561"><a href="#cb59-561" aria-hidden="true" tabindex="-1"></a>            <span class="at">varEspVida =</span> <span class="fu">var</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),            <span class="co"># obtengo la varianza</span></span>
-<span id="cb59-562"><a href="#cb59-562" aria-hidden="true" tabindex="-1"></a>            <span class="at">maxEspVida =</span> <span class="fu">max</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),            <span class="co"># obtengo el maximo</span></span>
-<span id="cb59-563"><a href="#cb59-563" aria-hidden="true" tabindex="-1"></a>            <span class="at">minEspVida =</span> <span class="fu">min</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T))            <span class="co"># obtengo el minimo</span></span>
-<span id="cb59-564"><a href="#cb59-564" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-565"><a href="#cb59-565" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="ot">&lt;-</span> resumenMedia <span class="sc">%&gt;%</span> </span>
-<span id="cb59-566"><a href="#cb59-566" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rango =</span> maxEspVida <span class="sc">-</span> minEspVida)                           <span class="co"># obtengo el rango, la distancia entre el maximo y el minimo</span></span>
-<span id="cb59-567"><a href="#cb59-567" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-568"><a href="#cb59-568" aria-hidden="true" tabindex="-1"></a>resumenMedia</span>
-<span id="cb59-569"><a href="#cb59-569" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-570"><a href="#cb59-570" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-571"><a href="#cb59-571" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-572"><a href="#cb59-572" aria-hidden="true" tabindex="-1"></a><span class="fu">## Una alternativa para el análisis</span></span>
+<span id="cb59-513"><a href="#cb59-513" aria-hidden="true" tabindex="-1"></a>Por ejemplo, interpretando el dato de desviación estándar para Colombia, la distancia promedio de cada dato con respecto al promedio es de 5.64 años de expectativa de vida al nacer.</span>
+<span id="cb59-514"><a href="#cb59-514" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-515"><a href="#cb59-515" aria-hidden="true" tabindex="-1"></a>$$\sigma = \sqrt{\frac{\sum_{i=1}^{n}(x_i - \mu)\cdot\sum_{i=1}^{n}(x_i - \mu)}{n-1}} = \sqrt{\frac{\sum_{i=1}^{n}(x_i-\mu)^2}{n-1}}$$</span>
+<span id="cb59-516"><a href="#cb59-516" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-517"><a href="#cb59-517" aria-hidden="true" tabindex="-1"></a>Una manera de observar gráficamente la dispersión de los datos es a partir de histogramas, a continuación se presenta el histograma comparando a Colombia con Brasil y Japón.</span>
+<span id="cb59-518"><a href="#cb59-518" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-521"><a href="#cb59-521" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-522"><a href="#cb59-522" aria-hidden="true" tabindex="-1"></a>baseWB <span class="sc">%&gt;%</span> </span>
+<span id="cb59-523"><a href="#cb59-523" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Colombia&quot;</span>, <span class="st">&quot;Brazil&quot;</span>, <span class="st">&quot;Japan&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-524"><a href="#cb59-524" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb59-525"><a href="#cb59-525" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> SP.DYN.LE00.IN), </span>
+<span id="cb59-526"><a href="#cb59-526" aria-hidden="true" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">15</span>, </span>
+<span id="cb59-527"><a href="#cb59-527" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb59-528"><a href="#cb59-528" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;lightgrey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb59-529"><a href="#cb59-529" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span>)</span>
+<span id="cb59-530"><a href="#cb59-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-531"><a href="#cb59-531" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-532"><a href="#cb59-532" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-533"><a href="#cb59-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-534"><a href="#cb59-534" aria-hidden="true" tabindex="-1"></a>Otra herramienta gráfica que suele utilizarse para ver a distribución de los datos, es la visualización de lo que se conoce como función de densidad. No profundizaremos demasiado al respecto, pero para que observen la lógica de la misma, se muestra la función de densidad de la expectativa de vida al nacer en 2019 para todos los países para los que existen datos, sobrepuesta al histograma.</span>
+<span id="cb59-535"><a href="#cb59-535" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-538"><a href="#cb59-538" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-539"><a href="#cb59-539" aria-hidden="true" tabindex="-1"></a>baseWB <span class="sc">%&gt;%</span> </span>
+<span id="cb59-540"><a href="#cb59-540" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-541"><a href="#cb59-541" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> SP.DYN.LE00.IN, <span class="at">y =</span> ..density..)) <span class="sc">+</span></span>
+<span id="cb59-542"><a href="#cb59-542" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">15</span>,</span>
+<span id="cb59-543"><a href="#cb59-543" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb59-544"><a href="#cb59-544" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;lightgrey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb59-545"><a href="#cb59-545" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb59-546"><a href="#cb59-546" aria-hidden="true" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.15</span>,</span>
+<span id="cb59-547"><a href="#cb59-547" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">&quot;darkblue&quot;</span>)</span>
+<span id="cb59-548"><a href="#cb59-548" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-549"><a href="#cb59-549" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-550"><a href="#cb59-550" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-551"><a href="#cb59-551" aria-hidden="true" tabindex="-1"></a><span class="fu">## Otras medidas de dispersión</span></span>
+<span id="cb59-552"><a href="#cb59-552" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-553"><a href="#cb59-553" aria-hidden="true" tabindex="-1"></a>Además de la desviación estándar, otras dos medidas que suelen presentarse son la varianza y el rango.\</span>
+<span id="cb59-554"><a href="#cb59-554" aria-hidden="true" tabindex="-1"></a>La varianza es el cuadrado de la desviación estandar, la cual se puede obtener con la funcion <span class="in">`var()`</span> y el rango es la distancia entre el valor máximo y mínimo.</span>
+<span id="cb59-555"><a href="#cb59-555" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-556"><a href="#cb59-556" aria-hidden="true" tabindex="-1"></a>A continuación añadimos estos valores en la tabla de <span class="in">`resumenMedia`</span></span>
+<span id="cb59-557"><a href="#cb59-557" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-560"><a href="#cb59-560" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-561"><a href="#cb59-561" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span>                                   <span class="co"># Base inicial</span></span>
+<span id="cb59-562"><a href="#cb59-562" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span> <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span>                            <span class="co"># filtro los paises que me interesan</span></span>
+<span id="cb59-563"><a href="#cb59-563" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Country Code</span><span class="st">`</span>) <span class="sc">%&gt;%</span>                                      <span class="co"># agrupo por país  </span></span>
+<span id="cb59-564"><a href="#cb59-564" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mediaEspVida =</span> <span class="fu">mean</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),         <span class="co"># obtengo la media</span></span>
+<span id="cb59-565"><a href="#cb59-565" aria-hidden="true" tabindex="-1"></a>            <span class="at">medianaEspVida =</span> <span class="fu">median</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),     <span class="co"># obtengo la mediana </span></span>
+<span id="cb59-566"><a href="#cb59-566" aria-hidden="true" tabindex="-1"></a>            <span class="at">desvioEspVida =</span> <span class="fu">sd</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),          <span class="co"># obtengo el desvio estandar</span></span>
+<span id="cb59-567"><a href="#cb59-567" aria-hidden="true" tabindex="-1"></a>            <span class="at">varEspVida =</span> <span class="fu">var</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),            <span class="co"># obtengo la varianza</span></span>
+<span id="cb59-568"><a href="#cb59-568" aria-hidden="true" tabindex="-1"></a>            <span class="at">maxEspVida =</span> <span class="fu">max</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),            <span class="co"># obtengo el maximo</span></span>
+<span id="cb59-569"><a href="#cb59-569" aria-hidden="true" tabindex="-1"></a>            <span class="at">minEspVida =</span> <span class="fu">min</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T))            <span class="co"># obtengo el minimo</span></span>
+<span id="cb59-570"><a href="#cb59-570" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-571"><a href="#cb59-571" aria-hidden="true" tabindex="-1"></a>resumenMedia <span class="ot">&lt;-</span> resumenMedia <span class="sc">%&gt;%</span> </span>
+<span id="cb59-572"><a href="#cb59-572" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rango =</span> maxEspVida <span class="sc">-</span> minEspVida)                           <span class="co"># obtengo el rango, la distancia entre el maximo y el minimo</span></span>
 <span id="cb59-573"><a href="#cb59-573" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-574"><a href="#cb59-574" aria-hidden="true" tabindex="-1"></a>Hasta ahora nos hemos concentrado en desagregar el análisis por países, una alternativa valida para el análisis es deasagregar la información por años, de manera que podamos observar la tendencia promedio de la expectativa de vida al nacer.</span>
+<span id="cb59-574"><a href="#cb59-574" aria-hidden="true" tabindex="-1"></a>resumenMedia</span>
 <span id="cb59-575"><a href="#cb59-575" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-576"><a href="#cb59-576" aria-hidden="true" tabindex="-1"></a>Realizaremos una tabla resumen que presente esa información, la estructura del código con <span class="in">`group_by()`</span> y <span class="in">`summarise()`</span> es la misma, pero, en lugar de agrupar la información por países debemos agruparla por año.</span>
+<span id="cb59-576"><a href="#cb59-576" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb59-577"><a href="#cb59-577" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-580"><a href="#cb59-580" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-581"><a href="#cb59-581" aria-hidden="true" tabindex="-1"></a>resumenAnios <span class="ot">&lt;-</span>  baseWB <span class="sc">%&gt;%</span> </span>
-<span id="cb59-582"><a href="#cb59-582" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">!=</span> <span class="dv">2023</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-583"><a href="#cb59-583" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-584"><a href="#cb59-584" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mediaEspVida =</span> <span class="fu">mean</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
-<span id="cb59-585"><a href="#cb59-585" aria-hidden="true" tabindex="-1"></a>            <span class="at">medianaEspVida =</span> <span class="fu">median</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
-<span id="cb59-586"><a href="#cb59-586" aria-hidden="true" tabindex="-1"></a>            <span class="at">desvioEspVida =</span> <span class="fu">sd</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
-<span id="cb59-587"><a href="#cb59-587" aria-hidden="true" tabindex="-1"></a>            <span class="at">varEspVida =</span> <span class="fu">var</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
-<span id="cb59-588"><a href="#cb59-588" aria-hidden="true" tabindex="-1"></a>            <span class="at">maxEspVida =</span> <span class="fu">max</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
-<span id="cb59-589"><a href="#cb59-589" aria-hidden="true" tabindex="-1"></a>            <span class="at">minEspVida =</span> <span class="fu">min</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T))</span>
-<span id="cb59-590"><a href="#cb59-590" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-591"><a href="#cb59-591" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-592"><a href="#cb59-592" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(resumenAnios, <span class="at">n =</span> <span class="dv">70</span>) <span class="co"># Con este comando veo todo el resultado en mi consola</span></span>
-<span id="cb59-593"><a href="#cb59-593" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-594"><a href="#cb59-594" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-595"><a href="#cb59-595" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-596"><a href="#cb59-596" aria-hidden="true" tabindex="-1"></a>De esta tabla que contiene el promedio general por año, podemos generar un gráfico en el que observemos como se ha comportado la misma a lo largo del tiempo.</span>
+<span id="cb59-578"><a href="#cb59-578" aria-hidden="true" tabindex="-1"></a><span class="fu">## Una alternativa para el análisis</span></span>
+<span id="cb59-579"><a href="#cb59-579" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-580"><a href="#cb59-580" aria-hidden="true" tabindex="-1"></a>Hasta ahora nos hemos concentrado en desagregar el análisis por países, una alternativa valida para el análisis es deasagregar la información por años, de manera que podamos observar la tendencia promedio de la expectativa de vida al nacer.</span>
+<span id="cb59-581"><a href="#cb59-581" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-582"><a href="#cb59-582" aria-hidden="true" tabindex="-1"></a>Realizaremos una tabla resumen que presente esa información, la estructura del código con <span class="in">`group_by()`</span> y <span class="in">`summarise()`</span> es la misma, pero, en lugar de agrupar la información por países debemos agruparla por año.</span>
+<span id="cb59-583"><a href="#cb59-583" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-586"><a href="#cb59-586" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-587"><a href="#cb59-587" aria-hidden="true" tabindex="-1"></a>resumenAnios <span class="ot">&lt;-</span>  baseWB <span class="sc">%&gt;%</span> </span>
+<span id="cb59-588"><a href="#cb59-588" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">!=</span> <span class="dv">2023</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-589"><a href="#cb59-589" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-590"><a href="#cb59-590" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mediaEspVida =</span> <span class="fu">mean</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
+<span id="cb59-591"><a href="#cb59-591" aria-hidden="true" tabindex="-1"></a>            <span class="at">medianaEspVida =</span> <span class="fu">median</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
+<span id="cb59-592"><a href="#cb59-592" aria-hidden="true" tabindex="-1"></a>            <span class="at">desvioEspVida =</span> <span class="fu">sd</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
+<span id="cb59-593"><a href="#cb59-593" aria-hidden="true" tabindex="-1"></a>            <span class="at">varEspVida =</span> <span class="fu">var</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
+<span id="cb59-594"><a href="#cb59-594" aria-hidden="true" tabindex="-1"></a>            <span class="at">maxEspVida =</span> <span class="fu">max</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T),</span>
+<span id="cb59-595"><a href="#cb59-595" aria-hidden="true" tabindex="-1"></a>            <span class="at">minEspVida =</span> <span class="fu">min</span>(SP.DYN.LE00.IN, <span class="at">na.rm =</span> T))</span>
+<span id="cb59-596"><a href="#cb59-596" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-597"><a href="#cb59-597" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-600"><a href="#cb59-600" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-601"><a href="#cb59-601" aria-hidden="true" tabindex="-1"></a>resumenAnios <span class="ot">&lt;-</span> resumenAnios <span class="sc">%&gt;%</span> </span>
-<span id="cb59-602"><a href="#cb59-602" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year)) <span class="co"># La variable &#39;year&#39; esta almacenada como tipo &lt;chr&gt; (character = almacena texto)</span></span>
-<span id="cb59-603"><a href="#cb59-603" aria-hidden="true" tabindex="-1"></a>                                  <span class="co"># para grafical la tendenia debo transformarla en numerica.   </span></span>
-<span id="cb59-604"><a href="#cb59-604" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-605"><a href="#cb59-605" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-606"><a href="#cb59-606" aria-hidden="true" tabindex="-1"></a><span class="co"># Genero un grafico de linea que muestra la tendencia</span></span>
-<span id="cb59-607"><a href="#cb59-607" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-608"><a href="#cb59-608" aria-hidden="true" tabindex="-1"></a>resumenAnios <span class="sc">%&gt;%</span> </span>
-<span id="cb59-609"><a href="#cb59-609" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> mediaEspVida)) <span class="sc">+</span></span>
-<span id="cb59-610"><a href="#cb59-610" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
+<span id="cb59-598"><a href="#cb59-598" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(resumenAnios, <span class="at">n =</span> <span class="dv">70</span>) <span class="co"># Con este comando veo todo el resultado en mi consola</span></span>
+<span id="cb59-599"><a href="#cb59-599" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-600"><a href="#cb59-600" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-601"><a href="#cb59-601" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-602"><a href="#cb59-602" aria-hidden="true" tabindex="-1"></a>De esta tabla que contiene el promedio general por año, podemos generar un gráfico en el que observemos como se ha comportado la misma a lo largo del tiempo.</span>
+<span id="cb59-603"><a href="#cb59-603" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-606"><a href="#cb59-606" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-607"><a href="#cb59-607" aria-hidden="true" tabindex="-1"></a>resumenAnios <span class="ot">&lt;-</span> resumenAnios <span class="sc">%&gt;%</span> </span>
+<span id="cb59-608"><a href="#cb59-608" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year)) <span class="co"># La variable &#39;year&#39; esta almacenada como tipo &lt;chr&gt; (character = almacena texto)</span></span>
+<span id="cb59-609"><a href="#cb59-609" aria-hidden="true" tabindex="-1"></a>                                  <span class="co"># para grafical la tendenia debo transformarla en numerica.   </span></span>
+<span id="cb59-610"><a href="#cb59-610" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-611"><a href="#cb59-611" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-612"><a href="#cb59-612" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-612"><a href="#cb59-612" aria-hidden="true" tabindex="-1"></a><span class="co"># Genero un grafico de linea que muestra la tendencia</span></span>
 <span id="cb59-613"><a href="#cb59-613" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-614"><a href="#cb59-614" aria-hidden="true" tabindex="-1"></a>La tendencia es positiva, por lo tanto, es posible afirmar que la expectativa de vida al nacer es una variable que ha mejorado con el tiempo alrededor del mundo.\</span>
-<span id="cb59-615"><a href="#cb59-615" aria-hidden="true" tabindex="-1"></a>Si además profundizamos el análisis de la media y la desviación estándar por año, no solo la media crecio, sino que la desviación estándar se redujo, lo que quiere decir que en general, todos los países están mejor.</span>
-<span id="cb59-616"><a href="#cb59-616" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-619"><a href="#cb59-619" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-620"><a href="#cb59-620" aria-hidden="true" tabindex="-1"></a>resumenAnios <span class="sc">%&gt;%</span> </span>
-<span id="cb59-621"><a href="#cb59-621" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, mediaEspVida, desvioEspVida) <span class="sc">%&gt;%</span> </span>
-<span id="cb59-622"><a href="#cb59-622" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1960</span>,<span class="dv">2022</span>))</span>
-<span id="cb59-623"><a href="#cb59-623" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-624"><a href="#cb59-624" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-625"><a href="#cb59-625" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-626"><a href="#cb59-626" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-627"><a href="#cb59-627" aria-hidden="true" tabindex="-1"></a><span class="fu">## Una digresión sobre la distribución normal</span></span>
-<span id="cb59-628"><a href="#cb59-628" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-629"><a href="#cb59-629" aria-hidden="true" tabindex="-1"></a>En general, quien ha tomado un curso de estadística alguna vez, ha escuchado sobre la distribución normal o distribución normal estándar. Introduzco este tema acá, porque en muchos de nuestros análisis, asumimos que los datos se distribuyen de manera normal, aunque empíricamente no sea así. Por ejemplo, si los datos de la expectativa de vida al nacer que acabamos de graficar, tuvieran una distribución normal, tendrían que verse más o menos así:</span>
+<span id="cb59-614"><a href="#cb59-614" aria-hidden="true" tabindex="-1"></a>resumenAnios <span class="sc">%&gt;%</span> </span>
+<span id="cb59-615"><a href="#cb59-615" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> mediaEspVida)) <span class="sc">+</span></span>
+<span id="cb59-616"><a href="#cb59-616" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
+<span id="cb59-617"><a href="#cb59-617" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-618"><a href="#cb59-618" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-619"><a href="#cb59-619" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-620"><a href="#cb59-620" aria-hidden="true" tabindex="-1"></a>La tendencia es positiva, por lo tanto, es posible afirmar que la expectativa de vida al nacer es una variable que ha mejorado con el tiempo alrededor del mundo.\</span>
+<span id="cb59-621"><a href="#cb59-621" aria-hidden="true" tabindex="-1"></a>Si además profundizamos el análisis de la media y la desviación estándar por año, no solo la media crecio, sino que la desviación estándar se redujo, lo que quiere decir que en general, todos los países están mejor.</span>
+<span id="cb59-622"><a href="#cb59-622" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-625"><a href="#cb59-625" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-626"><a href="#cb59-626" aria-hidden="true" tabindex="-1"></a>resumenAnios <span class="sc">%&gt;%</span> </span>
+<span id="cb59-627"><a href="#cb59-627" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, mediaEspVida, desvioEspVida) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-628"><a href="#cb59-628" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1960</span>,<span class="dv">2022</span>))</span>
+<span id="cb59-629"><a href="#cb59-629" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-630"><a href="#cb59-630" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-633"><a href="#cb59-633" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb59-634"><a href="#cb59-634" aria-hidden="true" tabindex="-1"></a>baseN <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span> </span>
-<span id="cb59-635"><a href="#cb59-635" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2019</span>)</span>
+<span id="cb59-631"><a href="#cb59-631" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-632"><a href="#cb59-632" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-633"><a href="#cb59-633" aria-hidden="true" tabindex="-1"></a><span class="fu">## Una digresión sobre la distribución normal</span></span>
+<span id="cb59-634"><a href="#cb59-634" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-635"><a href="#cb59-635" aria-hidden="true" tabindex="-1"></a>En general, quien ha tomado un curso de estadística alguna vez, ha escuchado sobre la distribución normal o distribución normal estándar. Introduzco este tema acá, porque en muchos de nuestros análisis, asumimos que los datos se distribuyen de manera normal, aunque empíricamente no sea así. Por ejemplo, si los datos de la expectativa de vida al nacer que acabamos de graficar, tuvieran una distribución normal, tendrían que verse más o menos así:</span>
 <span id="cb59-636"><a href="#cb59-636" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-637"><a href="#cb59-637" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">variable =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">mean =</span> <span class="fu">mean</span>(baseN<span class="sc">$</span>SP.DYN.LE00.IN, <span class="at">na.rm =</span> T), <span class="at">sd =</span> <span class="fu">sd</span>(baseN<span class="sc">$</span>SP.DYN.LE00.IN, <span class="at">na.rm =</span> T)))</span>
-<span id="cb59-638"><a href="#cb59-638" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-639"><a href="#cb59-639" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
-<span id="cb59-640"><a href="#cb59-640" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> ..density..)) <span class="sc">+</span></span>
-<span id="cb59-641"><a href="#cb59-641" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">15</span>,</span>
-<span id="cb59-642"><a href="#cb59-642" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;black&quot;</span>,</span>
-<span id="cb59-643"><a href="#cb59-643" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;lightgrey&quot;</span>) <span class="sc">+</span></span>
-<span id="cb59-644"><a href="#cb59-644" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">&quot;blue&quot;</span>,</span>
-<span id="cb59-645"><a href="#cb59-645" aria-hidden="true" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.15</span>,</span>
-<span id="cb59-646"><a href="#cb59-646" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">&quot;darkblue&quot;</span>)</span>
-<span id="cb59-647"><a href="#cb59-647" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-648"><a href="#cb59-648" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-649"><a href="#cb59-649" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb59-650"><a href="#cb59-650" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-651"><a href="#cb59-651" aria-hidden="true" tabindex="-1"></a>Esta forma acampanada es la que frecuentemente asumimos tiene la distribución de nuestros datos, la diferencia con respecto a la verdadera distribución es innegable, no ampliaremos demasiado sobre esto, pero es importante conocer de que se habla cuando se dice que una variable tiene una distribución normal y que en muchos de nuestros análisis se asume que los datos tienen una distribución normal.</span>
+<span id="cb59-639"><a href="#cb59-639" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb59-640"><a href="#cb59-640" aria-hidden="true" tabindex="-1"></a>baseN <span class="ot">&lt;-</span> baseWB <span class="sc">%&gt;%</span> </span>
+<span id="cb59-641"><a href="#cb59-641" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2019</span>)</span>
+<span id="cb59-642"><a href="#cb59-642" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-643"><a href="#cb59-643" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">variable =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">mean =</span> <span class="fu">mean</span>(baseN<span class="sc">$</span>SP.DYN.LE00.IN, <span class="at">na.rm =</span> T), <span class="at">sd =</span> <span class="fu">sd</span>(baseN<span class="sc">$</span>SP.DYN.LE00.IN, <span class="at">na.rm =</span> T)))</span>
+<span id="cb59-644"><a href="#cb59-644" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-645"><a href="#cb59-645" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb59-646"><a href="#cb59-646" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> ..density..)) <span class="sc">+</span></span>
+<span id="cb59-647"><a href="#cb59-647" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">15</span>,</span>
+<span id="cb59-648"><a href="#cb59-648" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb59-649"><a href="#cb59-649" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;lightgrey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb59-650"><a href="#cb59-650" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb59-651"><a href="#cb59-651" aria-hidden="true" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.15</span>,</span>
+<span id="cb59-652"><a href="#cb59-652" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">&quot;darkblue&quot;</span>)</span>
+<span id="cb59-653"><a href="#cb59-653" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-654"><a href="#cb59-654" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-655"><a href="#cb59-655" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb59-656"><a href="#cb59-656" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-657"><a href="#cb59-657" aria-hidden="true" tabindex="-1"></a>Esta forma acampanada es la que frecuentemente asumimos tiene la distribución de nuestros datos, la diferencia con respecto a la verdadera distribución es innegable, no ampliaremos demasiado sobre esto, pero es importante conocer de que se habla cuando se dice que una variable tiene una distribución normal y que en muchos de nuestros análisis se asume que los datos tienen una distribución normal.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

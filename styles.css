@@ -1,9 +1,9 @@
 /* css styles */
 
 body {
-    background-color: #d9e8ed;
+    background-color: var(--bs-body-bg);
     font-family: "Century", sans-serif;
-    color: #000000;
+    color: var(--bs-body-color);
 }
 
 h1, h2, h3 {
@@ -12,4 +12,15 @@ h1, h2, h3 {
 
 code {
     color: #ff4500; /* Naranja fuerte */
+}
+
+/* Ajustes específicos para modo oscuro */
+[data-bs-theme="dark"] h1,
+[data-bs-theme="dark"] h2,
+[data-bs-theme="dark"] h3 {
+    color: #bfe4f2 !important; /* Azul muy claro, alto contraste sobre fondo oscuro */
+}
+
+[data-bs-theme="dark"] code {
+    color: #ff8c5a; /* Naranja más suave para fondo oscuro */
 }

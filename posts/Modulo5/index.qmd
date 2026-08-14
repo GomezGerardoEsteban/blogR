@@ -1,6 +1,11 @@
 ---
-title: "Módulo 5: Visualización de datos con `{ggplot2}`"
+title: "Módulo 5: Visualización de datos con {ggplot2}"
 author: "Gerardo Esteban, Gómez-Santiago"
+date: "2026-08-14"
+categories: 
+  - Curso R
+  - Visualización
+  - Bases de datos
 toc: true
 format: 
   html:
@@ -25,11 +30,11 @@ El software R ya no se queda solamente en el análisis estrictamente estadístic
 En este tutorial veremos como utilizar una librería `{ggplot2}`, cuya sintaxis es bastante intuitiva y ofrece mucha flexibilidad en el diseño del gráfico.\
 Otras librerías que utilizaremos son:\
 
--   `giscoR`, la cual nos permite obtener las coordenadas geográficas de los países.
--   `ggrepel`, una extensión de `ggplot2` que nos ayuda a trabajar con etiquetas en gráficos de dispersión.
--   `extrafont`, que nos permite modificar la fuente de la letra.
--   `patchwork`, que nos permite unir gráficos.
--   `ggspatial`, un complemento de `ggplot2` para agregar detalles a los mapas.
+- `giscoR`, la cual nos permite obtener las coordenadas geográficas de los países.
+- `ggrepel`, una extensión de `ggplot2` que nos ayuda a trabajar con etiquetas en gráficos de dispersión.
+- `extrafont`, que nos permite modificar la fuente de la letra.
+- `patchwork`, que nos permite unir gráficos.
+- `ggspatial`, un complemento de `ggplot2` para agregar detalles a los mapas.
 
 ## Datos a gráficar
 
@@ -343,9 +348,9 @@ mapa %>%
 Vamos a modificar la forma y el color de los puntos a partir del valor de ciertas variables, cuando quiero incorporar alguna característica en el gráfico a partir del valor de cierta variable, es necesario especificar esto dentro del `aes()`, el cual puede estar definido en el `ggplot()` inicial o dentro de los `geom`.\
 En este caso modificaremos el color y la forma de los puntos a partir variables contenidas en nuestra base de datos.
 
--   `size`: tamaño de los puntos (en función de la población total)
--   `shape`: forma de los puntos (en función de los contienes)
--   `color`: color de los puntos (en función del índice de democracia)
+- `size`: tamaño de los puntos (en función de la población total)
+- `shape`: forma de los puntos (en función de los contienes)
+- `color`: color de los puntos (en función del índice de democracia)
 
 Otras especificaciones son `alpha` para agregar transparencia a los puntos y `show.legend = F` para que no aparezcan leyendas al costado del gráfico.
 

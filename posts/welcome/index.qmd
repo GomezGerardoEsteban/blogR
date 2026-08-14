@@ -1,7 +1,9 @@
 ---
 title: "Bienvenidos al Taller introductorio al análisis estadístico en R"
 author: "Gerardo Esteban Gómez-Santiago"
-date: "2025-01-14"
+date: "2026-08-14"
+categories:
+  - Curso R
 image: "imagenAzul.png"
 ---
 
@@ -23,33 +25,33 @@ La duración de cada video es de entre 1 hora y media y 2 horas, asegurate de co
 
 #### Módulo 1: Introducción al IDE RStudio y manipulación de bases de datos
 
--   Definición y organización del directorio de trabajo
--   Levantado de bases de datos en distintos formatos
--   Organización de los datos en formato largo y ancho
--   Filtrado de observaciones y selección de variables
--   Agrupación de los datos por variables categóricas para resúmenes estadísticos
--   Pegado de bases de datos
+- Definición y organización del directorio de trabajo
+- Levantado de bases de datos en distintos formatos
+- Organización de los datos en formato largo y ancho
+- Filtrado de observaciones y selección de variables
+- Agrupación de los datos por variables categóricas para resúmenes estadísticos
+- Pegado de bases de datos
 
 #### Módulo 2: Análisis estadístico univariado
 
--   Distribución de los datos
--   Cálculo de medidas de posición
--   Cálculo de medidas de dispersión
+- Distribución de los datos
+- Cálculo de medidas de posición
+- Cálculo de medidas de dispersión
 
 #### Módulo 3: Análisis estadístico bivariado
 
--   Covarianza
--   Correlación
--   Regresión
+- Covarianza
+- Correlación
+- Regresión
 
 #### Módulo 4: Inferencia estadística
 
--   Intervalos de confianza
--   Prueba de hipótesis de diferencia de medias
--   Prueba de hipótesis de diferencia de proporciones
--   Prueba ANOVA de un factor
--   Significatividad de los coeficientes de regresión
+- Intervalos de confianza
+- Prueba de hipótesis de diferencia de medias
+- Prueba de hipótesis de diferencia de proporciones
+- Prueba ANOVA de un factor
+- Significatividad de los coeficientes de regresión
 
 #### Módulo 5: Visualización de datos
 
--   Utilización del paquete `{ggplot2}` para realizar visualizaciones personalizadas con rigor profesional, en esta clase se incluye la visualización a través de mapas.
+- Utilización del paquete `{ggplot2}` para realizar visualizaciones personalizadas con rigor profesional, en esta clase se incluye la visualización a través de mapas.

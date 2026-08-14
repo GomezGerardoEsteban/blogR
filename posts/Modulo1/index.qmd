@@ -1,6 +1,10 @@
 ---
 title: "Módulo 1: Introducción al IDE RStudio y Manipulación de bases de datos"
 author: "Gerardo Esteban, Gómez-Santiago"
+date: "2026-08-14"
+categories:
+  - Curso R
+  - Bases de datos
 toc: true
 format: 
   html:

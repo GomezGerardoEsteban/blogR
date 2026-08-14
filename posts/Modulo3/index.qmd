@@ -1,6 +1,11 @@
 ---
 title: "Módulo 3: Análisis estadístico bivariado"
 author: "Gerardo Esteban, Gómez-Santiago"
+date: "2026-08-14"
+categories:
+  - Curso R
+  - Bases de datos
+  - Estadística
 toc: true
 format: 
   html:

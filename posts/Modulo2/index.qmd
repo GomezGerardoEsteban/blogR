@@ -1,6 +1,12 @@
 ---
 title: "Módulo 2: Análisis estadístico univariado"
 author: "Gerardo Esteban, Gómez-Santiago"
+date: "2026-08-14"
+categories:
+  - Curso R
+  - Bases de datos
+  - Estadística
+  - Visualización
 toc: true
 format: 
   html:
@@ -31,10 +37,10 @@ Un buen material de texto, con ejemplos en R lo pueden encontrar en este link [I
 
 ## Que vamos a aprender en este módulo?
 
--   Cómo calcular frecuencias absolutas y relativas
--   Cómo calcular la media, la mediana y la moda
--   Cómo calcular la varianza y la desviación estándar
--   Cómo presentar estas medidas en tablas y gráficos
+- Cómo calcular frecuencias absolutas y relativas
+- Cómo calcular la media, la mediana y la moda
+- Cómo calcular la varianza y la desviación estándar
+- Cómo presentar estas medidas en tablas y gráficos
 
 ## Frecuencias absolutas y relativas
 

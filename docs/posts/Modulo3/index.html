@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Gerardo Esteban, Gómez-Santiago">
+<meta name="dcterms.date" content="2026-08-14">
 
 <title>Módulo 3: Análisis estadístico bivariado – TallerR</title>
 <style>
@@ -4400,7 +4401,7 @@ window.Quarto = {
 };
 </script>
 
-<style type="text/css">body {background-color: #d9e8ed;font-family: "Century", sans-serif;color: #000000;}h1, h2, h3 {color: #09526d;}code {color: #ff4500; }</style>
+<style type="text/css">body {background-color: var(--bs-body-bg);font-family: "Century", sans-serif;color: var(--bs-body-color);}h1, h2, h3 {color: #09526d;}code {color: #ff4500; }[data-bs-theme="dark"] h1,[data-bs-theme="dark"] h2,[data-bs-theme="dark"] h3 {color: #bfe4f2 !important; }[data-bs-theme="dark"] code {color: #ff8c5a; }</style>
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -4626,7 +4627,12 @@ window.Quarto = {
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <div class="quarto-title-block"><div><h1 class="title">Módulo 3: Análisis estadístico bivariado</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-                      </div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Curso R</div>
+                <div class="quarto-category">Bases de datos</div>
+                <div class="quarto-category">Estadística</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -4639,6 +4645,12 @@ window.Quarto = {
             </div>
     </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 14, 2026</p>
+      </div>
+    </div>
     
       
     </div>
@@ -5560,343 +5572,348 @@ Tabla Resumen
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Módulo 3: Análisis estadístico bivariado&quot;</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> &quot;Gerardo Esteban, Gómez-Santiago&quot;</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">    code-links:</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">      - text: Video YouTube</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">        icon: camera-reels</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">        href: https://youtu.be/T-JHMBjzt4U</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">      - text: Repositorio GitHub</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">        icon: file-code</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">        href: https://github.com/GomezGerardoEsteban/Tidyverso/tree/main/TallerR/Modulo3</span></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">    mathjax: default</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">    self-contained: true</span></span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="an">image:</span><span class="co"> &quot;modulo3.png&quot;</span></span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introducción</span></span>
-<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>La principal razón por la que utilizamos la estadística como herramienta de investigación, es porque nos permite generar evidencia empírica sobre la relación entre dos o más variables.\</span>
-<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>Por ejemplo, teóricamente podemos asumir que el desarrollo económico tiene una relación positiva con la tolerancia política o los valores democráticos de un país. En el fondo, establecemos esa relación porque tenemos un argumento teórico que lo justifica.\</span>
-<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>En el caso del desarrollo económico y los valores democráticos, podemos argumentar que a mayor desarrollo económico, mayor es el costo para los ciudadanos de enfrentar un gobierno dictatorial que pone en tela de juicio los derechos de propiedad, pues los ciudadanos tienen aversión a la perdida y no quieren perder sus posesiones, lo cual es más probable que suceda bajo dictaduras.</span>
-<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>Lograr justificar estadísticamente un argumento causal es algo que excede este curso y que en el mundo de la estadística se conoce como **inferencia causal**, lo que si podemos evidenciar con estadística descriptiva, es si efectivamente el desarrollo económico, medido por el PIB per cápita, tiene una relación positiva con los valores democráticos, medidos por la tasa de participación en elecciones (por ejemplo).\</span>
-<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance=&quot;simple&quot;}</span>
-<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>A partir de estadística descriptiva, no podemos garantizar que la causa de una relación planteada se debe a nuestro planteamiento teórico, pero si podemos dar cuenta de que la relación existe.</span>
-<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>En el ejemplo hipotético que planteamos, estamos tratando a dos variables continuas, el **PIB per cápita**, el cual esta medido en unidades monetarias y la **tasa de participación en elecciones**, la cual es un porcentaje con valores posibles entre cero y cien.\</span>
-<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>En general, las variables cuantitativas son las más susceptibles al análisis bivariado, a las cuales se les calcula covarianza, correlación y con las que generalmente se realizan regresiones.</span>
-<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>Sin embargo no son las únicas, es posible verificar si existe relación entre variables categóricas.\</span>
-<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>Por ejemplo, nos interesa saber si fumar o no fumar (variable categórica de dos niveles) tiene relación con tener o no tener cáncer de pulmón (variable categórica de dos niveles), para ello se genera una prueba estadística conocida como prueba de independencia chi-cuadrado, la cual nos indica si las variables son independientes o no.</span>
-<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>No haremos un análisis exhaustivo de la estadística subyacente a las medidas mencionadas, nos enfocaremos en la obtención de los valores a través de R y RStudio y en su interpretación.</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;2026-08-14&quot;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - Curso R</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">  - Bases de datos</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">  - Estadística</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">    code-links:</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">      - text: Video YouTube</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">        icon: camera-reels</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">        href: https://youtu.be/T-JHMBjzt4U</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">      - text: Repositorio GitHub</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">        icon: file-code</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">        href: https://github.com/GomezGerardoEsteban/Tidyverso/tree/main/TallerR/Modulo3</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co">    mathjax: default</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co">    self-contained: true</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="an">image:</span><span class="co"> &quot;modulo3.png&quot;</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introducción</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>La principal razón por la que utilizamos la estadística como herramienta de investigación, es porque nos permite generar evidencia empírica sobre la relación entre dos o más variables.\</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>Por ejemplo, teóricamente podemos asumir que el desarrollo económico tiene una relación positiva con la tolerancia política o los valores democráticos de un país. En el fondo, establecemos esa relación porque tenemos un argumento teórico que lo justifica.\</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>En el caso del desarrollo económico y los valores democráticos, podemos argumentar que a mayor desarrollo económico, mayor es el costo para los ciudadanos de enfrentar un gobierno dictatorial que pone en tela de juicio los derechos de propiedad, pues los ciudadanos tienen aversión a la perdida y no quieren perder sus posesiones, lo cual es más probable que suceda bajo dictaduras.</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>Lograr justificar estadísticamente un argumento causal es algo que excede este curso y que en el mundo de la estadística se conoce como **inferencia causal**, lo que si podemos evidenciar con estadística descriptiva, es si efectivamente el desarrollo económico, medido por el PIB per cápita, tiene una relación positiva con los valores democráticos, medidos por la tasa de participación en elecciones (por ejemplo).\</span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance=&quot;simple&quot;}</span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>A partir de estadística descriptiva, no podemos garantizar que la causa de una relación planteada se debe a nuestro planteamiento teórico, pero si podemos dar cuenta de que la relación existe.</span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>En el ejemplo hipotético que planteamos, estamos tratando a dos variables continuas, el **PIB per cápita**, el cual esta medido en unidades monetarias y la **tasa de participación en elecciones**, la cual es un porcentaje con valores posibles entre cero y cien.\</span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>En general, las variables cuantitativas son las más susceptibles al análisis bivariado, a las cuales se les calcula covarianza, correlación y con las que generalmente se realizan regresiones.</span>
 <span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## Covarianzas</span></span>
-<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>Podemos rastrear el origen del análisis bivariado en el análisis univariado, a lo largo del módulo anterior, se hizo énfasis en la necesidad de obtener medidas de posición y de dispersión para conocer la distribución de los datos.\</span>
-<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>Como medidas de dispersión tenemos fundamentalmente la varianza y la desviación estándar, que en el fondo son la misma medida, debido a que la desviación estándar es una transformación de la varianza ($Desvio =  \sqrt{Varianza}$).</span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>Sin embargo no son las únicas, es posible verificar si existe relación entre variables categóricas.\</span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>Por ejemplo, nos interesa saber si fumar o no fumar (variable categórica de dos niveles) tiene relación con tener o no tener cáncer de pulmón (variable categórica de dos niveles), para ello se genera una prueba estadística conocida como prueba de independencia chi-cuadrado, la cual nos indica si las variables son independientes o no.</span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>No haremos un análisis exhaustivo de la estadística subyacente a las medidas mencionadas, nos enfocaremos en la obtención de los valores a través de R y RStudio y en su interpretación.</span>
 <span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>Si revisamos la fórmula matemática de la varianza, vemos que es la suma de las diferencias de cada observación con respecto a la media elevadas al cuadrado. Formalmente podemos expresarlo como:</span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## Covarianzas</span></span>
 <span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>$$\sigma^2 = \frac{\sum_{i = 1}^n (x_i - \bar{x})^2}{n-1} = \frac{1}{n-1} \cdot \sum_{i = 1}^n (x_i - \bar{x})\cdot(x_i - \bar{x})$$ donde $\bar{x}$ simboliza el promedio de $x$, $n$ el número de observaciones y $x_i$ los sucesivos valores de $x$.</span>
-<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a><span class="fu">### ¿Qué es lo que cambia en la varianza para poder obtener la covarianza?</span></span>
-<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a>Que en lugar de trabajar con una sola variable trabajamos con dos, tomando la última expresión de la fórmula matemática anterior, vemos que se repite $(x_i - \bar{x})$. En la covarianza, lo que hacemos es cambiar uno de estos términos por su equivalente en la segunda variable de interés, llamemos esa segunda variable de interés $y$. La fórmula de la covarianza es:</span>
-<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a>$$cov_{(x,y)} = \frac{\sum_{i = 1}^n (x_i - \bar{x})\cdot(y_i - \bar{y})}{n-1}$$</span>
-<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a>donde $\bar{y}$ es el promedio de la variable $y$ y $y_i$ son los sucesivos valores de $y$ (el resto de símbolos son los mismos que se explicaron en la expresión de la varianza).</span>
-<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a>La estructura en la fórmula de la covarianza es casi idéntica a la fórmula de la varianza, solo que en lugar de trabajar sobre una variable ($X$), ahora trabajamos sobre dos variables ($X,Y$).</span>
-<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a><span class="fu">### ¿Qué es lo que aporta la Covarianza?</span></span>
-<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a>La covarianza me permite conocer **cual es el sentido del cambio** (positivo o negativo) en una variable $(X)$ ante cambios en otra variable $(y)$, es decir, si $x$ y $y$ tienen una relación positiva o negativa.\</span>
-<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a>Lo de *&quot;el sentido del cambio&quot;* es relevante, porque la covarianza no me permite saber a ciencia cierta si la relación entre $x$ y $y$ es fuerte o débil, solo si esa relación es positiva o negativa.</span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>Podemos rastrear el origen del análisis bivariado en el análisis univariado, a lo largo del módulo anterior, se hizo énfasis en la necesidad de obtener medidas de posición y de dispersión para conocer la distribución de los datos.\</span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>Como medidas de dispersión tenemos fundamentalmente la varianza y la desviación estándar, que en el fondo son la misma medida, debido a que la desviación estándar es una transformación de la varianza ($Desvio =  \sqrt{Varianza}$).</span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>Si revisamos la fórmula matemática de la varianza, vemos que es la suma de las diferencias de cada observación con respecto a la media elevadas al cuadrado. Formalmente podemos expresarlo como:</span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a>$$\sigma^2 = \frac{\sum_{i = 1}^n (x_i - \bar{x})^2}{n-1} = \frac{1}{n-1} \cdot \sum_{i = 1}^n (x_i - \bar{x})\cdot(x_i - \bar{x})$$ donde $\bar{x}$ simboliza el promedio de $x$, $n$ el número de observaciones y $x_i$ los sucesivos valores de $x$.</span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a><span class="fu">### ¿Qué es lo que cambia en la varianza para poder obtener la covarianza?</span></span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a>Que en lugar de trabajar con una sola variable trabajamos con dos, tomando la última expresión de la fórmula matemática anterior, vemos que se repite $(x_i - \bar{x})$. En la covarianza, lo que hacemos es cambiar uno de estos términos por su equivalente en la segunda variable de interés, llamemos esa segunda variable de interés $y$. La fórmula de la covarianza es:</span>
+<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a>$$cov_{(x,y)} = \frac{\sum_{i = 1}^n (x_i - \bar{x})\cdot(y_i - \bar{y})}{n-1}$$</span>
+<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a>donde $\bar{y}$ es el promedio de la variable $y$ y $y_i$ son los sucesivos valores de $y$ (el resto de símbolos son los mismos que se explicaron en la expresión de la varianza).</span>
+<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a>La estructura en la fórmula de la covarianza es casi idéntica a la fórmula de la varianza, solo que en lugar de trabajar sobre una variable ($X$), ahora trabajamos sobre dos variables ($X,Y$).</span>
 <span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a>Veamos el ejemplo entre desarrollo económico (medida por el PIB per cápita) y valores democráticos (medido por un índice continúo construido por <span class="co">[</span><span class="ot">V-Dem</span><span class="co">](https://www.v-dem.net/)</span>). La base para el análisis la construiremos a partir de dos librerías <span class="in">`wbstats`</span> que contiene la variable de **PIB per cápita** `(NY.GDP.PCAP.KD)` y `vdemdata` que contiene un índice generalmente aceptado sobre **Democracia** <span class="in">`(v2x_polyarchy)`</span>.</span>
+<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a><span class="fu">### ¿Qué es lo que aporta la Covarianza?</span></span>
 <span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a>La función para obtener la covarianza <span class="in">`cov()`</span> y su sintaxis bastante sencilla, solo debo poner como argumentos a las dos variables que me interesa analizar.\</span>
-<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a>Este valor no tiene una interpretación analítica más allá de su signo, en el caso de democracia y PIB per cápita, como el valor es positivo, podemos afirmar que la democracia y el PIB se relacionan positivamente *(&quot;...a mayor PIB mayor democracia...&quot;)*.</span>
+<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a>La covarianza me permite conocer **cual es el sentido del cambio** (positivo o negativo) en una variable $(X)$ ante cambios en otra variable $(y)$, es decir, si $x$ y $y$ tienen una relación positiva o negativa.\</span>
+<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a>Lo de *&quot;el sentido del cambio&quot;* es relevante, porque la covarianza no me permite saber a ciencia cierta si la relación entre $x$ y $y$ es fuerte o débil, solo si esa relación es positiva o negativa.</span>
 <span id="cb20-70"><a href="#cb20-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb20-74"><a href="#cb20-74" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-71"><a href="#cb20-71" aria-hidden="true" tabindex="-1"></a>Veamos el ejemplo entre desarrollo económico (medida por el PIB per cápita) y valores democráticos (medido por un índice continúo construido por <span class="co">[</span><span class="ot">V-Dem</span><span class="co">](https://www.v-dem.net/)</span>). La base para el análisis la construiremos a partir de dos librerías <span class="in">`wbstats`</span> que contiene la variable de **PIB per cápita** `(NY.GDP.PCAP.KD)` y `vdemdata` que contiene un índice generalmente aceptado sobre **Democracia** <span class="in">`(v2x_polyarchy)`</span>.</span>
+<span id="cb20-72"><a href="#cb20-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a>La función para obtener la covarianza <span class="in">`cov()`</span> y su sintaxis bastante sencilla, solo debo poner como argumentos a las dos variables que me interesa analizar.\</span>
+<span id="cb20-74"><a href="#cb20-74" aria-hidden="true" tabindex="-1"></a>Este valor no tiene una interpretación analítica más allá de su signo, en el caso de democracia y PIB per cápita, como el valor es positivo, podemos afirmar que la democracia y el PIB se relacionan positivamente *(&quot;...a mayor PIB mayor democracia...&quot;)*.</span>
 <span id="cb20-75"><a href="#cb20-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-76"><a href="#cb20-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Limpieza de ambiente</span></span>
-<span id="cb20-77"><a href="#cb20-77" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())   </span>
-<span id="cb20-78"><a href="#cb20-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-79"><a href="#cb20-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Activacion de paquete tidyverse</span></span>
-<span id="cb20-80"><a href="#cb20-80" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb20-81"><a href="#cb20-81" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wbstats)</span>
-<span id="cb20-82"><a href="#cb20-82" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vdemdata)</span>
+<span id="cb20-78"><a href="#cb20-78" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb20-79"><a href="#cb20-79" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-80"><a href="#cb20-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-81"><a href="#cb20-81" aria-hidden="true" tabindex="-1"></a><span class="co"># Limpieza de ambiente</span></span>
+<span id="cb20-82"><a href="#cb20-82" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())   </span>
 <span id="cb20-83"><a href="#cb20-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-84"><a href="#cb20-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraigo la variable de Banco Mundial</span></span>
-<span id="cb20-85"><a href="#cb20-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-86"><a href="#cb20-86" aria-hidden="true" tabindex="-1"></a>base <span class="ot">&lt;-</span> <span class="fu">wb_data</span>(<span class="at">indicator =</span> <span class="fu">c</span>(<span class="st">&quot;NY.GDP.PCAP.KD&quot;</span>),</span>
-<span id="cb20-87"><a href="#cb20-87" aria-hidden="true" tabindex="-1"></a>                <span class="at">start_date =</span> <span class="dv">2019</span>,</span>
-<span id="cb20-88"><a href="#cb20-88" aria-hidden="true" tabindex="-1"></a>                <span class="at">end_date =</span> <span class="dv">2019</span>)</span>
-<span id="cb20-89"><a href="#cb20-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-90"><a href="#cb20-90" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraigo la variable del paque vdemdata</span></span>
-<span id="cb20-91"><a href="#cb20-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-92"><a href="#cb20-92" aria-hidden="true" tabindex="-1"></a>varVdem <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;country_text_id&quot;</span>,</span>
-<span id="cb20-93"><a href="#cb20-93" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;year&quot;</span>,</span>
-<span id="cb20-94"><a href="#cb20-94" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;v2x_polyarchy&quot;</span>)</span>
-<span id="cb20-95"><a href="#cb20-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-84"><a href="#cb20-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Activacion de paquete tidyverse</span></span>
+<span id="cb20-85"><a href="#cb20-85" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb20-86"><a href="#cb20-86" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wbstats)</span>
+<span id="cb20-87"><a href="#cb20-87" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vdemdata)</span>
+<span id="cb20-88"><a href="#cb20-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-89"><a href="#cb20-89" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraigo la variable de Banco Mundial</span></span>
+<span id="cb20-90"><a href="#cb20-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-91"><a href="#cb20-91" aria-hidden="true" tabindex="-1"></a>base <span class="ot">&lt;-</span> <span class="fu">wb_data</span>(<span class="at">indicator =</span> <span class="fu">c</span>(<span class="st">&quot;NY.GDP.PCAP.KD&quot;</span>),</span>
+<span id="cb20-92"><a href="#cb20-92" aria-hidden="true" tabindex="-1"></a>                <span class="at">start_date =</span> <span class="dv">2019</span>,</span>
+<span id="cb20-93"><a href="#cb20-93" aria-hidden="true" tabindex="-1"></a>                <span class="at">end_date =</span> <span class="dv">2019</span>)</span>
+<span id="cb20-94"><a href="#cb20-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-95"><a href="#cb20-95" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraigo la variable del paque vdemdata</span></span>
 <span id="cb20-96"><a href="#cb20-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-97"><a href="#cb20-97" aria-hidden="true" tabindex="-1"></a>vdata <span class="ot">&lt;-</span> vdemdata<span class="sc">::</span>vdem <span class="sc">%&gt;%</span> </span>
-<span id="cb20-98"><a href="#cb20-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">all_of</span>(varVdem))</span>
-<span id="cb20-99"><a href="#cb20-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-100"><a href="#cb20-100" aria-hidden="true" tabindex="-1"></a><span class="co"># Join de bases</span></span>
+<span id="cb20-97"><a href="#cb20-97" aria-hidden="true" tabindex="-1"></a>varVdem <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;country_text_id&quot;</span>,</span>
+<span id="cb20-98"><a href="#cb20-98" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;year&quot;</span>,</span>
+<span id="cb20-99"><a href="#cb20-99" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;v2x_polyarchy&quot;</span>)</span>
+<span id="cb20-100"><a href="#cb20-100" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-101"><a href="#cb20-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-102"><a href="#cb20-102" aria-hidden="true" tabindex="-1"></a>base <span class="ot">&lt;-</span> base <span class="sc">%&gt;%</span> </span>
-<span id="cb20-103"><a href="#cb20-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="at">y =</span> vdata,</span>
-<span id="cb20-104"><a href="#cb20-104" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;iso3c&quot;</span> <span class="ot">=</span> <span class="st">&quot;country_text_id&quot;</span>,</span>
-<span id="cb20-105"><a href="#cb20-105" aria-hidden="true" tabindex="-1"></a>                   <span class="st">&quot;date&quot;</span> <span class="ot">=</span> <span class="st">&quot;year&quot;</span>))</span>
+<span id="cb20-102"><a href="#cb20-102" aria-hidden="true" tabindex="-1"></a>vdata <span class="ot">&lt;-</span> vdemdata<span class="sc">::</span>vdem <span class="sc">%&gt;%</span> </span>
+<span id="cb20-103"><a href="#cb20-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">all_of</span>(varVdem))</span>
+<span id="cb20-104"><a href="#cb20-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-105"><a href="#cb20-105" aria-hidden="true" tabindex="-1"></a><span class="co"># Join de bases</span></span>
 <span id="cb20-106"><a href="#cb20-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-107"><a href="#cb20-107" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminamos valores perdidos de la base</span></span>
-<span id="cb20-108"><a href="#cb20-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-109"><a href="#cb20-109" aria-hidden="true" tabindex="-1"></a>base <span class="ot">&lt;-</span> base <span class="sc">%&gt;%</span> </span>
-<span id="cb20-110"><a href="#cb20-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(unit, obs_status, footnote, last_updated)) <span class="sc">%&gt;%</span> </span>
-<span id="cb20-111"><a href="#cb20-111" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span>
-<span id="cb20-112"><a href="#cb20-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-113"><a href="#cb20-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculo de la covarianza</span></span>
-<span id="cb20-114"><a href="#cb20-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-115"><a href="#cb20-115" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(base<span class="sc">$</span>NY.GDP.PCAP.KD, base<span class="sc">$</span>v2x_polyarchy)</span>
-<span id="cb20-116"><a href="#cb20-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-117"><a href="#cb20-117" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb20-118"><a href="#cb20-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-119"><a href="#cb20-119" aria-hidden="true" tabindex="-1"></a>Este valor de covarianza tiene un correlato gráfico, cuando queremos ver gráficamente como se relacionan dos variables continuas, generamos lo que se conoce como gráfico de dispersión, el cual genera un diagrama de puntos del cual se puede inferir una pendiente (sentido), la cual puede ser positiva o negativa.</span>
-<span id="cb20-120"><a href="#cb20-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-121"><a href="#cb20-121" aria-hidden="true" tabindex="-1"></a>A continuación se muestra el gráfico de dispersión entre <span class="in">`v2x_polyarchy`</span> y <span class="in">`NY.GDP.PCAP.KD`</span></span>
-<span id="cb20-122"><a href="#cb20-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-125"><a href="#cb20-125" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb20-126"><a href="#cb20-126" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-107"><a href="#cb20-107" aria-hidden="true" tabindex="-1"></a>base <span class="ot">&lt;-</span> base <span class="sc">%&gt;%</span> </span>
+<span id="cb20-108"><a href="#cb20-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="at">y =</span> vdata,</span>
+<span id="cb20-109"><a href="#cb20-109" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;iso3c&quot;</span> <span class="ot">=</span> <span class="st">&quot;country_text_id&quot;</span>,</span>
+<span id="cb20-110"><a href="#cb20-110" aria-hidden="true" tabindex="-1"></a>                   <span class="st">&quot;date&quot;</span> <span class="ot">=</span> <span class="st">&quot;year&quot;</span>))</span>
+<span id="cb20-111"><a href="#cb20-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-112"><a href="#cb20-112" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminamos valores perdidos de la base</span></span>
+<span id="cb20-113"><a href="#cb20-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-114"><a href="#cb20-114" aria-hidden="true" tabindex="-1"></a>base <span class="ot">&lt;-</span> base <span class="sc">%&gt;%</span> </span>
+<span id="cb20-115"><a href="#cb20-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(unit, obs_status, footnote, last_updated)) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-116"><a href="#cb20-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span>
+<span id="cb20-117"><a href="#cb20-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-118"><a href="#cb20-118" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculo de la covarianza</span></span>
+<span id="cb20-119"><a href="#cb20-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-120"><a href="#cb20-120" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(base<span class="sc">$</span>NY.GDP.PCAP.KD, base<span class="sc">$</span>v2x_polyarchy)</span>
+<span id="cb20-121"><a href="#cb20-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-122"><a href="#cb20-122" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-123"><a href="#cb20-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-124"><a href="#cb20-124" aria-hidden="true" tabindex="-1"></a>Este valor de covarianza tiene un correlato gráfico, cuando queremos ver gráficamente como se relacionan dos variables continuas, generamos lo que se conoce como gráfico de dispersión, el cual genera un diagrama de puntos del cual se puede inferir una pendiente (sentido), la cual puede ser positiva o negativa.</span>
+<span id="cb20-125"><a href="#cb20-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-126"><a href="#cb20-126" aria-hidden="true" tabindex="-1"></a>A continuación se muestra el gráfico de dispersión entre <span class="in">`v2x_polyarchy`</span> y <span class="in">`NY.GDP.PCAP.KD`</span></span>
 <span id="cb20-127"><a href="#cb20-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-128"><a href="#cb20-128" aria-hidden="true" tabindex="-1"></a>base <span class="sc">%&gt;%</span> </span>
-<span id="cb20-129"><a href="#cb20-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> (NY.GDP.PCAP.KD), <span class="at">y =</span> v2x_polyarchy)) <span class="sc">+</span></span>
-<span id="cb20-130"><a href="#cb20-130" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
-<span id="cb20-131"><a href="#cb20-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-132"><a href="#cb20-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb20-133"><a href="#cb20-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-134"><a href="#cb20-134" aria-hidden="true" tabindex="-1"></a>Este es uno de esos casos donde se observa una relación (existe un patrón en los datos), pero esa relación no es tan clara, podríamos argumentar una relación positiva pero difícilmente podemos sostener que esa relación es completamente lineal.</span>
-<span id="cb20-135"><a href="#cb20-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-136"><a href="#cb20-136" aria-hidden="true" tabindex="-1"></a><span class="fu">## Correlación</span></span>
-<span id="cb20-137"><a href="#cb20-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-138"><a href="#cb20-138" aria-hidden="true" tabindex="-1"></a>La covarianza nos permitió conocer que sí, que efectivamente existe una relación positiva entre democracia y PIB, sin embargo, no nos permitió conocer que tan fuerte es esa relación.\</span>
-<span id="cb20-139"><a href="#cb20-139" aria-hidden="true" tabindex="-1"></a>No lo permite porque la medida de la covarianza esta influenciada por las unidades de medición, es decir, el PIB se mide en miles de dólares y la democracia es un número índice entre cero y uno, como las unidades de medida son distintas, la covarianza no me dice nada respecto a la magnitud de la relación.</span>
+<span id="cb20-130"><a href="#cb20-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb20-131"><a href="#cb20-131" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-132"><a href="#cb20-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-133"><a href="#cb20-133" aria-hidden="true" tabindex="-1"></a>base <span class="sc">%&gt;%</span> </span>
+<span id="cb20-134"><a href="#cb20-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> (NY.GDP.PCAP.KD), <span class="at">y =</span> v2x_polyarchy)) <span class="sc">+</span></span>
+<span id="cb20-135"><a href="#cb20-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb20-136"><a href="#cb20-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-137"><a href="#cb20-137" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-138"><a href="#cb20-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-139"><a href="#cb20-139" aria-hidden="true" tabindex="-1"></a>Este es uno de esos casos donde se observa una relación (existe un patrón en los datos), pero esa relación no es tan clara, podríamos argumentar una relación positiva pero difícilmente podemos sostener que esa relación es completamente lineal.</span>
 <span id="cb20-140"><a href="#cb20-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-141"><a href="#cb20-141" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance=&quot;simple&quot;}</span>
-<span id="cb20-142"><a href="#cb20-142" aria-hidden="true" tabindex="-1"></a>**¿Como solucionarlo?** con la Correlación. El cálculo de la correlación parte de la covarianza, pero agrega una división por los desvíos estándar de cada variable que normaliza el rango de valores posibles entre -1 y 1.</span>
-<span id="cb20-143"><a href="#cb20-143" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb20-144"><a href="#cb20-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-145"><a href="#cb20-145" aria-hidden="true" tabindex="-1"></a>Es decir, la correlación entre dos variables cualesquiera sean estas, es un valor entre -1 y 1, donde 1 significa una correlación positiva perfecta y -1 significa una correlación negativa perfecta.\</span>
-<span id="cb20-146"><a href="#cb20-146" aria-hidden="true" tabindex="-1"></a>Valores cercanos a cero indican que no existe una relación significativa entre las variables.</span>
-<span id="cb20-147"><a href="#cb20-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-148"><a href="#cb20-148" aria-hidden="true" tabindex="-1"></a>Formalmente la fórmula de la correlación es:</span>
+<span id="cb20-141"><a href="#cb20-141" aria-hidden="true" tabindex="-1"></a><span class="fu">## Correlación</span></span>
+<span id="cb20-142"><a href="#cb20-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-143"><a href="#cb20-143" aria-hidden="true" tabindex="-1"></a>La covarianza nos permitió conocer que sí, que efectivamente existe una relación positiva entre democracia y PIB, sin embargo, no nos permitió conocer que tan fuerte es esa relación.\</span>
+<span id="cb20-144"><a href="#cb20-144" aria-hidden="true" tabindex="-1"></a>No lo permite porque la medida de la covarianza esta influenciada por las unidades de medición, es decir, el PIB se mide en miles de dólares y la democracia es un número índice entre cero y uno, como las unidades de medida son distintas, la covarianza no me dice nada respecto a la magnitud de la relación.</span>
+<span id="cb20-145"><a href="#cb20-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-146"><a href="#cb20-146" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance=&quot;simple&quot;}</span>
+<span id="cb20-147"><a href="#cb20-147" aria-hidden="true" tabindex="-1"></a>**¿Como solucionarlo?** con la Correlación. El cálculo de la correlación parte de la covarianza, pero agrega una división por los desvíos estándar de cada variable que normaliza el rango de valores posibles entre -1 y 1.</span>
+<span id="cb20-148"><a href="#cb20-148" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb20-149"><a href="#cb20-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-150"><a href="#cb20-150" aria-hidden="true" tabindex="-1"></a>$$\rho_{x,y} = \frac{COV_{x,y}}{\sigma_x\cdot\sigma_y} = \frac{\sum_{i=1}^n(x_i - \bar{x})\cdot(y_i - \bar{y})}{\sigma_x\cdot\sigma_y}$$</span>
-<span id="cb20-151"><a href="#cb20-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-152"><a href="#cb20-152" aria-hidden="true" tabindex="-1"></a>Note en la fórmula matemática, que el valor del numerador es el mismo que en la fórmula de la covarianza, el cual habíamos deducido de la fórmula de la varianza.</span>
-<span id="cb20-153"><a href="#cb20-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-154"><a href="#cb20-154" aria-hidden="true" tabindex="-1"></a>Para obtener la correlación entre dos variables, la lógica es muy similar a la de la covarianza, la función es <span class="in">`cor()`</span> y los argumentos son los mismos, solo debo indicar las variables que estoy analizando.</span>
-<span id="cb20-155"><a href="#cb20-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-158"><a href="#cb20-158" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb20-159"><a href="#cb20-159" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-150"><a href="#cb20-150" aria-hidden="true" tabindex="-1"></a>Es decir, la correlación entre dos variables cualesquiera sean estas, es un valor entre -1 y 1, donde 1 significa una correlación positiva perfecta y -1 significa una correlación negativa perfecta.\</span>
+<span id="cb20-151"><a href="#cb20-151" aria-hidden="true" tabindex="-1"></a>Valores cercanos a cero indican que no existe una relación significativa entre las variables.</span>
+<span id="cb20-152"><a href="#cb20-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-153"><a href="#cb20-153" aria-hidden="true" tabindex="-1"></a>Formalmente la fórmula de la correlación es:</span>
+<span id="cb20-154"><a href="#cb20-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-155"><a href="#cb20-155" aria-hidden="true" tabindex="-1"></a>$$\rho_{x,y} = \frac{COV_{x,y}}{\sigma_x\cdot\sigma_y} = \frac{\sum_{i=1}^n(x_i - \bar{x})\cdot(y_i - \bar{y})}{\sigma_x\cdot\sigma_y}$$</span>
+<span id="cb20-156"><a href="#cb20-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-157"><a href="#cb20-157" aria-hidden="true" tabindex="-1"></a>Note en la fórmula matemática, que el valor del numerador es el mismo que en la fórmula de la covarianza, el cual habíamos deducido de la fórmula de la varianza.</span>
+<span id="cb20-158"><a href="#cb20-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-159"><a href="#cb20-159" aria-hidden="true" tabindex="-1"></a>Para obtener la correlación entre dos variables, la lógica es muy similar a la de la covarianza, la función es <span class="in">`cor()`</span> y los argumentos son los mismos, solo debo indicar las variables que estoy analizando.</span>
 <span id="cb20-160"><a href="#cb20-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-161"><a href="#cb20-161" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(base<span class="sc">$</span>NY.GDP.PCAP.KD, base<span class="sc">$</span>v2x_polyarchy)</span>
-<span id="cb20-162"><a href="#cb20-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-163"><a href="#cb20-163" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb20-164"><a href="#cb20-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-165"><a href="#cb20-165" aria-hidden="true" tabindex="-1"></a>En ciencias sociales las correlaciones no tienden a ser muy fuertes, el valor de <span class="in">`r round(cor(base$NY.GDP.PCAP.KD, base$v2x_polyarchy),2)`</span> entre democracia y PIB no es despreciable, me estaría indicando una intensidad media (no muy fuerte pero tampoco trivial) entre ambas variables.</span>
-<span id="cb20-166"><a href="#cb20-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-167"><a href="#cb20-167" aria-hidden="true" tabindex="-1"></a>Algo que puede ayudar en la discusión sobre la significatividad de la correlación, es utilizar un **test estadístico de correlación lineal**, el comando para realizarlo en R es <span class="in">`cor.test()`</span>, los argumentos que recibe la función son los mismos que utilizamos en la función <span class="in">`cor()`</span>.</span>
-<span id="cb20-168"><a href="#cb20-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-171"><a href="#cb20-171" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb20-172"><a href="#cb20-172" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-163"><a href="#cb20-163" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb20-164"><a href="#cb20-164" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-165"><a href="#cb20-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-166"><a href="#cb20-166" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(base<span class="sc">$</span>NY.GDP.PCAP.KD, base<span class="sc">$</span>v2x_polyarchy)</span>
+<span id="cb20-167"><a href="#cb20-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-168"><a href="#cb20-168" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-169"><a href="#cb20-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-170"><a href="#cb20-170" aria-hidden="true" tabindex="-1"></a>En ciencias sociales las correlaciones no tienden a ser muy fuertes, el valor de <span class="in">`r round(cor(base$NY.GDP.PCAP.KD, base$v2x_polyarchy),2)`</span> entre democracia y PIB no es despreciable, me estaría indicando una intensidad media (no muy fuerte pero tampoco trivial) entre ambas variables.</span>
+<span id="cb20-171"><a href="#cb20-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-172"><a href="#cb20-172" aria-hidden="true" tabindex="-1"></a>Algo que puede ayudar en la discusión sobre la significatividad de la correlación, es utilizar un **test estadístico de correlación lineal**, el comando para realizarlo en R es <span class="in">`cor.test()`</span>, los argumentos que recibe la función son los mismos que utilizamos en la función <span class="in">`cor()`</span>.</span>
 <span id="cb20-173"><a href="#cb20-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-174"><a href="#cb20-174" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(base<span class="sc">$</span>NY.GDP.PCAP.KD, base<span class="sc">$</span>v2x_polyarchy)</span>
-<span id="cb20-175"><a href="#cb20-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-176"><a href="#cb20-176" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb20-177"><a href="#cb20-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-178"><a href="#cb20-178" aria-hidden="true" tabindex="-1"></a>Este test realiza una prueba de hipótesis, cuya hipótesis nula es que la verdadera correlación entre las variables es cero. Por lo tanto, para argumentar que la relación entre democracia y PIB per cápita es significativa, el objetivo es rechazar la hipótesis nula.\</span>
-<span id="cb20-179"><a href="#cb20-179" aria-hidden="true" tabindex="-1"></a>En la salida del comando <span class="in">`cor.test()`</span>, se muestran dos criterios que nos permiten obtener conclusiones respecto a la hipótesis nula.\</span>
-<span id="cb20-180"><a href="#cb20-180" aria-hidden="true" tabindex="-1"></a>El primero es el ***p-value*** , en este caso su valor es de <span class="in">`r cor.test(base$NY.GDP.PCAP.KD, base$v2x_polyarchy)$p.value`</span>, por ser menor de 0.05, podemos rechazar la hipótesis nula y afirmar que la relación entre democracia y PIB per cápita es significativa.\</span>
-<span id="cb20-181"><a href="#cb20-181" aria-hidden="true" tabindex="-1"></a>El segundo son los ***intervalos de confianza***, cuando estos tienen el mismo signo, se puede rechazar la hipótesis nula, adémas, como en este caso son ambos positivos, podemos afirmar que la relación es significativa y positiva. (Límite inferior = <span class="in">`r cor.test(base$NY.GDP.PCAP.KD, base$v2x_polyarchy)$conf.int[1]`</span>, Límite superior = <span class="in">`r cor.test(base$NY.GDP.PCAP.KD, base$v2x_polyarchy)$conf.int[2]`</span>)</span>
+<span id="cb20-176"><a href="#cb20-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb20-177"><a href="#cb20-177" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-178"><a href="#cb20-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-179"><a href="#cb20-179" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(base<span class="sc">$</span>NY.GDP.PCAP.KD, base<span class="sc">$</span>v2x_polyarchy)</span>
+<span id="cb20-180"><a href="#cb20-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-181"><a href="#cb20-181" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb20-182"><a href="#cb20-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-183"><a href="#cb20-183" aria-hidden="true" tabindex="-1"></a><span class="fu">### ¿Que agrega la correlación respecto a la covarianza?</span></span>
-<span id="cb20-184"><a href="#cb20-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-185"><a href="#cb20-185" aria-hidden="true" tabindex="-1"></a>La magnitud de la relación, por la covarianza yo sabía que la relación entre ambas variables era positiva, pero no sabía que tan positiva era. Ahora que tenemos la correlación, podemos afirmar que esa relación positiva es significativa (es distinta de cero) y está en torno al 0.46</span>
-<span id="cb20-186"><a href="#cb20-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-187"><a href="#cb20-187" aria-hidden="true" tabindex="-1"></a>Podríamos ir un paso más allá y preguntarnos en cuanto mejoraría la democracia si incrementamos en una unidad el PIB per cápita.\</span>
-<span id="cb20-188"><a href="#cb20-188" aria-hidden="true" tabindex="-1"></a>Este tipo de análisis ya es bastante más riguroso debido a que me permite hacer predicciones, es decir, podríamos conocer el valor del índice de democracia para un valor hipotético de $\$ 50.000$ dólares de PIB.\</span>
-<span id="cb20-189"><a href="#cb20-189" aria-hidden="true" tabindex="-1"></a>Obviamente, esto tiene sus limitaciones, hay un montón de supuestos estadísticos detrás de la regresión que pocas veces se cumplen, pero es mejor saber hacerlo que simplemente no hacer nada porque ningún supuesto se cumple.</span>
-<span id="cb20-190"><a href="#cb20-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-191"><a href="#cb20-191" aria-hidden="true" tabindex="-1"></a><span class="fu">## Regresión</span></span>
-<span id="cb20-192"><a href="#cb20-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-193"><a href="#cb20-193" aria-hidden="true" tabindex="-1"></a>No tengo pruebas pero tampoco dudas, de que la regresión es el análisis más utilizado para corroborar hipótesis en ciencias sociales.\</span>
-<span id="cb20-194"><a href="#cb20-194" aria-hidden="true" tabindex="-1"></a>Lo que vamos a ver ahora es un análisis de regresión simple, en el que existe una variable dependiente $(Y)$ y una variable independiente $(X)$. Lo de dependiente e independiente no es trivial, contrario a los análisis de covarianza y correlación, en el análisis de regresión si importa el orden y el sentido de la relación que planteo, puesto que estoy estableciendo una relación causal entre las variables en el sentido de que $(X)$ es causa de $(Y)$.</span>
+<span id="cb20-183"><a href="#cb20-183" aria-hidden="true" tabindex="-1"></a>Este test realiza una prueba de hipótesis, cuya hipótesis nula es que la verdadera correlación entre las variables es cero. Por lo tanto, para argumentar que la relación entre democracia y PIB per cápita es significativa, el objetivo es rechazar la hipótesis nula.\</span>
+<span id="cb20-184"><a href="#cb20-184" aria-hidden="true" tabindex="-1"></a>En la salida del comando <span class="in">`cor.test()`</span>, se muestran dos criterios que nos permiten obtener conclusiones respecto a la hipótesis nula.\</span>
+<span id="cb20-185"><a href="#cb20-185" aria-hidden="true" tabindex="-1"></a>El primero es el ***p-value*** , en este caso su valor es de <span class="in">`r cor.test(base$NY.GDP.PCAP.KD, base$v2x_polyarchy)$p.value`</span>, por ser menor de 0.05, podemos rechazar la hipótesis nula y afirmar que la relación entre democracia y PIB per cápita es significativa.\</span>
+<span id="cb20-186"><a href="#cb20-186" aria-hidden="true" tabindex="-1"></a>El segundo son los ***intervalos de confianza***, cuando estos tienen el mismo signo, se puede rechazar la hipótesis nula, adémas, como en este caso son ambos positivos, podemos afirmar que la relación es significativa y positiva. (Límite inferior = <span class="in">`r cor.test(base$NY.GDP.PCAP.KD, base$v2x_polyarchy)$conf.int[1]`</span>, Límite superior = <span class="in">`r cor.test(base$NY.GDP.PCAP.KD, base$v2x_polyarchy)$conf.int[2]`</span>)</span>
+<span id="cb20-187"><a href="#cb20-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-188"><a href="#cb20-188" aria-hidden="true" tabindex="-1"></a><span class="fu">### ¿Que agrega la correlación respecto a la covarianza?</span></span>
+<span id="cb20-189"><a href="#cb20-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-190"><a href="#cb20-190" aria-hidden="true" tabindex="-1"></a>La magnitud de la relación, por la covarianza yo sabía que la relación entre ambas variables era positiva, pero no sabía que tan positiva era. Ahora que tenemos la correlación, podemos afirmar que esa relación positiva es significativa (es distinta de cero) y está en torno al 0.46</span>
+<span id="cb20-191"><a href="#cb20-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-192"><a href="#cb20-192" aria-hidden="true" tabindex="-1"></a>Podríamos ir un paso más allá y preguntarnos en cuanto mejoraría la democracia si incrementamos en una unidad el PIB per cápita.\</span>
+<span id="cb20-193"><a href="#cb20-193" aria-hidden="true" tabindex="-1"></a>Este tipo de análisis ya es bastante más riguroso debido a que me permite hacer predicciones, es decir, podríamos conocer el valor del índice de democracia para un valor hipotético de $\$ 50.000$ dólares de PIB.\</span>
+<span id="cb20-194"><a href="#cb20-194" aria-hidden="true" tabindex="-1"></a>Obviamente, esto tiene sus limitaciones, hay un montón de supuestos estadísticos detrás de la regresión que pocas veces se cumplen, pero es mejor saber hacerlo que simplemente no hacer nada porque ningún supuesto se cumple.</span>
 <span id="cb20-195"><a href="#cb20-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-196"><a href="#cb20-196" aria-hidden="true" tabindex="-1"></a>Realizó el cálculo de la regresión para saber cuál sería el cambio en $(Y)$ si $(X)$ cambia en una unidad. La regresión tiene un apellido que es importante no olvidar, regresión **lineal**, este hace referencia a que se asume que la relación entre ambas variables $(X, Y)$ es lineal, es decir, existe una tasa constante que establece en cuanto se afecta $Y$ ante un cambio en $X$.</span>
+<span id="cb20-196"><a href="#cb20-196" aria-hidden="true" tabindex="-1"></a><span class="fu">## Regresión</span></span>
 <span id="cb20-197"><a href="#cb20-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-198"><a href="#cb20-198" aria-hidden="true" tabindex="-1"></a>La fórmula más sencilla de regresión simple es:</span>
-<span id="cb20-199"><a href="#cb20-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-200"><a href="#cb20-200" aria-hidden="true" tabindex="-1"></a>$$\hat{y} = \hat{\alpha} + \hat{\beta}\cdot x$$ Lo que establece el sentido de la relación entre $(X)$ y $(Y)$ es el valor de $\hat{\beta}$, cuya fórmula tiene que ver con la fórmula de la correlación y la covarianza.</span>
-<span id="cb20-201"><a href="#cb20-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-202"><a href="#cb20-202" aria-hidden="true" tabindex="-1"></a>$$\hat{\beta} = \frac{COV_{X,Y}}{VAR_X} = \frac{\sum_{i=1}^n(x_i - \bar{x})\cdot(y_i - \bar{y})}{\sum_{i=1}^n(x_i - \bar{x})^2}$$</span>
-<span id="cb20-203"><a href="#cb20-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-204"><a href="#cb20-204" aria-hidden="true" tabindex="-1"></a>La regresión es la base de la inferencia causal, por eso es importante manejarla bien si mi objetivo es corroborar hipótesis entre variables, en el sentido de que una es causada por la otra.</span>
-<span id="cb20-205"><a href="#cb20-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-206"><a href="#cb20-206" aria-hidden="true" tabindex="-1"></a>La función para realizar análisis de regresión lineal simple es <span class="in">`lm()`</span>, los argumentos también son dos variables pero la sintaxis es un poco diferente. Además, la impresión de los resultados requiere el uso de la función <span class="in">`summary()`</span>, a continuación mostramos la regresión entre PIB per cápita e índice de democracia, es decir, asumimos que el PIB per cápita tiene un efecto positivo sobre el índice de democracia y queremos saber en cuanto cambiaria el índice de democracia si incrementamos en una unidad monetaria el PIB per cápita.</span>
-<span id="cb20-207"><a href="#cb20-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-210"><a href="#cb20-210" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb20-211"><a href="#cb20-211" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-198"><a href="#cb20-198" aria-hidden="true" tabindex="-1"></a>No tengo pruebas pero tampoco dudas, de que la regresión es el análisis más utilizado para corroborar hipótesis en ciencias sociales.\</span>
+<span id="cb20-199"><a href="#cb20-199" aria-hidden="true" tabindex="-1"></a>Lo que vamos a ver ahora es un análisis de regresión simple, en el que existe una variable dependiente $(Y)$ y una variable independiente $(X)$. Lo de dependiente e independiente no es trivial, contrario a los análisis de covarianza y correlación, en el análisis de regresión si importa el orden y el sentido de la relación que planteo, puesto que estoy estableciendo una relación causal entre las variables en el sentido de que $(X)$ es causa de $(Y)$.</span>
+<span id="cb20-200"><a href="#cb20-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-201"><a href="#cb20-201" aria-hidden="true" tabindex="-1"></a>Realizó el cálculo de la regresión para saber cuál sería el cambio en $(Y)$ si $(X)$ cambia en una unidad. La regresión tiene un apellido que es importante no olvidar, regresión **lineal**, este hace referencia a que se asume que la relación entre ambas variables $(X, Y)$ es lineal, es decir, existe una tasa constante que establece en cuanto se afecta $Y$ ante un cambio en $X$.</span>
+<span id="cb20-202"><a href="#cb20-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-203"><a href="#cb20-203" aria-hidden="true" tabindex="-1"></a>La fórmula más sencilla de regresión simple es:</span>
+<span id="cb20-204"><a href="#cb20-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-205"><a href="#cb20-205" aria-hidden="true" tabindex="-1"></a>$$\hat{y} = \hat{\alpha} + \hat{\beta}\cdot x$$ Lo que establece el sentido de la relación entre $(X)$ y $(Y)$ es el valor de $\hat{\beta}$, cuya fórmula tiene que ver con la fórmula de la correlación y la covarianza.</span>
+<span id="cb20-206"><a href="#cb20-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-207"><a href="#cb20-207" aria-hidden="true" tabindex="-1"></a>$$\hat{\beta} = \frac{COV_{X,Y}}{VAR_X} = \frac{\sum_{i=1}^n(x_i - \bar{x})\cdot(y_i - \bar{y})}{\sum_{i=1}^n(x_i - \bar{x})^2}$$</span>
+<span id="cb20-208"><a href="#cb20-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-209"><a href="#cb20-209" aria-hidden="true" tabindex="-1"></a>La regresión es la base de la inferencia causal, por eso es importante manejarla bien si mi objetivo es corroborar hipótesis entre variables, en el sentido de que una es causada por la otra.</span>
+<span id="cb20-210"><a href="#cb20-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-211"><a href="#cb20-211" aria-hidden="true" tabindex="-1"></a>La función para realizar análisis de regresión lineal simple es <span class="in">`lm()`</span>, los argumentos también son dos variables pero la sintaxis es un poco diferente. Además, la impresión de los resultados requiere el uso de la función <span class="in">`summary()`</span>, a continuación mostramos la regresión entre PIB per cápita e índice de democracia, es decir, asumimos que el PIB per cápita tiene un efecto positivo sobre el índice de democracia y queremos saber en cuanto cambiaria el índice de democracia si incrementamos en una unidad monetaria el PIB per cápita.</span>
 <span id="cb20-212"><a href="#cb20-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-213"><a href="#cb20-213" aria-hidden="true" tabindex="-1"></a><span class="co"># Para la regresion debemos usar el simbolo &#39;~&#39; de manera que antes de este se</span></span>
-<span id="cb20-214"><a href="#cb20-214" aria-hidden="true" tabindex="-1"></a><span class="co"># encuentre la variable dependiente (Y) y despues de este se encuentre la variable </span></span>
-<span id="cb20-215"><a href="#cb20-215" aria-hidden="true" tabindex="-1"></a><span class="co"># independiente (X).</span></span>
-<span id="cb20-216"><a href="#cb20-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-217"><a href="#cb20-217" aria-hidden="true" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> v2x_polyarchy <span class="sc">~</span> NY.GDP.PCAP.KD,</span>
-<span id="cb20-218"><a href="#cb20-218" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> base)</span>
-<span id="cb20-219"><a href="#cb20-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-220"><a href="#cb20-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-221"><a href="#cb20-221" aria-hidden="true" tabindex="-1"></a><span class="co"># Con la funcion &#39;summary()&#39; veo el resultado de la regresion</span></span>
-<span id="cb20-222"><a href="#cb20-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-223"><a href="#cb20-223" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg)</span>
+<span id="cb20-215"><a href="#cb20-215" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb20-216"><a href="#cb20-216" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-217"><a href="#cb20-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-218"><a href="#cb20-218" aria-hidden="true" tabindex="-1"></a><span class="co"># Para la regresion debemos usar el simbolo &#39;~&#39; de manera que antes de este se</span></span>
+<span id="cb20-219"><a href="#cb20-219" aria-hidden="true" tabindex="-1"></a><span class="co"># encuentre la variable dependiente (Y) y despues de este se encuentre la variable </span></span>
+<span id="cb20-220"><a href="#cb20-220" aria-hidden="true" tabindex="-1"></a><span class="co"># independiente (X).</span></span>
+<span id="cb20-221"><a href="#cb20-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-222"><a href="#cb20-222" aria-hidden="true" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> v2x_polyarchy <span class="sc">~</span> NY.GDP.PCAP.KD,</span>
+<span id="cb20-223"><a href="#cb20-223" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> base)</span>
 <span id="cb20-224"><a href="#cb20-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-225"><a href="#cb20-225" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb20-226"><a href="#cb20-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-227"><a href="#cb20-227" aria-hidden="true" tabindex="-1"></a>Ahora vemos muchos números y esto puede generar una mala impresión, lo relevante por ahora está en los <span class="in">`Coefficients`</span>, donde vemos que existe un <span class="in">`(Intercept)`</span> (equivalente a $\hat{\alpha}$ en la formula anterior) y el nombre de nuestra variable $(X)$ <span class="in">`NY.GDP.PCAP.KD`</span> (equivalente a $\hat{\beta}$ en la formula anterior).\</span>
-<span id="cb20-228"><a href="#cb20-228" aria-hidden="true" tabindex="-1"></a>Centrémonos en el valor del coeficiente de <span class="in">`NY.GDP.PCAP.KD`</span>, este es de <span class="in">`r round(reg$coefficients[2], 8)`</span>, parece muy bajito y cercano a cero, pero pensémoslo bien, lo que nos está diciendo es que si incremento el PIB per cápita en 1 dólar, el índice de democracia se incrementa en <span class="in">`r round(reg$coefficients[2], 8)`</span>.\</span>
-<span id="cb20-229"><a href="#cb20-229" aria-hidden="true" tabindex="-1"></a>Un cambio de un dólar en el PIB per cápita es algo casi que aleatorio, tendría mas sentido hablar de un cambio de mil dólares. Corrijamos la unidad de medida del PIB de manera que se refleje eso.</span>
-<span id="cb20-230"><a href="#cb20-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-233"><a href="#cb20-233" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb20-234"><a href="#cb20-234" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-225"><a href="#cb20-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-226"><a href="#cb20-226" aria-hidden="true" tabindex="-1"></a><span class="co"># Con la funcion &#39;summary()&#39; veo el resultado de la regresion</span></span>
+<span id="cb20-227"><a href="#cb20-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-228"><a href="#cb20-228" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg)</span>
+<span id="cb20-229"><a href="#cb20-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-230"><a href="#cb20-230" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-231"><a href="#cb20-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-232"><a href="#cb20-232" aria-hidden="true" tabindex="-1"></a>Ahora vemos muchos números y esto puede generar una mala impresión, lo relevante por ahora está en los <span class="in">`Coefficients`</span>, donde vemos que existe un <span class="in">`(Intercept)`</span> (equivalente a $\hat{\alpha}$ en la formula anterior) y el nombre de nuestra variable $(X)$ <span class="in">`NY.GDP.PCAP.KD`</span> (equivalente a $\hat{\beta}$ en la formula anterior).\</span>
+<span id="cb20-233"><a href="#cb20-233" aria-hidden="true" tabindex="-1"></a>Centrémonos en el valor del coeficiente de <span class="in">`NY.GDP.PCAP.KD`</span>, este es de <span class="in">`r round(reg$coefficients[2], 8)`</span>, parece muy bajito y cercano a cero, pero pensémoslo bien, lo que nos está diciendo es que si incremento el PIB per cápita en 1 dólar, el índice de democracia se incrementa en <span class="in">`r round(reg$coefficients[2], 8)`</span>.\</span>
+<span id="cb20-234"><a href="#cb20-234" aria-hidden="true" tabindex="-1"></a>Un cambio de un dólar en el PIB per cápita es algo casi que aleatorio, tendría mas sentido hablar de un cambio de mil dólares. Corrijamos la unidad de medida del PIB de manera que se refleje eso.</span>
 <span id="cb20-235"><a href="#cb20-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-236"><a href="#cb20-236" aria-hidden="true" tabindex="-1"></a><span class="co"># Creo la variable de PIB per capita dividida por mil</span></span>
-<span id="cb20-237"><a href="#cb20-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-238"><a href="#cb20-238" aria-hidden="true" tabindex="-1"></a>base<span class="sc">$</span>pib <span class="ot">&lt;-</span> base<span class="sc">$</span>NY.GDP.PCAP.KD<span class="sc">/</span><span class="dv">1000</span></span>
-<span id="cb20-239"><a href="#cb20-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-240"><a href="#cb20-240" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculo nuevamente la regresión</span></span>
-<span id="cb20-241"><a href="#cb20-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-242"><a href="#cb20-242" aria-hidden="true" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> v2x_polyarchy <span class="sc">~</span> pib,</span>
-<span id="cb20-243"><a href="#cb20-243" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> base)</span>
+<span id="cb20-238"><a href="#cb20-238" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb20-239"><a href="#cb20-239" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-240"><a href="#cb20-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-241"><a href="#cb20-241" aria-hidden="true" tabindex="-1"></a><span class="co"># Creo la variable de PIB per capita dividida por mil</span></span>
+<span id="cb20-242"><a href="#cb20-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-243"><a href="#cb20-243" aria-hidden="true" tabindex="-1"></a>base<span class="sc">$</span>pib <span class="ot">&lt;-</span> base<span class="sc">$</span>NY.GDP.PCAP.KD<span class="sc">/</span><span class="dv">1000</span></span>
 <span id="cb20-244"><a href="#cb20-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-245"><a href="#cb20-245" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg)</span>
+<span id="cb20-245"><a href="#cb20-245" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculo nuevamente la regresión</span></span>
 <span id="cb20-246"><a href="#cb20-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-247"><a href="#cb20-247" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb20-248"><a href="#cb20-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-249"><a href="#cb20-249" aria-hidden="true" tabindex="-1"></a>Al leer nuevamente los resultados, podemos concluir que un incremento de mil dólares en el PIB per cápita, conduce a un incremento en el valor del índice de democracia de <span class="in">`r round(reg$coefficients[2], 4)`</span>, parece ínfimo, pero en ciencias sociales ese tipo de efectos son los más usuales.\</span>
-<span id="cb20-250"><a href="#cb20-250" aria-hidden="true" tabindex="-1"></a>Algo importante respecto a la lectura de los coeficientes es la última columna en la que aparece el P-Valor, lo que implícitamente hace el R, es una prueba de hipótesis en la que se corrobora si el valor de mi estimador (<span class="in">`r round(reg$coefficients[2], 4)`</span>) es significativamente diferente de 0.\</span>
-<span id="cb20-251"><a href="#cb20-251" aria-hidden="true" tabindex="-1"></a>El hecho de que el P-Valor sea menor que 0.001, implica que al $99.9\%$ de confianza, el PIB tiene un efecto positivo sobre la democracia.</span>
-<span id="cb20-252"><a href="#cb20-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-253"><a href="#cb20-253" aria-hidden="true" tabindex="-1"></a>La regresión lineal también tiene un correlato gráfico, conocido como recta de regresión. A continuación se muestran dos opciones de código para graficarla con **{ggplot2}**.</span>
-<span id="cb20-254"><a href="#cb20-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-257"><a href="#cb20-257" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb20-258"><a href="#cb20-258" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-247"><a href="#cb20-247" aria-hidden="true" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> v2x_polyarchy <span class="sc">~</span> pib,</span>
+<span id="cb20-248"><a href="#cb20-248" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> base)</span>
+<span id="cb20-249"><a href="#cb20-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-250"><a href="#cb20-250" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg)</span>
+<span id="cb20-251"><a href="#cb20-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-252"><a href="#cb20-252" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-253"><a href="#cb20-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-254"><a href="#cb20-254" aria-hidden="true" tabindex="-1"></a>Al leer nuevamente los resultados, podemos concluir que un incremento de mil dólares en el PIB per cápita, conduce a un incremento en el valor del índice de democracia de <span class="in">`r round(reg$coefficients[2], 4)`</span>, parece ínfimo, pero en ciencias sociales ese tipo de efectos son los más usuales.\</span>
+<span id="cb20-255"><a href="#cb20-255" aria-hidden="true" tabindex="-1"></a>Algo importante respecto a la lectura de los coeficientes es la última columna en la que aparece el P-Valor, lo que implícitamente hace el R, es una prueba de hipótesis en la que se corrobora si el valor de mi estimador (<span class="in">`r round(reg$coefficients[2], 4)`</span>) es significativamente diferente de 0.\</span>
+<span id="cb20-256"><a href="#cb20-256" aria-hidden="true" tabindex="-1"></a>El hecho de que el P-Valor sea menor que 0.001, implica que al $99.9\%$ de confianza, el PIB tiene un efecto positivo sobre la democracia.</span>
+<span id="cb20-257"><a href="#cb20-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-258"><a href="#cb20-258" aria-hidden="true" tabindex="-1"></a>La regresión lineal también tiene un correlato gráfico, conocido como recta de regresión. A continuación se muestran dos opciones de código para graficarla con **{ggplot2}**.</span>
 <span id="cb20-259"><a href="#cb20-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-260"><a href="#cb20-260" aria-hidden="true" tabindex="-1"></a>base <span class="sc">%&gt;%</span> </span>
-<span id="cb20-261"><a href="#cb20-261" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> pib, <span class="at">y =</span> v2x_polyarchy)) <span class="sc">+</span></span>
-<span id="cb20-262"><a href="#cb20-262" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb20-263"><a href="#cb20-263" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="co"># Agrega la recta de regresión</span></span>
+<span id="cb20-262"><a href="#cb20-262" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb20-263"><a href="#cb20-263" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
 <span id="cb20-264"><a href="#cb20-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-265"><a href="#cb20-265" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb20-266"><a href="#cb20-266" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-269"><a href="#cb20-269" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb20-270"><a href="#cb20-270" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-265"><a href="#cb20-265" aria-hidden="true" tabindex="-1"></a>base <span class="sc">%&gt;%</span> </span>
+<span id="cb20-266"><a href="#cb20-266" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> pib, <span class="at">y =</span> v2x_polyarchy)) <span class="sc">+</span></span>
+<span id="cb20-267"><a href="#cb20-267" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb20-268"><a href="#cb20-268" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="co"># Agrega la recta de regresión</span></span>
+<span id="cb20-269"><a href="#cb20-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-270"><a href="#cb20-270" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb20-271"><a href="#cb20-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-272"><a href="#cb20-272" aria-hidden="true" tabindex="-1"></a>base <span class="sc">%&gt;%</span> </span>
-<span id="cb20-273"><a href="#cb20-273" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> pib, <span class="at">y =</span> v2x_polyarchy)) <span class="sc">+</span></span>
-<span id="cb20-274"><a href="#cb20-274" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb20-275"><a href="#cb20-275" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> reg<span class="sc">$</span>coefficients[<span class="dv">1</span>], <span class="at">slope =</span> reg<span class="sc">$</span>coefficients[<span class="dv">2</span>])</span>
+<span id="cb20-274"><a href="#cb20-274" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb20-275"><a href="#cb20-275" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
 <span id="cb20-276"><a href="#cb20-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-277"><a href="#cb20-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-278"><a href="#cb20-278" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb20-279"><a href="#cb20-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-280"><a href="#cb20-280" aria-hidden="true" tabindex="-1"></a><span class="fu">### ¿Como mejorar el ajuste?</span></span>
+<span id="cb20-277"><a href="#cb20-277" aria-hidden="true" tabindex="-1"></a>base <span class="sc">%&gt;%</span> </span>
+<span id="cb20-278"><a href="#cb20-278" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> pib, <span class="at">y =</span> v2x_polyarchy)) <span class="sc">+</span></span>
+<span id="cb20-279"><a href="#cb20-279" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb20-280"><a href="#cb20-280" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> reg<span class="sc">$</span>coefficients[<span class="dv">1</span>], <span class="at">slope =</span> reg<span class="sc">$</span>coefficients[<span class="dv">2</span>])</span>
 <span id="cb20-281"><a href="#cb20-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-282"><a href="#cb20-282" aria-hidden="true" tabindex="-1"></a>La recta parece no ajustarse muy bien a los puntos, no se observa una distribución aleatoria de los puntos en torno a la recta de regresión.\</span>
-<span id="cb20-283"><a href="#cb20-283" aria-hidden="true" tabindex="-1"></a>En la clase pasada hablamos de la necesidad de que en ciertos escenarios, las variables presenten una distribución normal, el análisis de regresión es uno de ellos.\</span>
-<span id="cb20-284"><a href="#cb20-284" aria-hidden="true" tabindex="-1"></a>En el siguiente gráfico vemos la distribución de las variables Democracia y PIB per cápita, vemos que el PIB per cápita presenta un importante sesgo a la derecha, mientras la democracia no presenta un sesgo tan claro, pero es dificil sostener que tiene una distribución normal. Lo ideal sería poder corregir ambas distribuciones a partir de alguna transformación que conduzca a la variable a comportarse como una normal (o se aproxime más a ella).</span>
-<span id="cb20-285"><a href="#cb20-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-288"><a href="#cb20-288" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb20-289"><a href="#cb20-289" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-282"><a href="#cb20-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-283"><a href="#cb20-283" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-284"><a href="#cb20-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-285"><a href="#cb20-285" aria-hidden="true" tabindex="-1"></a><span class="fu">### ¿Como mejorar el ajuste?</span></span>
+<span id="cb20-286"><a href="#cb20-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-287"><a href="#cb20-287" aria-hidden="true" tabindex="-1"></a>La recta parece no ajustarse muy bien a los puntos, no se observa una distribución aleatoria de los puntos en torno a la recta de regresión.\</span>
+<span id="cb20-288"><a href="#cb20-288" aria-hidden="true" tabindex="-1"></a>En la clase pasada hablamos de la necesidad de que en ciertos escenarios, las variables presenten una distribución normal, el análisis de regresión es uno de ellos.\</span>
+<span id="cb20-289"><a href="#cb20-289" aria-hidden="true" tabindex="-1"></a>En el siguiente gráfico vemos la distribución de las variables Democracia y PIB per cápita, vemos que el PIB per cápita presenta un importante sesgo a la derecha, mientras la democracia no presenta un sesgo tan claro, pero es dificil sostener que tiene una distribución normal. Lo ideal sería poder corregir ambas distribuciones a partir de alguna transformación que conduzca a la variable a comportarse como una normal (o se aproxime más a ella).</span>
 <span id="cb20-290"><a href="#cb20-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-291"><a href="#cb20-291" aria-hidden="true" tabindex="-1"></a>base <span class="sc">%&gt;%</span> </span>
-<span id="cb20-292"><a href="#cb20-292" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> v2x_polyarchy)) <span class="sc">+</span> </span>
-<span id="cb20-293"><a href="#cb20-293" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span></span>
-<span id="cb20-294"><a href="#cb20-294" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución v2x_polyarchy&quot;</span>)</span>
+<span id="cb20-293"><a href="#cb20-293" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb20-294"><a href="#cb20-294" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
 <span id="cb20-295"><a href="#cb20-295" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-296"><a href="#cb20-296" aria-hidden="true" tabindex="-1"></a>base <span class="sc">%&gt;%</span> </span>
-<span id="cb20-297"><a href="#cb20-297" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> pib)) <span class="sc">+</span> </span>
+<span id="cb20-297"><a href="#cb20-297" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> v2x_polyarchy)) <span class="sc">+</span> </span>
 <span id="cb20-298"><a href="#cb20-298" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span></span>
-<span id="cb20-299"><a href="#cb20-299" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución PIB&quot;</span>)</span>
+<span id="cb20-299"><a href="#cb20-299" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución v2x_polyarchy&quot;</span>)</span>
 <span id="cb20-300"><a href="#cb20-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-301"><a href="#cb20-301" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb20-302"><a href="#cb20-302" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-303"><a href="#cb20-303" aria-hidden="true" tabindex="-1"></a>Los logaritmos son las operaciones mas utilizadas para realizar este tipo de transformaciones, apliquemos logaritmo natural a ambas variables y veamos que pasa con el gráfico de dispersión y la recta de regresión.</span>
-<span id="cb20-304"><a href="#cb20-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-307"><a href="#cb20-307" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb20-308"><a href="#cb20-308" aria-hidden="true" tabindex="-1"></a>base<span class="sc">$</span>log_democ <span class="ot">&lt;-</span> <span class="fu">log</span>(base<span class="sc">$</span>v2x_polyarchy)</span>
+<span id="cb20-301"><a href="#cb20-301" aria-hidden="true" tabindex="-1"></a>base <span class="sc">%&gt;%</span> </span>
+<span id="cb20-302"><a href="#cb20-302" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> pib)) <span class="sc">+</span> </span>
+<span id="cb20-303"><a href="#cb20-303" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span></span>
+<span id="cb20-304"><a href="#cb20-304" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución PIB&quot;</span>)</span>
+<span id="cb20-305"><a href="#cb20-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-306"><a href="#cb20-306" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-307"><a href="#cb20-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-308"><a href="#cb20-308" aria-hidden="true" tabindex="-1"></a>Los logaritmos son las operaciones mas utilizadas para realizar este tipo de transformaciones, apliquemos logaritmo natural a ambas variables y veamos que pasa con el gráfico de dispersión y la recta de regresión.</span>
 <span id="cb20-309"><a href="#cb20-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-310"><a href="#cb20-310" aria-hidden="true" tabindex="-1"></a>base<span class="sc">$</span>log_pib <span class="ot">&lt;-</span> <span class="fu">log</span>(base<span class="sc">$</span>pib)</span>
-<span id="cb20-311"><a href="#cb20-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-312"><a href="#cb20-312" aria-hidden="true" tabindex="-1"></a>reg_log <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> log_democ <span class="sc">~</span> log_pib,</span>
-<span id="cb20-313"><a href="#cb20-313" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> base)</span>
+<span id="cb20-312"><a href="#cb20-312" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb20-313"><a href="#cb20-313" aria-hidden="true" tabindex="-1"></a>base<span class="sc">$</span>log_democ <span class="ot">&lt;-</span> <span class="fu">log</span>(base<span class="sc">$</span>v2x_polyarchy)</span>
 <span id="cb20-314"><a href="#cb20-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-315"><a href="#cb20-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-316"><a href="#cb20-316" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg_log)</span>
-<span id="cb20-317"><a href="#cb20-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-318"><a href="#cb20-318" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-315"><a href="#cb20-315" aria-hidden="true" tabindex="-1"></a>base<span class="sc">$</span>log_pib <span class="ot">&lt;-</span> <span class="fu">log</span>(base<span class="sc">$</span>pib)</span>
+<span id="cb20-316"><a href="#cb20-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-317"><a href="#cb20-317" aria-hidden="true" tabindex="-1"></a>reg_log <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> log_democ <span class="sc">~</span> log_pib,</span>
+<span id="cb20-318"><a href="#cb20-318" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> base)</span>
 <span id="cb20-319"><a href="#cb20-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-320"><a href="#cb20-320" aria-hidden="true" tabindex="-1"></a>Cuando se utilizan logaritmos en ambas variables $(X,Y)$, la interpretación de la regresión pasa a realizarse en terminos porcentuales, es decir, en este caso un incremento del $1\%$ en el PIB per cápita, generá un incremento del <span class="in">`r round(reg_log$coefficients[2],3)`</span>% en el índice de democracia.</span>
-<span id="cb20-321"><a href="#cb20-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-322"><a href="#cb20-322" aria-hidden="true" tabindex="-1"></a>La gráfica se ve asi ahora.</span>
-<span id="cb20-323"><a href="#cb20-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-326"><a href="#cb20-326" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb20-327"><a href="#cb20-327" aria-hidden="true" tabindex="-1"></a>base <span class="sc">%&gt;%</span> </span>
-<span id="cb20-328"><a href="#cb20-328" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> log_pib, <span class="at">y =</span> log_democ)) <span class="sc">+</span></span>
-<span id="cb20-329"><a href="#cb20-329" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb20-330"><a href="#cb20-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>)</span>
-<span id="cb20-331"><a href="#cb20-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-332"><a href="#cb20-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-333"><a href="#cb20-333" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb20-334"><a href="#cb20-334" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-335"><a href="#cb20-335" aria-hidden="true" tabindex="-1"></a>Aunque el comportamiento sigue sin ser el ideal, mejoro significativamente respecto a sus valores originales.</span>
+<span id="cb20-320"><a href="#cb20-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-321"><a href="#cb20-321" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg_log)</span>
+<span id="cb20-322"><a href="#cb20-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-323"><a href="#cb20-323" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-324"><a href="#cb20-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-325"><a href="#cb20-325" aria-hidden="true" tabindex="-1"></a>Cuando se utilizan logaritmos en ambas variables $(X,Y)$, la interpretación de la regresión pasa a realizarse en terminos porcentuales, es decir, en este caso un incremento del $1\%$ en el PIB per cápita, generá un incremento del <span class="in">`r round(reg_log$coefficients[2],3)`</span>% en el índice de democracia.</span>
+<span id="cb20-326"><a href="#cb20-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-327"><a href="#cb20-327" aria-hidden="true" tabindex="-1"></a>La gráfica se ve asi ahora.</span>
+<span id="cb20-328"><a href="#cb20-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-331"><a href="#cb20-331" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb20-332"><a href="#cb20-332" aria-hidden="true" tabindex="-1"></a>base <span class="sc">%&gt;%</span> </span>
+<span id="cb20-333"><a href="#cb20-333" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> log_pib, <span class="at">y =</span> log_democ)) <span class="sc">+</span></span>
+<span id="cb20-334"><a href="#cb20-334" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb20-335"><a href="#cb20-335" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>)</span>
 <span id="cb20-336"><a href="#cb20-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-337"><a href="#cb20-337" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tabla resumen de las medidas calculadas</span></span>
-<span id="cb20-338"><a href="#cb20-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-339"><a href="#cb20-339" aria-hidden="true" tabindex="-1"></a><span class="in">```{r echo=FALSE}</span></span>
-<span id="cb20-340"><a href="#cb20-340" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-337"><a href="#cb20-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-338"><a href="#cb20-338" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-339"><a href="#cb20-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-340"><a href="#cb20-340" aria-hidden="true" tabindex="-1"></a>Aunque el comportamiento sigue sin ser el ideal, mejoro significativamente respecto a sus valores originales.</span>
 <span id="cb20-341"><a href="#cb20-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-342"><a href="#cb20-342" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb20-343"><a href="#cb20-343" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
-<span id="cb20-344"><a href="#cb20-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-345"><a href="#cb20-345" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos de la tabla</span></span>
-<span id="cb20-346"><a href="#cb20-346" aria-hidden="true" tabindex="-1"></a>tabla <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb20-347"><a href="#cb20-347" aria-hidden="true" tabindex="-1"></a>  <span class="at">Medida =</span> <span class="fu">c</span>(<span class="st">&quot;Covarianza&quot;</span>, <span class="st">&quot;Correlación&quot;</span>, <span class="st">&quot;Regresión&quot;</span>),</span>
-<span id="cb20-348"><a href="#cb20-348" aria-hidden="true" tabindex="-1"></a>  Interpretación <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;La relación entre las variables es (positiva/negativa)&quot;</span>, </span>
-<span id="cb20-349"><a href="#cb20-349" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;La relación entre las variables es (positiva/negativa) y significativa&quot;</span>, </span>
-<span id="cb20-350"><a href="#cb20-350" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;Un incremento de ... en X genera un cambio de ... en Y&quot;</span>),</span>
-<span id="cb20-351"><a href="#cb20-351" aria-hidden="true" tabindex="-1"></a>  Fórmula <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;$$</span><span class="sc">\\</span><span class="st">frac{</span><span class="sc">\\</span><span class="st">sum_{i = 1}^n (x_i - </span><span class="sc">\\</span><span class="st">bar{x}) </span><span class="sc">\\</span><span class="st">cdot (y_i - </span><span class="sc">\\</span><span class="st">bar{y})}{n-1}$$&quot;</span>,</span>
-<span id="cb20-352"><a href="#cb20-352" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;$$</span><span class="sc">\\</span><span class="st">frac{</span><span class="sc">\\</span><span class="st">sum_{i=1}^n(x_i - </span><span class="sc">\\</span><span class="st">bar{x}) </span><span class="sc">\\</span><span class="st">cdot (y_i - </span><span class="sc">\\</span><span class="st">bar{y})}{</span><span class="sc">\\</span><span class="st">sigma_x </span><span class="sc">\\</span><span class="st">cdot </span><span class="sc">\\</span><span class="st">sigma_y}$$&quot;</span>,</span>
-<span id="cb20-353"><a href="#cb20-353" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;$$</span><span class="sc">\\</span><span class="st">frac{</span><span class="sc">\\</span><span class="st">sum_{i=1}^n(x_i - </span><span class="sc">\\</span><span class="st">bar{x}) </span><span class="sc">\\</span><span class="st">cdot (y_i - </span><span class="sc">\\</span><span class="st">bar{y})}{</span><span class="sc">\\</span><span class="st">sum_{i=1}^n(x_i - </span><span class="sc">\\</span><span class="st">bar{x})^2}$$&quot;</span>)</span>
-<span id="cb20-354"><a href="#cb20-354" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb20-355"><a href="#cb20-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-356"><a href="#cb20-356" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar la tabla</span></span>
-<span id="cb20-357"><a href="#cb20-357" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(tabla, <span class="at">format =</span> <span class="st">&quot;html&quot;</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Medida&quot;</span>, <span class="st">&quot;Interpretación&quot;</span>, <span class="st">&quot;Fórmula&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb20-358"><a href="#cb20-358" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb20-359"><a href="#cb20-359" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Tabla Resumen&quot;</span> <span class="ot">=</span> <span class="dv">3</span>))</span>
+<span id="cb20-342"><a href="#cb20-342" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tabla resumen de las medidas calculadas</span></span>
+<span id="cb20-343"><a href="#cb20-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-344"><a href="#cb20-344" aria-hidden="true" tabindex="-1"></a><span class="in">```{r echo=FALSE}</span></span>
+<span id="cb20-345"><a href="#cb20-345" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb20-346"><a href="#cb20-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-347"><a href="#cb20-347" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb20-348"><a href="#cb20-348" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb20-349"><a href="#cb20-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-350"><a href="#cb20-350" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos de la tabla</span></span>
+<span id="cb20-351"><a href="#cb20-351" aria-hidden="true" tabindex="-1"></a>tabla <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb20-352"><a href="#cb20-352" aria-hidden="true" tabindex="-1"></a>  <span class="at">Medida =</span> <span class="fu">c</span>(<span class="st">&quot;Covarianza&quot;</span>, <span class="st">&quot;Correlación&quot;</span>, <span class="st">&quot;Regresión&quot;</span>),</span>
+<span id="cb20-353"><a href="#cb20-353" aria-hidden="true" tabindex="-1"></a>  Interpretación <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;La relación entre las variables es (positiva/negativa)&quot;</span>, </span>
+<span id="cb20-354"><a href="#cb20-354" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;La relación entre las variables es (positiva/negativa) y significativa&quot;</span>, </span>
+<span id="cb20-355"><a href="#cb20-355" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;Un incremento de ... en X genera un cambio de ... en Y&quot;</span>),</span>
+<span id="cb20-356"><a href="#cb20-356" aria-hidden="true" tabindex="-1"></a>  Fórmula <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;$$</span><span class="sc">\\</span><span class="st">frac{</span><span class="sc">\\</span><span class="st">sum_{i = 1}^n (x_i - </span><span class="sc">\\</span><span class="st">bar{x}) </span><span class="sc">\\</span><span class="st">cdot (y_i - </span><span class="sc">\\</span><span class="st">bar{y})}{n-1}$$&quot;</span>,</span>
+<span id="cb20-357"><a href="#cb20-357" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;$$</span><span class="sc">\\</span><span class="st">frac{</span><span class="sc">\\</span><span class="st">sum_{i=1}^n(x_i - </span><span class="sc">\\</span><span class="st">bar{x}) </span><span class="sc">\\</span><span class="st">cdot (y_i - </span><span class="sc">\\</span><span class="st">bar{y})}{</span><span class="sc">\\</span><span class="st">sigma_x </span><span class="sc">\\</span><span class="st">cdot </span><span class="sc">\\</span><span class="st">sigma_y}$$&quot;</span>,</span>
+<span id="cb20-358"><a href="#cb20-358" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;$$</span><span class="sc">\\</span><span class="st">frac{</span><span class="sc">\\</span><span class="st">sum_{i=1}^n(x_i - </span><span class="sc">\\</span><span class="st">bar{x}) </span><span class="sc">\\</span><span class="st">cdot (y_i - </span><span class="sc">\\</span><span class="st">bar{y})}{</span><span class="sc">\\</span><span class="st">sum_{i=1}^n(x_i - </span><span class="sc">\\</span><span class="st">bar{x})^2}$$&quot;</span>)</span>
+<span id="cb20-359"><a href="#cb20-359" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb20-360"><a href="#cb20-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-361"><a href="#cb20-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-362"><a href="#cb20-362" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb20-361"><a href="#cb20-361" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar la tabla</span></span>
+<span id="cb20-362"><a href="#cb20-362" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(tabla, <span class="at">format =</span> <span class="st">&quot;html&quot;</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Medida&quot;</span>, <span class="st">&quot;Interpretación&quot;</span>, <span class="st">&quot;Fórmula&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-363"><a href="#cb20-363" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-364"><a href="#cb20-364" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Tabla Resumen&quot;</span> <span class="ot">=</span> <span class="dv">3</span>))</span>
+<span id="cb20-365"><a href="#cb20-365" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-366"><a href="#cb20-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-367"><a href="#cb20-367" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
