@@ -21,7 +21,7 @@ Mi nombre es Esteban, soy economista de la [Universidad Nacional de Río Cuarto]
 
 En el ámbito académico investigo temas de energía y finanzas públicas subnacionales. Actualmente me desempeño como lider del área cuantitativa en [E-valuar SAS](www.e-valuarsas.com), una firma especializada en evaluación de política pública y en generación y procesamiento de información para la toma de decisiones en el sector público y privado.
 
-Este blog es un recurso más para todos aquellos que quieran aprender cosas de R y estadística. Su contenido está abierto a comentarios, criticas, juicios o correcciones. 
+Este blog es un recurso más para todos aquellos que quieran aprender cosas de R y estadística. Su contenido está abierto a comentarios, criticas, juicios o correcciones.
 
 **"La estadística es como un poste de luz para un borracho: sirve para apoyarse, no para iluminarse."**
 

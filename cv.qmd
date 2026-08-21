@@ -1,0 +1,58 @@
+---
+title: "CV"
+image: IMG_20231212_110856.JPG
+about:
+  template: jolla
+  links:
+    - icon: twitter
+      text: Twitter
+      href: https://x.com/GEsteban_Gomez
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/gestebangomez/
+    - icon: github
+      text: Github
+      href: https://github.com/GomezGerardoEsteban
+    - icon: youtube
+      text: YouTube
+      href: https://www.youtube.com/@GEstebanGomez
+---
+
+Soy un economista especializado en análisis cuantitativo y procesamiento de datos, con experiencia en métodos estadísticos, computacionales y visualización de resultados. Actualmente me desempeño como consultor en análisis cuantitativo, desarrollando productos en R e implementando técnicas de análisis en proyectos de investigación, evaluación y análisis de políticas públicas.
+
+[Descargar CV](cv_sin_foto.pdf){.btn .btn-primary target="_blank"}  [Download CV](cv_no_photo.pdf){.btn .btn-primary target="_blank"}
+
+## Experiencia
+
+**Científico de Datos** \| [E-valuar SAS](www.e-valuarsas.com) \| 2025 - Actualidad
+
+Actualmente trabajo en la formulación y evaluación de proyectos y políticas públicas, liderando el área cuantitativa y generando evidencia sólida que respalde nuestras investigaciones y propuestas.
+
+**Docente en Métodos Cuantitativos** \| [Flacso México](https://www.flacso.edu.mx/diplomado-internacional-en-ciencia-de-datos-para-las-ciencias-sociales/#presentacion) \| 2024 y 2025
+
+Estuve a cargo de los talleres impartidos en los módulos de manipulación de bases de datos y de minería de texto con procesamiento de lenguaje natural en el diplomado internacional de ciencia de datos.
+
+**Pasantía de Investigación** \| [Ecopetrol](https://es.wikipedia.org/wiki/Ecopetrol) \| 2023
+
+Tuve la posibilidad de hacer la pasantía de la maestría en la Empresa Colombiana de Petróleos. Elaboré un informe sobre la política energética para la incorporación de fuentes de energía renovable en el sistema eléctrico colombiano, haciendo énfasis en la energía geotérmica como un área potencial para la diversificación de la empresa. El repositorio de la investigación esta disponible [en este enlace](https://github.com/GomezGerardoEsteban/Ecopetrol)
+
+**Análista de control interno** \| [Molino Cañuelas](https://www.linkedin.com/company/molino-canuelas-sacifia/?originalSubdomain=ar) \| 2021 - 2022
+
+Molino Cañuelas es una empresa agroalimentaria argentina, mi trabajo como analista consistía en conciliar la información interna de cada planta en términos de insumos y producto terminado. Manejaba información de las distintas etapas del proceso productivo, a partir de los cuales debía generar reportes y tableros de control para implementar planes de mejora dentro de la empresa.
+
+**Profesor Ajunto** \| [Universidad Nacional de Río Cuarto](https://www.eco.unrc.edu.ar/) \| 2021
+
+Estuve participando en la catedra de Economía Internacional (3 año de la carrera de economía) como coordinador de trabajos prácticos.
+
+## Educación
+
+Maestría en Gobierno y Asuntos Públicos \| Ago 2022 - Ago 2024
+
+Facultad Latinoamericana de Ciencias Sociales (Flacso México) \| Ciudad de México, México
+
+
+Licenciado en Economía \| Feb 2016 - Dic 2020
+
+Universidad Nacional de Río Cuarto (UNRC) \| Río Cuarto, Córdoba - Argentina 
+
+

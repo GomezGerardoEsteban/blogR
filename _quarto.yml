@@ -3,11 +3,11 @@ project:
   output-dir: docs
 
 website:
-  title: "TallerR"
+  title: "Gerardo Esteban Gómez-Santiago"
   navbar:
     background: "#b0c6cf"
     left: 
-      - "Gerardo Esteban Gómez-Santiago"
+      - cv.qmd
     right:
       - about.qmd
       - icon: github
