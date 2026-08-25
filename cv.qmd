@@ -20,7 +20,7 @@ about:
 
 Soy un economista especializado en análisis cuantitativo y procesamiento de datos, con experiencia en métodos estadísticos, computacionales y visualización de resultados. Actualmente me desempeño como consultor en análisis cuantitativo, desarrollando productos en R e implementando técnicas de análisis en proyectos de investigación, evaluación y análisis de políticas públicas.
 
-[Descargar CV](cv_sin_foto.pdf){.btn .btn-primary target="_blank"}  [Download CV](cv_no_photo.pdf){.btn .btn-primary target="_blank"}
+[Descargar CV](cv_sin_foto.pdf){.btn .btn-primary target="_blank"}  [Download CV](cv_no_photo_en.pdf){.btn .btn-primary target="_blank"}
 
 ## Experiencia
 
