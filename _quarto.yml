@@ -22,7 +22,6 @@ format:
   html:
     theme: 
       light: spacelab
-      dark: superhero
     highlight-style: atom-one
     css: styles.css
 
