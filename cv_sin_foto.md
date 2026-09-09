@@ -58,6 +58,19 @@ Estuve participando en la catedra de Economía Internacional (3 año de la carre
 
 *Referencias: fgranato\@fce.unrc.edu.ar - Florencia Granato (Resp. de catedra)*
 
+### Proyectos
+
+- *Fortalecimiento del Área de Enfoque (índice) del Programa Territorial para el Bienestar (México, 2026)* Consultoría de **Fundación Casa y Ciudad** para la **Secretaría de Desarrollo Agrario, Territorial y Urbano (SEDATU) del Gobierno de México** bajo financiación del **Banco de Desarrollo de América Latina y El Caribe (CAF)**. Como especialista cuantitativo, asesoré en la construcción de un Índice de Habitabilidad para orientar la política de infraestructura pública, basado en la agregación de variables agrupadas en bloques temáticos mediante Análisis Factorial Múltiple (AFM).
+
+- *Actualización del Banco de Proyectos de Colombia Crea Talento (COCREA) (Colombia, 2026)* Consultoría de **E-valuar SAS** para la **Corporación Colombia Crea Talento (COCREA)**. Como especialista cuantitativo y experto de programación en *R*, lideré la consolidación de información de proyectos con potencial para hacer parte del Banco de Proyectos de la organización. Está labor requirió un estudio de métodos mixtos para el sector cultural colombiano, evaluando 584 proyectos, donde diseñé e implementé la solución tecnológica integral en R, abarcando desde la captura de datos en campo, la validación de bases de datos secundarias, hasta el análisis multivariado avanzado.
+
+- *Determinación de Retorno Social a la Inversión (SROI) de BogotáBio (Colombia, 2025 - 2026)* Consultoría de **E-valuar SAS** y **Diorama Group** para **BogotáBio**. Como investigador cuantitativo, lideré el desarrollo de indicadores para habilitar el cálculo del Retorno Social de la Inversión (SROI) de la planta de producción de vacunas BogotáBio en las dimensiones de Ciencia, Tecnología e Innovación, Fortalecimiento Institucional y Desarrollo Económico Local.
+
+- *Evaluación de impacto del programa de atención a la primera infancia 'Círculos de Familia' (El Salvador, 2025)*. Consultoría de **E-valuar SAS** e **Isegoria** para el **Ministerio de Educación, Ciencia y Tecnología (MINEDUCYT) de El Salvador** financiado por el **Banco Interamericano de Desarrollo (BID)**. Como especialista cuantitativo, consolidé y analicé los datos cuantitativos del estudio longitudinal realizado con 7.000 niños participantes del programa Círculos de Familia en El Salvador.
+
+- *Evaluación del programa de transformación verde del pacífico 'PACIFIC GX' (Vanuatu, Samoa, Timor-Leste, Papua Nueva Guinea, 2024 - 2025)*. Consultoría de **E-valuar SAS** e **I-Aps** para el **Programa de Naciones Unidas para el Desarrollo (PNUD) de Tailandia**. Este proyecto buscaba promover la transformación verde en pequeñas islas en desarrollo de la región del pacífico sur, a través de proyectos de energía renovable dirigidos a poblaciones vulnerables. Como investigador cuantitativo, evalué la relevancia del programa con base en datos secundarios, considerando las necesidades energéticas, la realidad socioeconómica de la población objetivo y los recursos disponibles del programa.
+
+
 ## Educación
 
 ### Títulos
