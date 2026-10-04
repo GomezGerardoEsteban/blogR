@@ -1,0 +1,743 @@
+---
+title: "Formato de tablas con flextable"
+author: "Gerardo Esteban, Gómez-Santiago"
+date: "2026-09-26"
+categories:
+  - Tablas
+  - Visualización
+toc: true
+format: 
+  html:
+    # code-links:
+    #   # - text: Video YouTube
+    #   #   icon: camera-reels
+    #   #   href: https://youtu.be/qbkHkeouuvQ
+    #   - text: Repositorio GitHub
+    #     icon: file-code
+    #     href: https://github.com/GomezGerardoEsteban/Tidyverso/tree/main/TallerR/Modulo1
+    html-math-method: katex
+    code-tools: true
+    self-contained: true
+execute:
+  warning: false
+image: "flextable1.png"
+---
+
+Las tablas con información resumida es una de las formas más frecuentes de presentar los resultados de nuestros análisis. Facilitan la comparación entre categorías y transmiten de manera sencilla y precisa aquello que queremos informar.
+
+Si nunca has utilizado un lenguaje de programación como R. Generar una tabla requiere múltiples *Copy-Paste* en un Excel, si además esa tabla debe ir dentro de un documento, se vuelve necesario ajustar los anchos de columna y otros formatos de estilo como **negritas**, [colores]{style="color: red;"}, *cursivas*, etc. Lo cuál se puede volver tedioso y aburrido.
+
+Si eres de los que ya utiliza un lenguaje de programación para generar los resultados, el contenido de la tabla no es un problema ante nuevos datos, pero sin una herramienta que lo integre directamente en tu documento, exportarlo a un Excel para darle estilo y después copiar y pegar sigue siendo algo tedioso.
+
+Aún si te salteas esa parte del formato con ayuda de la Inteligencia Artificial, un dilema que empieza a presentarse es la replicabilidad de la tabla y los recursos que se invierten en ello. ¿Voy a poder obtener siempre el mismo formato de tabla? ¿Sigo gastando tokens en diseño? ¿Que otras alternativas tengo?
+
+R tiene varías herramientas para darle formato a las tablas y exportarlas en distintos tipos de documento, en este tutorial vamos a explorar y a generar las bases para utilizar [flextable](https://cran.r-project.org/web/packages/flextable/index.html) una de mis favoritas por su compatibilidad con el ecosistema de Microsoft Office, un ecosistema que con algunas excepciones en el mundo académico, sigue siendo el de preferencia para hacer documentos y presentaciones.
+
+## Librerias a utilizar
+
+Para darle formato a la tabla `flextable` es la librería protagonista, utilizaremos también `officer` (una librería hermana) la cuál nos habilita un par de funciones que se complementan muy bien. Para la generación de la tabla con la información resumida (sin formato) utilizaremos `tidyverse` y `wbstats` (está última permite traer datos del Banco Mundial directamente a tu ambiente de trabajo).
+
+Los procesos de instalación de estas librerías son los habituales con la función `install.packages`, otra alternativa es utilizar la función `pacman`, la cual se encarga de instalar (en caso de que no este instalada) y activar las librerías correspondientes.
+
+```{r}
+
+# Instalación y activación con pacman
+
+library(pacman)
+
+pacman::p_load("tidyverse", "wbstats", "flextable", "officer")
+
+```
+
+## Tabla con información resumida
+
+Para concentrarnos en el uso de la herramienta, vamos a asumir que ya tienes una tabla con la información resumida que deseas presentar, sin embargo, acá te dejo el código con la información que yo quiero presentar y sobre la que voy a desarrollar el paso a paso con algunas de las funciones de `flextable`. 
+
+Empezaremos con una comparación del PIB per cápita entre algunos países latinoamericanos.
+
+```{r}
+
+# Vector con código iso3 de algunos países de latinoamericanos
+
+paises <- c("COL", "ECU", "PER", "CHL", "ARG", "URY", "PRY",
+            "BRA", "BOL", "VEN", "CRI", "SLV", "GTM", "HND",
+            "NIC", "MEX", "DOM", "PAN")
+
+# Captura de datos via API utilizando wbstats 
+
+base <- wbstats::wb_data(indicator = c("NY.GDP.PCAP.KD"),
+                         country = paises)
+
+# Seleccionamos solo algunos años para el análisis
+
+base <- base |> 
+  filter(date > 2000 & date <= 2024)
+
+# Generamos resumen por país en una tabla
+
+tabla <- base |> 
+  group_by(country) |> 
+  summarise(mean_gdp = mean(NY.GDP.PCAP.KD, na.rm = T),
+            sd_gdp = sd(NY.GDP.PCAP.KD, na.rm = T)) |> 
+  mutate(coef_gdp = sd_gdp/mean_gdp*100)
+
+tabla1 <- tabla |> 
+  select(country, ends_with("gdp"))
+
+```
+
+El objeto `tabla1` contiene el promedio, la desviación estándar y el coeficiente de variación del PIB per cápita por país entre el 2000 y el 2024. A continuación exploraremos alternativas de presentación de la información utilizando siempre `flextable`.
+
+## ¿Cómo trabaja flextable?
+
+Como muchos paquetes posteriores al universo `tidyverse`, flextable tiene una sintaxis de tubería donde el uso del pipe (`|>` o `%>%`) permite conectar ordenes. Partiendo de la tabla cruda que contiene la información que deseas presentar, el objetivo es conectar un conjunto de ordenes que ajustan el formato de la tabla. Esto nos permite tener control sobre cada detalle del formato e ir acomodando la tabla de manera iterada.
+
+Ajustes como el nombre de las columnas, el alto y ancho de las celdas, el color de las letras o de las celdas, la presencia de bordes, tipos de letra y agrupaciones de celdas, son algunos de los ajustes que podemos hacer de forma muy intuitiva con está herramienta.
+
+Vamos al paso a paso...
+
+## Paso a paso para dar formato con flextable
+
+Empezamos siempre conectando a la tabla con la función `flextable()`. Esto le da el formato que trae por defecto la librería y sobre el que iremos incorporando ajustes de manera paulatina. Algo similar a como vas ajustando un gráfico (subrayas acá, resaltas allá, y así con cada detalle).
+
+```{r}
+
+tabla1 |> 
+  flextable()
+
+```
+
+### Estructura de la tabla
+
+En `flextable` las tablas tienen cinco grandes elementos que sirven para indicar la zona sobre la quieres aplicar los ajustes. En primer lugar esta la especificación del `part` (parte), cuyas alternativas son:
+
+1. `header` (encabezados)
+2. `body` (cuerpo)
+3. `footer` (pie de página) 
+
+En caso de que quieras aplicar el mismo formato a toda la tabla tienes la opción `all`. En segundo lugar esta la especificación de filas y columnas, para ello casi todas las funciones tienen los argumentos:
+
+4. `i` para filas
+5. `j` para columnas
+
+Estos cinco grandes elementos los utilizaremos a lo largo del tutorial, haremos énfasis en ellos a su debido momento.
+
+### Nombres de columnas
+
+Aunque los nombres de nuestra tabla están bien para escribir código, no son nombres que podamos utilizar en una tabla dentro de un documento, la función para personalizarlos es `set_header_labels()`. La sintaxis de la función es `nombre_viejo = "Nombre Nuevo"`, asegurate de que el nombre nuevo sea el que quieres que salga en tu tabla final, puedes incorporar caracteres especiales como paréntesis, espacios, guiones, mayúsculas, etc.
+
+Un detalle importante es que el ajuste de los nombres es solo estético, es decir, en comandos posteriores, si quieres hacer referencia a alguna columna, debes utilizar el nombre original de la tabla (`nombre_viejo`).
+
+```{r}
+
+tabla1 |> 
+  flextable() |> 
+  set_header_labels(
+    country = "País",
+    mean_gdp = "Promedio",
+    sd_gdp = "Desviación estándar",
+    coef_gdp = "Coeficiente de variación"
+  )
+
+
+```
+
+### Resaltar encabezados
+
+Uno de los primeros ajustes que hacemos en cualquier tabla, es resaltar los encabezados. Normalmente le ponemos negrita, un tamaño de letra diferente y un color de fondo que lo distinga del resto.
+
+Aplicaremos los cambios en ese orden utilizando `fontsize` (tamaño de letra), `bold` (negrita) y `bg` (color de fondo de las celdas).
+
+```{r}
+
+tabla1 |> 
+  flextable() |> 
+  set_header_labels(
+    country = "País",
+    mean_gdp = "Promedio",
+    sd_gdp = "Desviación estándar",
+    coef_gdp = "Coeficiente de variación"
+  ) |> 
+  fontsize(size = 14, part = "header") |> 
+  bold(bold = TRUE, part = "header") |> 
+  bg(bg = "gray90", part = "header")
+
+
+```
+
+Es evidente el uso de `part = "header"` en los tres comandos, si remplazaramos `"header"` por `"body"` los encabezados quedarían intactos y los cambios se aplicarían sobre el cuerpo de la tabla. Podrías hacer el intento para ir entendiendo la lógica de los comandos.
+
+### Alineación de las celdas
+
+Para ajustar la alineación de las celdas se utiliza la función `align()`, la cual nos ofrece tres alternativas, `"center"`, `"left"` y `"right"`. Es usual encontrar centrados los encabezados y los valores numéricos y con alineación a la izquierda las columnas con texto (como el nombre del país en este caso). Incorporemos estos cambios sobre la tabla.
+
+```{r}
+
+tabla1 |> 
+  flextable() |> 
+  set_header_labels(
+    country = "País",
+    mean_gdp = "Promedio",
+    sd_gdp = "Desviación estándar",
+    coef_gdp = "Coeficiente de variación"
+  ) |> 
+  fontsize(size = 14, part = "header") |> 
+  bold(bold = TRUE, part = "header") |> 
+  bg(bg = "gray90", part = "header") |> 
+  align(part = "header", align = "center") |>     # Centramos todos los titulos
+  align(j = 1, align = "left", part = "body") |>  # Izquierda los valores de la primer columna
+  align(j = 2:4, align = "center", part = "body") # Centramos el resto de columnas
+
+```
+
+::: {.callout-note appearance="simple"}
+
+Algo que puede suceder es que la cantidad de comandos empiece a crecer significativamente, como cualquier objeto de R y como es usual en la sintaxis que estamos utilizando, puedes almacenar objetos intermedios para facilitar la legibilidad, llamaremos `t_formato` a lo que llevamos hasta ahora
+
+```{r}
+
+t_formato <- tabla1 |> 
+  flextable() |> 
+  set_header_labels(
+    country = "País",
+    mean_gdp = "Promedio",
+    sd_gdp = "Desviación estándar",
+    coef_gdp = "Coeficiente de variación"
+  ) |> 
+  fontsize(size = 14, part = "header") |> 
+  bold(bold = TRUE, part = "header") |> 
+  bg(bg = "gray90", part = "header") |> 
+  align(part = "header", align = "center") |>     # Centramos todos los titulos
+  align(j = 1, align = "left", part = "body") |>  # Izquierda los valores de la primer columna
+  align(j = 2:4, align = "center", part = "body") # Centramos el resto de columnas
+
+```
+
+:::
+
+### Ancho de columnas
+
+En la tabla que tenemos el nombre de algunos países queda en doble línea, podemos manipular el ancho de las columnas con la función `width()`. El ancho de columnas es algo que condiciona todo el contenido, en esta característica los encabezados no son independientes del cuerpo de la tabla, por ello debemos utilizar el argumento `j` para especificar la columna sobre la que queremos aplicar cambios. 
+
+Para especificar la columna podemos utilizar el número o el nombre de la columna original entre comillas. Aquí un ejemplo de ambos tipos de especificaciones.
+
+```{r}
+
+t_formato <- t_formato |> 
+  width(j = "country", # Especificación por nombre de columna 
+        width = 2) |> 
+  width(j = c(2:4),    # Especificación por número de columna
+        width = c(1.5,1.5,1.5)) 
+
+t_formato
+
+```
+
+### Bordes de la tabla
+
+Para manipular los bordes de la tabla, se utilizan las funciones cuyo nombre empieza por `border...`. Un complemento importante para especificar el formato del borde (color, grosor y tipo de línea) es la librería `officer` y su función `fp_border()`. Una buena práctica es crear uno o varios formatos de borde y llamarlos cuando sea necesario. Tambien existe una opción de borde por defecto.
+
+Empezemos por los bordes externos con `border_outer()`.
+
+#### Bordes externos
+
+```{r}
+
+t_formato |> 
+  border_outer()  # Bordes externos por defecto
+
+```
+
+
+```{r}
+
+borde_azul <- officer::fp_border(color = "blue",
+                                 width = 1.5)
+
+t_formato <- t_formato |> 
+  border_outer(border = borde_azul)  # Bordes externos con formato
+
+t_formato
+
+```
+
+
+#### Bordes en filas o columnas específicas
+
+Podemos aplicar bordes en filas o columnas específicas con la función `border` y los argumentos `i` y `j`, en estos casos debemos específicar si queremos bordes superior (`border.top`) o inferior (`border.bottom`) en caso de filas o borde a la izquierda (`border.left`) o a la derecha (`border.right`) en el caso de columnas.
+
+```{r}
+
+t_formato |> 
+  
+  # Fila 8
+  # Borde superior por defecto
+  
+  border(i = 8,                                 
+         border.top = fp_border_default()) |>   
+  
+  # Fila 8
+  # Borde inferior con formato
+  
+  border(i = 8,                                      
+         border.bottom = fp_border(color = "orange", 
+                                   style = "dashed",
+                                   width = 8)) |> 
+  
+  # Columna 1
+  # Borde derecho con formato guardado
+  
+  border(j = 1,                                    
+         border.right = borde_azul) |>             
+  
+  # Columna 3
+  # Borde izquierdo con formato
+  
+  border(j = 3,                                    
+         border.left = fp_border(color = "purple", 
+                                 width = 3))
+  
+```
+
+Si queremos tener todas las líneas verticales podemos usar `border_inner_v()`
+
+```{r}
+
+t_formato |> 
+  border_inner_v()
+
+```
+
+Para todas las líneas horizontales podemos usar `border_inner_h()`. Tanto `border_inner_v()` como `border_inner_h()` reciben las especificaciones de formato de línea que ya vimos con `officer::fp_border`
+
+```{r}
+
+t_formato |> 
+  border_inner_h(border = borde_azul) # Borde azul creado con fp_border
+
+```
+
+#### Subrayar una celda particular
+
+No es algo usual, pero puede ser util resaltar los bordes de una celda particular, para ello se utiliza la función `surround()`. Es posible hacer la especificación por filas y columnas con los argumentos `i` y `j` o podemos hacer una especificación mas funcional, definiendo la columna, establecemos una condición lógica a partir de la cual se debe subrayar o no.
+
+En  este último caso debemos utilizar el simbolo de virgulilla (`~`) para introducir la condición lógica que determinara que filas resaltar, en este caso resaltaremos las celdas que tengan un promedio de PIB per cápita mayor a 10.000 dólares.
+
+```{r}
+
+t_formato |>
+  
+  # Especificación deterministica por i y j
+  # Formato de borde guardado
+  
+  surround(j = 1, i = 4, border = borde_azul) |> 
+  
+  # Especificación por condición lógica
+  
+  surround(j = "mean_gdp",            # Columna
+           i = ~ mean_gdp > 10000,    # Condición lógica
+           border = fp_border(color = "red"))
+
+
+```
+
+### Color de las celdas
+
+Ya vimos como ajustar el color de las celdas cuando resaltamos los encabezados utilizando la función `bg()`. Aquí veremos algunas variantes para destacar ciertos valores o casos específicos de manera determinística (siempre la misma celda independientemente de su valor) o a partir de condiciones lógicas.
+
+Los argumentos escenciales de la función `bg()` son `i` para especificar la fila, `j` para especificar la columna y `bg` para especificar el color. En caso de no especificar el argumento `part` (como lo hicimos para añadir el gris a los encabezados) este asume por defecto el valor de `body`.
+
+#### Casos determinísticos
+
+Colorear filas completas
+
+```{r}
+
+# Colorear la fila 1, 5 y 12
+
+t_formato |> 
+  bg(i = c(1,5,12), bg = "skyblue")
+
+```
+
+Colorear columnas completas
+
+```{r}
+
+# Colorear la columna 1 y 4
+
+t_formato |> 
+  bg(j = c(1,4), bg = "skyblue")
+
+```
+
+Colorear celdas específicas
+
+```{r}
+
+# Colorear la fila 1, 5 y 12 de la columna 2
+
+t_formato |> 
+  bg(j = 2,
+     i = c(1,5,12), 
+     bg = "skyblue")
+
+```
+
+#### Casos lógicos
+
+La selección de las filas sobre las que queremos aplicar el color también puede realizarse a partir de condiciones lógicas, de la misma forma en que lo hicimos para resaltar los bordes de ciertas filas, debemos anteponer a la condición lógica el símbolo de virgulilla (`~`).
+
+```{r}
+
+t_formato |>
+  
+  # Condición para resaltar bordes ya utilizado
+  # solo cambiamos el color y ancho del borde
+  
+  surround(j = "mean_gdp",            # Columna
+           i = ~ mean_gdp > 10000,    # Condición lógica
+           border = fp_border(color = "darkgreen",
+                              width = 3)) |> 
+  
+  # Aplicamos la misma condición para el color (relleno)
+  # de la celda
+  
+  bg(j = 2, 
+     i = ~ mean_gdp > 10000, 
+     bg = "green")
+
+
+```
+
+Esto nos permite implementar múltiples criterios en la aplicación de colores sobre una misma columna, por ejemplo, verde para aquellos que tienen más de 10.000, amarillo para los que tienen entre 5.000 y 10.000 y rojo para los que tienen menos de 5.000. Pero recuerda que esas condiciones lógicas deben ser mutuamente excluyentes, es decir, ninguna observación puede caer en más de un color.
+
+```{r}
+
+t_formato |> 
+  bg(j = 2, i = ~ mean_gdp > 10000, bg = "green") |> 
+  bg(j = 2, i = ~ mean_gdp > 5000 & mean_gdp <= 10000, bg = "yellow") |> 
+  bg(j = 2, i = ~ mean_gdp < 5000, bg = "red")
+
+```
+
+#### Color de datos continuos
+
+Otra forma habitual de colorear las celdas es generando una escala o paleta de colores, manteniendo la misma lógica del último ejemplo, podemos generar un gradiente de colores que vayan de rojo a verde con la librería `scales()` y utilizarlo para colorear toda la columna.
+
+```{r}
+
+# Función que colorea en función de minimo y maximo de 'mean_gdp'
+
+color_continua <- scales::col_numeric(palette = c("red", "yellow", "green"), 
+                                      domain = c(min(tabla1$mean_gdp), 
+                                                 max(tabla1$mean_gdp)))
+
+
+# Aplicación sobre la tabla
+
+t_formato |> 
+  bg(j = 2, bg = color_continua) 
+
+
+```
+
+### Formato de los valores
+
+Por defecto los valores numéricos aparecen con comas como marcador de miles, con punto como marcador de decimales y con una gran cantidad de decimales (5 en el caso del coeficiente de variación). Estas convenciones pueden cambiar dependiendo del país, en `flextable` podemos ajustar esos formatos de varias maneras. Las funciones por defecto cumplen con lo necesario, pero también podemos crear y aplicar nuestras propias funciones.
+
+Empecemos por ajustar la columna de promedio con la función que ofrece por defecto `flextable`, en este caso es una variable continua, asi que debemos usar `colformat_double()` la cual recibe los argumentos usuales de la función `format`
+
+```{r}
+
+t_formato |> 
+  bg(j = 2, bg = color_continua) |> 
+  colformat_double(j = 2,              # Especificamos columna
+                   big.mark = ".",     # Marcador de miles
+                   decimal.mark = ",", # Marcador de decimales
+                   digits = 1,         # Cantidad de decimales
+                   prefix = "$ ")      # Prefijo de pesos 
+  
+
+```
+
+En general con las funciones por defecto alcanza, el mismo ajuste que aplicamos sobre el `Promedio` podemos aplicarlo sobre la `Desviacion Estandar` teniendo en cuenta que tienen la misma unidad de medida. El `Coeficiente de Variación` si debería tener otro tipo de especificación, pero como la columna también es numérica solo debemos ajustar los argumentos de la misma función.
+
+Sin embargo, podriamos querer utilizar una abreviación de la columna `País`, por ejemplo, que salgan los primeros tres caracteres de esa columna, en ese caso es un poco más complejo hacerlo con las opciones por defecto y una función propia puede resultar más sencillo. Las funciones propias se incorporan en el `flextable` con la función `set_formatter()`, la sintaxis es la siguiente: `variable_a_ajustar = nombre_funcion_propia`. 
+
+```{r}
+
+# función para extraer primeros tres carácteres de vector de texto
+
+tres_chr_func <- function(vector) {
+  
+  p <- str_to_upper(str_sub(string = str_remove_all(string = vector, 
+                                       pattern = " "),
+                            start = 1,
+                            end = 3))
+  
+  return(p)
+  
+}
+
+
+t_formato |> 
+  bg(j = 2, bg = color_continua) |> 
+  colformat_double(j = c(2,3),         # Especificamos columnas (2 y 3)
+                   big.mark = ".",     # Marcador de miles
+                   decimal.mark = ",", # Marcador de decimales
+                   digits = 1,         # Cantidad de decimales
+                   prefix = "$ ") |>   # Prefijo de pesos 
+  
+  # Ajuste de formato de la columna de coeficiente de variación
+  
+  colformat_double(j = c(4),           # Especificamos columnas (4)
+                   big.mark = ".",     # Marcador de miles
+                   decimal.mark = ",", # Marcador de decimales
+                   digits = 1,         # Cantidad de decimales
+                   suffix = " %") |>    # Sufijo de %    
+  
+  # Uso de la funcion propia 'tres_chr_func'
+  
+  set_formatter(country = tres_chr_func)
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+t_formato <- t_formato |> 
+  bg(j = 2, bg = color_continua) |> 
+  colformat_double(j = c(2,3),         # Especificamos columnas (2 y 3)
+                   big.mark = ".",     # Marcador de miles
+                   decimal.mark = ",", # Marcador de decimales
+                   digits = 1,         # Cantidad de decimales
+                   prefix = "$ ") |>   # Prefijo de pesos 
+  
+  # Ajuste de formato de la columna de coeficiente de variación
+  
+  colformat_double(j = c(4),           # Especificamos columnas (4)
+                   big.mark = ".",     # Marcador de miles
+                   decimal.mark = ",", # Marcador de decimales
+                   digits = 1,         # Cantidad de decimales
+                   suffix = " %")
+
+
+```
+
+
+
+### Incorporación de pies de página
+
+El origen de los datos de la información que estamos presentando es algo que siempre nos van a pedir, igualmente, muchas veces necesitamos aclarar algún valor específico o añadir detalles sobre alguna columna, en tods estos casos se suele pone un 'pie de página' o una nota al margen al inferior de la tabla. Con `flextable` esto se puede hacer de manera sencilla con las funciones `add_footer_lines` y `footnote`.
+
+Empecemos por `add_footer_lines`, este es bastante simple, es el que suelo utilizar para mencionar la fuente, simplemente añades la función e incorporas el texto que consideres necesario.
+
+```{r}
+
+t_formato |> 
+  add_footer_lines("Fuente: WDI del Banco Mundial | @GEsteban_Gomez03")
+
+```
+
+Ahora incorporemos una nota sobre la columna del `Coeficiente de Variación`, indicando que su cálculo corresponde a la desviación estándar sobre el promedio. En este caso debemos complementar la función `footnote` con la función `as_paragraph`.
+
+```{r}
+
+t_formato |> 
+  footnote(i = 1, j = 4, 
+           part = "header", 
+           value = as_paragraph("CV = Desviación Estándar sobre el Promedio")) |> 
+  add_footer_lines("Fuente: WDI del Banco Mundial | @GEsteban_Gomez03")
+
+
+```
+
+Si la tabla la estas renderizando en un HTML como la salida de este blog, puedes verse más profesional incorporar la ecuación del `Coeficiente de Variación` en notación matemática, eso lo puedes hacer con `as_equation`.
+
+```{r}
+
+library(equatags) # Libreria necesaria para incorporar notación matemática
+
+t_formato <- t_formato |> 
+  
+  # Nota sobre CV con notación matemática
+  
+  footnote(i = 1, j = 4, 
+           part = "header", 
+           value = as_paragraph(
+             as_equation("CV = \\frac{\\sigma}{\\hat{X}}")
+           )) |> 
+  
+  # Nota sobre valores de una celda de la tabla
+  
+  footnote(i = ~ country == "Venezuela, RB", j = 1, 
+           part = "body", 
+           value = as_paragraph(
+             "La fuerte variación de Venezuela puede deberse a fluctuaciones del Tipo de Cambio"
+           ), ref_symbols = "a") |> 
+  
+  # Pie de página general
+  
+  add_footer_lines("Fuente: WDI del Banco Mundial | @GEsteban_Gomez03")
+  
+t_formato
+
+```
+
+### Agrupación de filas y columnas
+
+En algunos escenarios puede ser útil agrupar columnas o filas para presentar la información, esto permite que en lugar de presentar diferentes tablas, se presente una sola con estadísticos de distintas variables. Aquí por ejemplo, puede ser pertinente incorporar una columna que agrupe `Promedio`, `Desviación estándar` y `Coeficiente de variación` con la leyenda `PIB per cápita (Dólares constates de 2015)`. Esto lo podemos hacer con una combinación de funciones, primero `add_header_row()` para añadir una fila superior y después `merge_v` para pegar valores iguales y que se vea agrupada.
+
+```{r}
+
+t_formato |> 
+  add_header_row(values = c("País", "PIB per cápita (Dólares constantes de 2015)"),
+             colwidths = c(1,3)) |> 
+  merge_v(j = 1, part = "header")
+
+
+```
+
+
+Para la agrupación por filas, utilicemos los criterios con los que coloreamos la columna de PIB per cápita, creemos una variable categórica que ponga el valor de `Alto` si es mayor a `10.000`, `Medio` si esta entre `10.000` y `5.000` y `Bajo` si es menor a `5.000`.
+
+Al tener que hacer un ajuste sobre los datos que dan origen a la tabla, tenemos que volver a ejecutar los comandos de formato que llevamos hasta acá, pero es algo relativamente sencillo teniendo en cuenta que es recopilar código y no pasos aislados sobre un Excel que no quedaron registrados en ningún lado.
+
+```{r}
+
+# Creación de la variable categórica para agrupar filas
+
+tabla1 <- tabla1 |> 
+  mutate(categoria = factor(case_when(
+    mean_gdp < 5000 ~ "Bajo",
+    mean_gdp >= 5000 & mean_gdp < 10000 ~ "Medio",
+    mean_gdp >= 10000 ~ "Alto"
+  ), levels = c("Alto", "Medio", "Bajo"))) |> 
+  relocate(categoria, .before = 1) |> 
+  arrange(-mean_gdp)
+
+
+# Rearmado de la tabla
+
+# Partimos de la tabla y flextable()
+
+t_formato <- tabla1 |> 
+  flextable() |> 
+  
+  # Ajuste de titulos
+  
+  set_header_labels(
+    categoria = "Categoría",
+    country = "País",
+    mean_gdp = "Promedio",
+    sd_gdp = "Desviación estándar",
+    coef_gdp = "Coeficiente de variación"
+  ) |> 
+  
+  # Cambio en encabezados
+  
+  fontsize(size = 14, part = "header") |> 
+  bold(bold = TRUE, part = "header") |> 
+  bg(bg = "gray90", part = "header") |> 
+  
+  # Alineación de la tabla
+  
+  align(part = "header", align = "center") |>     # Centramos todos los titulos
+  align(j = 1:2, align = "left", part = "body") |>  # Izquierda los valores de la primer columna
+  align(j = 3:5, align = "center", part = "body") |> # Centramos el resto de columnas
+  
+  # Anchos de columnas
+  
+  width(j = "country", # Especificación por nombre de columna 
+        width = 1.8) |> 
+  width(j = c(1, 3:5),    # Especificación por número de columna
+        width = c(1.2,1.2,1.2,1.2)) |> 
+  
+  # Bordes exteriores
+  
+  border_outer(border = borde_azul) |> # Bordes externos con formato
+  
+  # Color de variable continua
+  
+  bg(j = 3, bg = color_continua) |> 
+  
+  # Formato de columnas
+  
+  colformat_double(j = c(3,4),         
+                   big.mark = ".",     
+                   decimal.mark = ",", 
+                   digits = 1,         
+                   prefix = "$ ") |>   
+  colformat_double(j = c(5),           
+                   big.mark = ".",     
+                   decimal.mark = ",", 
+                   digits = 1,         
+                   suffix = " %") |> 
+  
+  # Notas al pie de la tabla
+  
+   footnote(i = 1, j = 5, 
+           part = "header", 
+           value = as_paragraph(
+             as_equation("CV = \\frac{\\sigma}{\\hat{X}}")
+           )) |> 
+  footnote(i = ~ country == "Venezuela, RB", j = 2, 
+           part = "body", 
+           value = as_paragraph(
+             "La fuerte variación de Venezuela puede deberse a fluctuaciones del Tipo de Cambio"
+           ), ref_symbols = "a") |> 
+  add_footer_lines("Fuente: WDI del Banco Mundial | @GEsteban_Gomez03") |> 
+  
+  # Añadimos fila superior para agrupar columnas
+  
+  add_header_row(values = c("Categoría", "País", "PIB per cápita (Dólares constantes de 2015)"),
+             colwidths = c(1,1,3)) |> 
+  
+  # Agrupamos columnas con el titulo "PIB per cápita (Dólares constantes de 2015)"
+  
+  merge_v(part = "header") |> 
+  
+  # Agrupamos filas
+  
+  merge_v(j = 1, part = "body") |> 
+  
+  # Añadimos bordes horizontales para hacer notoria la agrupación
+  
+  border_inner_h(border = borde_azul)
+
+t_formato
+
+
+```
+
+### Tipos de fuente para la letra
+
+El tipo de fuente para la letra de la tabla seguro es importante, sobre todo si quieres incorporar esto en documentos, hay varias opciones para incorporar fuentes en R, yo me siento comodo con la librería `extrafont` la cual pone a disposición de R las fuentes que tengas en tu computador.
+
+La función que nos permite ajustar el tipo de fuente en `flextable` es `font()`, en este caso utilizare `"Cambria"`. Incorporamos unos ajustes finales sobre el tamaño y color de la letra de las notas al pie y del cuerpo de la tabla y tenemos la tabla finalizada.
+
+```{r}
+
+library(extrafont)
+
+t_formato <- t_formato |> 
+  font(fontname = "Cambria", part = "all") |> 
+  fontsize(size = 9, part = "footer") |> 
+  fontsize(size = 12, part = "body") |> 
+  color(color = "gray40", part = "footer")
+
+t_formato
+
+```
+
+### Material adicional
+
+Como cualquier herramienta de código abierto, el material está disponible pero a veces disperso:
+
+- Un gran tutorial en inglés sobre esta librería esta disponible en la página de [Danielle Navarro](https://blog.djnavarro.net/), el enlace directo al tutorial está [aquí](https://blog.djnavarro.net/posts/2024-07-04_flextable/).
+- El libro de `flextable` también es muy completo, encuentralo [aquí](https://ardata-fr.github.io/flextable-book/).
+- Como mencioné al inicio, hay otros paquetes para hacer algo similar, [Bastian Olea]() (otro crack de la programación en R) tiene un tutorial para usar `gt` disponible [aquí](https://bastianolea.rbind.io/blog/tablas_gt/)
+
+### Próximos pasos
+
+Este tutorial es para que te familiarices con los comandos básicos de `flextable()`, en próximas salidas veremos la utilización de está librería para generar un formato uniforme que se apliqué a muchas tablas, distintos formatos en los que podemos exportar nuestras tablas y otras cositas (como insertar imágenes o combinarla con gráficos)
